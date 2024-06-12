@@ -17,21 +17,26 @@
                                                 </div>
                                                 <div class="method-right col-12 col-md-6">
                                                     <h2>Login</h2>
+                                                    <a style="display: block;margin-bottom: 10px" id="loginGoogle" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login&response_type=code&client_id=457078457719-toc7bkb07iv1f0agnf4otfeusnegdhev.apps.googleusercontent.com&approval_prompt=force" class="btn btn-primary btn-block"><i style="margin-right:15px;font-size: 18px;" class="fab fa-google-plus-g"></i>Login With Google</a>
                                                     <label>Already registered?</label> <a href="/register" style="color: #00A0DC; text-decoration: underline">Register now!</a>
-                                                    <form action="/login" method="post">
+                                                    <form id="login" action="/login" method="post">
                                                         <div class="form-group">
                                                             <label>Username <sup>*</sup></label>
-                                                            <input name="username" type="text" class="form-control" placeholder="Type your username" required>
+                                                            <input id="username" name="username" type="text" class="form-control" placeholder="Type your username">
+                                                            <div class="message"></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>Password <sup>*</sup></label>
-                                                            <input name="password" type="password" class="form-control" placeholder="Type your password" required>
+                                                            <input id="password" name="password" type="password" class="form-control" placeholder="Type your password">
+                                                            <div class="message"></div>
                                                         </div>
-
+                                                        <div class="form-group">
+                                                            <p style="color:red"><%=request.getAttribute("failLogin")!=null?request.getAttribute("failLogin"):""%></p>
+                                                        </div>
                                                         <div class="block-button-right">
                                                             <a href="#">Forgot your pasword?</a>
-                                                            
-                                                            <button name="login" value="login" class="btn btn-primary" type="submit">Login</button>
+                                                            <input type="hidden" name="login" value="login"> 
+                                                            <button class="btn btn-primary" type="submit">Login</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -48,3 +53,15 @@
         </div>
     </div>	
 </section>
+
+<script>
+    Validator({
+        form: "#login",
+        message: ".message", // Selector class
+        invalid: "invalid", // T�n class message
+        rules: [
+            Validator.isRequire("#username", "Username is required"),
+            Validator.isRequire("#password", "Password is required"),
+        ]
+    });
+</script>

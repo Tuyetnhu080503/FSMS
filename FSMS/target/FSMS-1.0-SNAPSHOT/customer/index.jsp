@@ -4382,3 +4382,22 @@
         </div>
     </div>
 </section>
+
+<script>
+    <%
+        String sucessLogin = (String) session.getAttribute("successLogin");
+        if (sucessLogin != null) {
+            
+    %>
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login Successful!",
+        showConfirmButton: false,
+        timer: 1000
+    });
+     
+    <% }
+        session.removeAttribute("successLogin");
+    %>
+</script>

@@ -178,7 +178,8 @@
 <!-- jquery-counterup js -->
 <script src="../../assets/assets_customer/js/jquery.counterup.min.js"></script>		
 <!-- wow js -->
-<script src="../../assets/assets_customer/js/wow.js"></script>		
+<script src="../../assets/assets_customer/js/wow.js"></script>
+
 <script>
     new WOW().init();
 </script>		

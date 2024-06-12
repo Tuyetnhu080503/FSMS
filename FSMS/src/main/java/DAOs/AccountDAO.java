@@ -39,11 +39,26 @@ public class AccountDAO {
     public Account getAccountByUsername(String username) {
         Account account = null;
         try {
-            PreparedStatement ps = conn.prepareStatement("select * from Account where username = ?");
+            PreparedStatement ps = conn.prepareStatement("select * from Account where Username = ?");
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                account = new Account(rs.getString("Username"), rs.getString("Password"), rs.getString("Email"), rs.getString("Firstname"), rs.getString("Lastname"), rs.getDate("DOB"), rs.getString("Avatar"), rs.getString("Gender"), rs.getString("Phonenumber"), rs.getString("Address"), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
+                account = new Account(rs.getInt("AccountID"),rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return account;
+    }
+    
+    public Account getAccountByEmail(String email) {
+        Account account = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Account where Email = ?");
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                account = new Account(rs.getInt("AccountID"),rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,11 +74,25 @@ public class AccountDAO {
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                account = new Account(rs.getString("Username"), rs.getString("Password"), rs.getString("Email"), rs.getString("Firstname"), rs.getString("Lastname"), rs.getDate("DOB"), rs.getString("Avatar"), rs.getString("Gender"), rs.getString("Phonenumber"), rs.getString("Address"), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
+                account = new Account(rs.getInt("AccountID"),rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return account;
+    }
+     public boolean checkAccountIsActive(Account account) {
+        boolean isActive = false;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Account where AccountID = ?");
+            ps.setInt(1, account.getAccountId());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                isActive = rs.getBoolean("Isactive");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return isActive;
     }
 }
