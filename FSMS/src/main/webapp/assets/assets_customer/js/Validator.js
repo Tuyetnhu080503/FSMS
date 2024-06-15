@@ -198,4 +198,12 @@ Validator.isPhone = (selector, invalidMessage) => {
     };
 };
 
+Validator.isExactNumber = (selector,valueNumber, invalidMessage) => {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value.trim().length != valueNumber ? invalidMessage : undefined;
+        }
+    };
+}
 

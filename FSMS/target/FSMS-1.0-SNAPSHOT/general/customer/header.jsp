@@ -268,7 +268,7 @@
                         <div class="col-12 col-lg-3">
                             <div class="left-category-menu-area">
                                 <h3 class="cat-toggle-heading">category</h3>
-                                <div class="left-category-menu" <%=(session.getAttribute("tabId").equals(2)) ? "style=\"display:none\"" : ""%>>
+                                <div class="left-category-menu" <%=(session.getAttribute("tabId").equals(1)) ? "" : "style=\"display:none\""%>>
                                     <ul>
                                         <li>
                                             <a href="shop-grid.html">Games & Software</a><p>Extensive games such as games online</p>

@@ -81,7 +81,8 @@ public class AccountDAO {
         }
         return account;
     }
-     public boolean checkAccountIsActive(Account account) {
+    
+    public boolean checkAccountIsActive(Account account) {
         boolean isActive = false;
         try {
             PreparedStatement ps = conn.prepareStatement("select * from Account where AccountID = ?");
@@ -94,5 +95,16 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return isActive;
+    }
+    
+    public void updatePasswordByEmail(String email, String password) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Account SET Password = ? Where Email = ?");
+            ps.setString(1, password);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

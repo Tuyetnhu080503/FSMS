@@ -34,7 +34,7 @@
                                                             <p style="color:red"><%=request.getAttribute("failLogin")!=null?request.getAttribute("failLogin"):""%></p>
                                                         </div>
                                                         <div class="block-button-right">
-                                                            <a href="#">Forgot your pasword?</a>
+                                                            <a href="/account/forgot">Forgot your pasword?</a>
                                                             <input type="hidden" name="login" value="login"> 
                                                             <button class="btn btn-primary" type="submit">Login</button>
                                                         </div>
@@ -64,4 +64,39 @@
             Validator.isRequire("#password", "Password is required"),
         ]
     });
+</script>
+
+<script>
+    <%
+        String resetOTP = (String) session.getAttribute("resetOTP");
+        if (resetOTP != null) {
+            
+    %>
+    Swal.fire({
+        icon: "error",
+        title: "You can't resset password.You enter wrong 5 times!",
+        showConfirmButton: true,
+    });
+     
+    <% }
+        session.removeAttribute("resetOTP");
+    %>
+</script>
+
+<script>
+    <%
+        String successUpdateNewPassword = (String) session.getAttribute("successUpdateNewPassword");
+        if (successUpdateNewPassword != null) {
+            
+    %>
+    Swal.fire({
+        icon: "success",
+        title: "Reset Password Sucessfully!",
+        showConfirmButton: false,
+        timer: 2000
+    });
+     
+    <% }
+        session.removeAttribute("successUpdateNewPassword");
+    %>
 </script>

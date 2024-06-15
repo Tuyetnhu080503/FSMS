@@ -95,9 +95,12 @@ public class LoginController extends HttpServlet {
             response.sendRedirect("/");
         } else if (request.getParameter("code") != null) {
             doGetLoginWithGoogle(request, response);
-        } else {
+        } else if(session.getAttribute("acc") == null) {
             session.setAttribute("tabId", 2);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        }
+        else{
+            response.sendRedirect("/");
         }
     }
 
