@@ -29,7 +29,7 @@
                                                             <p style="color:red"><%=request.getAttribute("notSentOTP")!=null?request.getAttribute("notSentOTP"):""%></p>
                                                         </div>
                                                         <div class="block-button-left">
-                                                            <input type="hidden" name="getMewPassword" value="getMewPassword"> 
+                                                            <input type="hidden" name="getNewPassword" value="getNewPassword"> 
                                                             <button style="font-size: 13px" class="btn btn-primary" type="submit">Get New Password</button>
                                                             <button style="font-size: 13px;margin-left: 10px" class="btn btn-danger"><a style="text-decoration: none;color: white" href="/login">Back to Login</a></button>
                                                         </div>

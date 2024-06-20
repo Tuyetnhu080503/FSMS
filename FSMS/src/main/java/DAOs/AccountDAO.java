@@ -69,7 +69,7 @@ public class AccountDAO {
     public Account getAccountByUsernameAndPassword(String username, String password) {
         Account account = null;
         try {
-            PreparedStatement ps = conn.prepareStatement("select * from Account where Username =? and Password=? and Isactive = 1");
+            PreparedStatement ps = conn.prepareStatement("select * from Account where Username =? and Password=?");
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
@@ -107,4 +107,43 @@ public class AccountDAO {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void banAccountByEmail(String email) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Account SET Isactive = 0 Where Email = ?");
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public boolean checkRightPasswordByEmail(String email, String pass) {
+        boolean isActive = false;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Account where Email = ? and Password = ?");
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                isActive = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return isActive;
+    }
+    
+    
+    public void changePasswordByEmail(String email, String pass) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Account SET Password = ? Where Email = ?");
+            ps.setString(1, pass);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

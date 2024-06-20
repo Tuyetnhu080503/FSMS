@@ -34,7 +34,16 @@ public class AccountController extends HttpServlet {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
         if (acc != null) {
-
+            if (path.endsWith("/profile")) {
+                session.setAttribute("tabId", 6);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            } else if (path.endsWith("/profile/edit")) {
+                session.setAttribute("tabId", 7);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            } else if (path.endsWith("/changepassword")) {
+                session.setAttribute("tabId", 8);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            }
         } else if (path.endsWith("/forgot")) {
             session.setAttribute("tabId", 3);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);
@@ -53,7 +62,7 @@ public class AccountController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession mySession = request.getSession();
-        if (request.getParameter("getMewPassword") != null) {
+        if (request.getParameter("getNewPassword") != null) {
 
             AccountDAO accDAO = new AccountDAO();
 
@@ -75,7 +84,7 @@ public class AccountController extends HttpServlet {
                 props.put("mail.smtp.port", "465");
                 Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("kendyle2702@gmail.com", ""); // enter key email
+                        return new PasswordAuthentication("", ""); // enter key email
                     }
                 });
 
@@ -128,12 +137,16 @@ public class AccountController extends HttpServlet {
                     if ((int) mySession.getAttribute("enterOTP") == 4) {
                         mySession.removeAttribute("otp");
                         mySession.removeAttribute("enterOTP");
-                        
+
+                        AccountDAO accDAO = new AccountDAO();
+                        accDAO.banAccountByEmail((String) mySession.getAttribute("email"));
+                        mySession.removeAttribute("email");
+
                         mySession.setAttribute("resetOTP", "yes");
                         response.sendRedirect("/login");
                     } else {
                         mySession.setAttribute("enterOTP", (int) mySession.getAttribute("enterOTP") + 1);
-                        
+
                         request.setAttribute("failOTP", "Wrong OTP. Please re-enter!");
                         mySession.setAttribute("tabId", 4);
                         request.getRequestDispatcher("/customer.jsp").forward(request, response);
@@ -141,20 +154,43 @@ public class AccountController extends HttpServlet {
 
                 }
             }
-        } else if(request.getParameter("newPassword") != null){
+        } else if (request.getParameter("newPassword") != null) {
             String newPassword = request.getParameter("newpassword");
             String email = request.getParameter("email");
+
+            String pass = MD5.getMd5(newPassword);
+
+            AccountDAO accDAO = new AccountDAO();
+
+            accDAO.updatePasswordByEmail(email, pass);
+
+            mySession.setAttribute("successUpdateNewPassword", "yes");
+
+            response.sendRedirect("/login");
+
+        } else if (request.getParameter("changePassword") != null) {
+            String password = request.getParameter("oldpassword");
+            String newPassword = request.getParameter("newpassword");
+
+            String pass = MD5.getMd5(password);
             
-            String pass =  MD5.getMd5(newPassword);
             
             AccountDAO accDAO = new AccountDAO();
-            
-            accDAO.updatePasswordByEmail(email, pass);
-            
-            mySession.setAttribute("successUpdateNewPassword", "yes");
-            
-            response.sendRedirect("/login");
-            
+            Account curAcc = (Account) mySession.getAttribute("acc");
+            String email = curAcc.getEmail();
+
+            boolean isRightPassword = accDAO.checkRightPasswordByEmail(email, pass);
+
+            if (isRightPassword) {
+                String newpass = MD5.getMd5(newPassword);
+                accDAO.changePasswordByEmail(email, newpass);
+                mySession.setAttribute("changePassword", "yes");
+                response.sendRedirect("/account/profile");
+            } else {
+                request.setAttribute("wrongPass", "The old password is incorrect");
+                mySession.setAttribute("tabId", 8);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            }
         }
     }
 

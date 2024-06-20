@@ -74,7 +74,7 @@
     %>
     Swal.fire({
         icon: "error",
-        title: "You can't resset password.You enter wrong 5 times!",
+        title: "Your account has been locked due to entering the wrong OTP code too many times!",
         showConfirmButton: true,
     });
      

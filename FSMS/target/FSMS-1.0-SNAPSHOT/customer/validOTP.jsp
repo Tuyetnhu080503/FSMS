@@ -24,7 +24,7 @@
                                                             <div class="message"></div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <p style="color:red"><%=request.getAttribute("failOTP")!=null?request.getAttribute("failOTP") :""%></p>
+                                                            <p style="color:red"><%=request.getAttribute("failOTP") != null ? "You have entered incorrectly " + Integer.toString((int) session.getAttribute("enterOTP")) + " times. If you enter incorrectly 5 times, your account will be locked." : ""%></p>
                                                         </div>
                                                         <div class="block-button-left">
                                                             <input type="hidden" name="getOTP" value="getOTP"> 
@@ -52,7 +52,7 @@
         message: ".message", // Selector class
         invalid: "invalid", // T�n class message
         rules: [
-            Validator.isExactNumber("#otp",6, "OTP must be six digits"),
+            Validator.isExactNumber("#otp", 6, "OTP must be six digits"),
         ]
     });
 </script>
@@ -61,7 +61,7 @@
     <%
         String sucessOTP = (String) session.getAttribute("sentOTP");
         if (sucessOTP != null) {
-            
+
     %>
     Swal.fire({
 //        position: "top-end",
@@ -70,7 +70,7 @@
         showConfirmButton: false,
         timer: 2000
     });
-     
+
     <% }
         session.removeAttribute("sentOTP");
     %>
@@ -80,7 +80,7 @@
     <%
         String failOTP = (String) session.getAttribute("failOTP");
         if (failOTP != null) {
-            
+
     %>
     Swal.fire({
 //        position: "top-end",
@@ -89,7 +89,7 @@
         showConfirmButton: false,
         timer: 2000
     });
-     
+
     <% }
         session.removeAttribute("sentOTP");
     %>

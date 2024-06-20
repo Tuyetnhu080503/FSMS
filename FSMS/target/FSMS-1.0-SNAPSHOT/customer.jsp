@@ -15,6 +15,15 @@
     <c:when test="${sessionScope.tabId == 5}">
         <%@include file="./customer/newPassword.jsp" %>
     </c:when>
+    <c:when test="${sessionScope.tabId == 6}">
+        <%@include file="./customer/viewProfile.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 7}">
+        <%@include file="./customer/editProfile.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 8}">
+        <%@include file="./customer/changePassword.jsp" %>
+    </c:when>
 </c:choose>
 <%@include file="./general/customer/brand.jsp" %>	
 <%@include file="./general/customer/footer.jsp" %>

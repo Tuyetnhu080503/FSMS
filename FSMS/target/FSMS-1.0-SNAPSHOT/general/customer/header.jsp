@@ -78,7 +78,7 @@
                                                 Account acc = (Account) session.getAttribute("acc");
                                             %>
                                             <ul>
-                                                <li><a href="my-account.html">My Account</a></li>
+                                                <%=acc == null ? "" : "<li><a href=\"/account/profile\">My Account</a></li>"%>
                                                 <li><a href="wishlist.html">My Wishlist</a></li>
                                                 <li><a href="cart.html">My Cart</a></li>
                                                 <li><a href="checkout.html">Checkout</a></li>
