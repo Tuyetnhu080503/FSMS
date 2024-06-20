@@ -10,14 +10,15 @@ package Models;
  */
 public class Category {
     private int categoryId;
-    private String name;
+    private String categoryname;
     private String description;
 
     public Category(int categoryId, String name, String description) {
         this.categoryId = categoryId;
-        this.name = name;
+        this.categoryname = name;
         this.description = description;
     }
+
 
     public int getCategoryId() {
         return categoryId;
@@ -27,13 +28,14 @@ public class Category {
         this.categoryId = categoryId;
     }
 
-    public String getName() {
-        return name;
+    public String getCategoryName() {
+        return categoryname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryName(String categoryname) {
+        this.categoryname = categoryname;
     }
+
 
     public String getDescription() {
         return description;

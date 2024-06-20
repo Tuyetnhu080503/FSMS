@@ -10,40 +10,73 @@ import java.math.BigDecimal;
  *
  * @author DELL
  */
-public class Product {
+    public class Product {
 
-    private String productId;
-    private String name;
+    private int productId;
+    private String productName;
     private String description;
-    private BigDecimal price;
+    private float price;
     private String image;
+    private String categoryName;
     private int categoryId;
-    private String productType;
+    private String color;
+    private String size;
+    private int quantity;
 
-    public Product(String productId, String name, String description, BigDecimal price, String image, int categoryId, String productType) {
+    public Product() {
+    }
+
+    public Product(int productId, String productName, String description, float price, String image, int categoryID) {
         this.productId = productId;
-        this.name = name;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.categoryId = categoryID;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Product(int productId, String productName, String description, float price, String image, String categoryName, String color, String size, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.categoryName = categoryName;
+        this.color = color;
+        this.size = size;
+        this.quantity = quantity;
+    }
+
+    public Product(String productName, String description, float price, String image, int categoryId) {
+        this.productName = productName;
         this.description = description;
         this.price = price;
         this.image = image;
         this.categoryId = categoryId;
-        this.productType = productType;
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getDescription() {
@@ -54,11 +87,11 @@ public class Product {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -70,20 +103,36 @@ public class Product {
         this.image = image;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public String getProductType() {
-        return productType;
+    public String getColor() {
+        return color;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
 }
