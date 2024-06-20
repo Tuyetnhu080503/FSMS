@@ -16,23 +16,31 @@ import java.util.logging.Logger;
  */
 public class DBConnection {
 
-    public static Connection connect() throws SQLException {
-        String server = "VIETNGUYEN\\SQLEXPRESS";
-        String port = "1433";
-        String database = "SROMS";
-        String user = "sa";
-        String password = "Vietnguyen02";
-        Connection conn = null;
+     public static Connection conn = null;
+    
+    public static Connection getConnection(){
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            conn = DriverManager.getConnection("jdbc:sqlserver://" + server + ":" + port
-                    + ";databaseName=" + database + ";user=" + user + ";password=" + password
-                    + ";encrypt=true;trustServerCertificate=true;");
+            conn = DriverManager.getConnection("jdbc:sqlserver://"
+                    + "Aaron-PC\\SQLEXPRESS;databaseName=SROMS;"
+                    + "user=sa;password=12345;encrypt=true;"
+                    + "trustServerCertificate=true;");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return conn;
+        
     }
+    public static void main(String[] args) throws SQLException {
+        Connection connection = new DBConnection().getConnection();
+        if (connection != null) {
+            System.out.println("Connection established");
+        } else {
+            System.out.println("Failed to make connection");
+        }
+    }
+    
+   
 }
