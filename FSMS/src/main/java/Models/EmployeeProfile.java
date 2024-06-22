@@ -4,21 +4,18 @@
  */
 package Models;
 
-/**
- *
- * @author DELL
- */
+
 public class EmployeeProfile {
     private String employeeId;
-    private String accountID;
+    private String accountId;
     private String cccd;
-    private String name;
+    private String employeeCode;
 
-    public EmployeeProfile(String employeeId, String accountID, String cccd, String name) {
+    public EmployeeProfile(String employeeId, String accountId, String cccd, String employeeCode) {
         this.employeeId = employeeId;
-        this.accountID = accountID;
+        this.accountId = accountId;
         this.cccd = cccd;
-        this.name = name;
+        this.employeeCode = employeeCode;
     }
 
     public String getEmployeeId() {
@@ -29,12 +26,12 @@ public class EmployeeProfile {
         this.employeeId = employeeId;
     }
 
-    public String getAccountID() {
-        return accountID;
+    public String getAccountId() {
+        return accountId;
     }
 
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public String getCccd() {
@@ -45,12 +42,14 @@ public class EmployeeProfile {
         this.cccd = cccd;
     }
 
-    public String getName() {
-        return name;
+    public String getEmployeeCode() {
+        return employeeCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
     }
+
+   
     
 }

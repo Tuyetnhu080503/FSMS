@@ -15,7 +15,10 @@
                                     <%
                                         Account account = (Account) session.getAttribute("acc");
                                     %>
-                                    <img style="width:100px; display: block; b" src="../assets/assets_customer/img/product/home2/2.jpg" alt="alt"/>
+                                    <div class="d-flex flex-column">
+                                        <img style="width:100px; display: block; b" src="../assets/avatar/<%= account.getAvatar() %>" alt="alt"/>
+                                        <span style="display: block; margin-left: 30px;margin-bottom: 20px">Avatar</span>
+                                    </div>
                                     <h5 class="card-title d-flex justify-content-between">
                                         <span>General Information</span>
                                         <a class="edit-link" href="/account/profile/edit"><i class="far fa-edit me-1"></i>Edit</a>

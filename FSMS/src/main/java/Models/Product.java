@@ -4,30 +4,23 @@
  */
 package Models;
 
-import java.math.BigDecimal;
 
-/**
- *
- * @author DELL
- */
 public class Product {
 
     private String productId;
     private String name;
     private String description;
-    private BigDecimal price;
+    private long price;
     private String image;
     private int categoryId;
-    private String productType;
 
-    public Product(String productId, String name, String description, BigDecimal price, String image, int categoryId, String productType) {
+    public Product(String productId, String name, String description, long price, String image, int categoryId) {
         this.productId = productId;
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
         this.categoryId = categoryId;
-        this.productType = productType;
     }
 
     public String getProductId() {
@@ -54,11 +47,11 @@ public class Product {
         this.description = description;
     }
 
-    public BigDecimal getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
@@ -76,14 +69,6 @@ public class Product {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public String getProductType() {
-        return productType;
-    }
-
-    public void setProductType(String productType) {
-        this.productType = productType;
     }
 
 }

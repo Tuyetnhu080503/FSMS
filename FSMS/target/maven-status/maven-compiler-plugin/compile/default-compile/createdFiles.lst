@@ -6,6 +6,7 @@ Hash\MD5.class
 Models\Category.class
 Models\Role.class
 Models\Product.class
+Controllers\UploadController.class
 Models\Account.class
 DBConnection\DBConnection.class
 Models\ProductType.class

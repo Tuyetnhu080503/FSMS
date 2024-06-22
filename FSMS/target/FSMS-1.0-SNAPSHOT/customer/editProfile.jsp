@@ -1,3 +1,4 @@
+<%@page import="Models.Account"%>
 <style>
     .login-danger,
     .star-red {
@@ -22,11 +23,14 @@
                     <div class="sec-heading-area">
                         <h2>Edit Profile</h2>
                     </div>
+                    <%
+                        Account account = (Account) session.getAttribute("acc");
+                    %>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <form id="formEditProfile" action="/account/profile/edit" method="post" enctype="multipart/form-data">
+                                    <form id="formEditProfile" action="/upload/profile/edit" method="post" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="col-12">
                                                 <h5 class="form-title student-info">Customer Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
@@ -35,7 +39,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Avatar</label>
                                                     <div style="margin-bottom: 20px" class="profile-image">
-                                                        <img id="avatarImg" width="100" alt="User Image" src="/assets/avatar/new1.png">
+                                                        <img id="avatarImg" width="100" alt="User Image" src="/assets/avatar/<%= account.getAvatar()%>">
                                                     </div>
                                                     <div class="upload">
                                                         <input name="avatar" type="file" id="uploadAvatar" class="form-control form-control-sm">
@@ -47,14 +51,14 @@
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>First Name <span class="login-danger">*</span></label>
-                                                    <input id="firstname" name="firstname" class="form-control" type="text" value="Cu">
+                                                    <input id="firstname" name="firstname" class="form-control" type="text" value="<%=account.getFirstName() %>">
                                                     <div class="message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Last Name <span class="login-danger">*</span></label>
-                                                    <input id="lastname" name="lastname" class="form-control" type="text" value="Le Quoc">
+                                                    <input id="lastname" name="lastname" class="form-control" type="text" value="<%=account.getLastName()%>">
                                                     <div class="message"></div>
                                                 </div>
                                             </div>
@@ -62,29 +66,29 @@
                                                 <div class=" form-group local-forms">
                                                     <label>Gender <span class="login-danger">*</span></label>
                                                     <select name="gender" class=" form-select form-control select">
-                                                        <option value="Female">Female</option>
-                                                        <option value="Male" selected="">Male</option>
+                                                        <option <%=account.getGender().equals("Female") ? "selected" : ""%> value="Female">Female</option>
+                                                        <option <%=account.getGender().equals("Male") ? "selected" : ""%> value="Male" selected="">Male</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label for="birthdate">Date Of Birth <span class="login-danger">*</span></label>
-                                                    <input id="birthdate" name="birthdate" class="form-control" type="date" value="2003-02-27">
+                                                    <input id="birthdate" name="birthdate" class="form-control" type="date" value="<%= account.getDob() %>">
                                                     <div class="message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Phone<span class="login-danger">*</span> </label>
-                                                    <input id="phone" name="phone" class="form-control" type="text" value="0942341234">
+                                                    <input id="phone" name="phone" class="form-control" type="text" value="<%= account.getPhoneNumber()%>">
                                                     <div class="message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-12 col-sm-4">
                                                 <div class="form-group local-forms">
                                                     <label>Address <span class="login-danger">*</span></label>
-                                                    <input id="address" name="address" class="form-control" type="text" value="Can Tho 22">
+                                                    <input id="address" name="address" class="form-control" type="text" value="<%= account.getAddress()%>">
                                                     <div class="message"></div>
                                                 </div>
                                             </div>

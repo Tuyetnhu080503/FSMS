@@ -10,16 +10,13 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author DELL
- */
+
 public class DBConnection {
 
     public static Connection connect() throws SQLException {
         String server = "DESKTOP-7UI977G\\SQLEXPRESS";
         String port = "1433";
-        String database = "FSMS_NEW";
+        String database = "finaldtb";
         String user = "sa";
         String password = "123456";
         Connection conn = null;

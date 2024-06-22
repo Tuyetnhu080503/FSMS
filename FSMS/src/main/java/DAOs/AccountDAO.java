@@ -146,4 +146,26 @@ public class AccountDAO {
         }
     }
     
+    public Account updateCustomerProfile(Account account, int accId) {
+        int count = 0;
+        try {
+            PreparedStatement ps = conn.prepareStatement(""
+                    + "update Account set Firstname =?, Lastname=?, Avatar=?, Gender=?, DOB=?,"
+                    + "Address=?, Phonenumber=? where AccountID =?");
+
+            ps.setString(1, account.getFirstName());
+            ps.setString(2, account.getLastName());
+            ps.setString(3, account.getAvatar());
+            ps.setString(4, account.getGender());
+            ps.setDate(5, account.getDob());
+            ps.setString(6, account.getAddress());
+            ps.setString(7, account.getPhoneNumber());
+            ps.setInt(8,accId);
+            count = ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Account.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return (count == 0) ? null : account;
+    }
+    
 }

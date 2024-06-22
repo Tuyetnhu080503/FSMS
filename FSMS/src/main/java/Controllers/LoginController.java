@@ -79,7 +79,9 @@ public class LoginController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        
         String path = request.getRequestURI();
+        
         if (path.endsWith("/logout")) {
             Cookie[] cList = request.getCookies();
             if (cList != null) {

@@ -4,27 +4,26 @@
  */
 package Models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
-/**
- *
- * @author DELL
- */
+
 public class Comment {
     private int commentId;
     private int productId;
     private String customerId;
-    private String content;
+    private String comment;
     private int rating;
-    private Date createdAt;
+    private int image;
+    private Timestamp createAt;
 
-    public Comment(int commentId, int productId, String customerId, String content, int rating, Date createdAt) {
+    public Comment(int commentId, int productId, String customerId, String comment, int rating, int image, Timestamp createAt) {
         this.commentId = commentId;
         this.productId = productId;
         this.customerId = customerId;
-        this.content = content;
+        this.comment = comment;
         this.rating = rating;
-        this.createdAt = createdAt;
+        this.image = image;
+        this.createAt = createAt;
     }
 
     public int getCommentId() {
@@ -51,12 +50,12 @@ public class Comment {
         this.customerId = customerId;
     }
 
-    public String getContent() {
-        return content;
+    public String getComment() {
+        return comment;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getRating() {
@@ -67,12 +66,21 @@ public class Comment {
         this.rating = rating;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public int getImage() {
+        return image;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setImage(int image) {
+        this.image = image;
     }
 
+    public Timestamp getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Timestamp createAt) {
+        this.createAt = createAt;
+    }
+
+    
 }

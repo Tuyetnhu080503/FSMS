@@ -4,10 +4,7 @@
  */
 package Models;
 
-/**
- *
- * @author DELL
- */
+
 public class CustomerProfile {
     private String customerId;
     private int accountId;

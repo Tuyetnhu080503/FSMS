@@ -4,17 +4,13 @@
  */
 package Models;
 
-/**
- *
- * @author DELL
- */
 public class Role {
     private int roleId;
-    private String roleName;
+    private String name;
 
-    public Role(int roleId, String roleName) {
+    public Role(int roleId, String name) {
         this.roleId = roleId;
-        this.roleName = roleName;
+        this.name = name;
     }
 
     public int getRoleId() {
@@ -25,12 +21,13 @@ public class Role {
         this.roleId = roleId;
     }
 
-    public String getRoleName() {
-        return roleName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setName(String name) {
+        this.name = name;
     }
-    
+
+   
 }

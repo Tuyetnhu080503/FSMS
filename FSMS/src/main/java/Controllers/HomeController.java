@@ -21,6 +21,7 @@ public class HomeController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        
         if (session.getAttribute("acc") == null) {
             String username = null;
             Cookie[] cList = request.getCookies();
@@ -89,5 +90,6 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
     }
 }

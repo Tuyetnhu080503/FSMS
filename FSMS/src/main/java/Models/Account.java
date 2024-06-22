@@ -22,6 +22,18 @@ public class Account {
     private boolean isActive;
     private int roleId;
 
+    public Account( String firstName, String lastName, Date dob, String avatar, String gender, String phoneNumber, String address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.avatar = avatar;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
+    
+    
     public Account(String username, String password, String email, String firstName, String lastName, Date dob, String avatar, String gender, String phoneNumber, String address, boolean isActive, int roleId) {
         this.username = username;
         this.password = password;

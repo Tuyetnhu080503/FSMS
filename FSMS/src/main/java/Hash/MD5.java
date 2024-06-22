@@ -8,10 +8,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- *
- * @author QuocCu
- */
+
 public class MD5 {
    
     public static String getMd5(String input) {
