@@ -15,6 +15,9 @@ public class Banner {
     private boolean isActive;
     private Timestamp createAt;
     
+    
+    
+    
 
     public Banner(int bannerId, String bannerName, String image, String content, boolean isActive, Timestamp createAt) {
         this.bannerId = bannerId;
