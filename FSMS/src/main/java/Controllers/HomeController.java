@@ -7,7 +7,6 @@ package Controllers;
 import DAOs.AccountDAO;
 import Models.Account;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;

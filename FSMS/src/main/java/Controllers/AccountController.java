@@ -33,7 +33,8 @@ public class AccountController extends HttpServlet {
         String path = request.getRequestURI();
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
-        if (acc != null) {
+        
+        if (acc != null && acc.getRoleId() == 4) { // is customer
             if (path.endsWith("/profile")) {
                 session.setAttribute("tabId", 6);
                 request.getRequestDispatcher("/customer.jsp").forward(request, response);
