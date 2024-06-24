@@ -8,11 +8,18 @@ package Models;
 public class Category {
     private int categoryId;
     private String name;
+    private String description;
 
     public Category(int categoryId, String name) {
         this.categoryId = categoryId;
         this.name = name;
     }
+    public Category(int categoryId, String name, String description) {
+        this.categoryId = categoryId;
+        this.name = name;
+        this.description = description;
+    }
+
 
     public int getCategoryId() {
         return categoryId;

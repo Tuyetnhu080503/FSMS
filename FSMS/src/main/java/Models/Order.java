@@ -4,9 +4,11 @@
  */
 package Models;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Order {
+
     private int orderId;
     private int customerId;
     private String status;
@@ -25,6 +27,11 @@ public class Order {
         this.voucherId = voucherId;
         this.paymentMethod = paymentMethod;
         this.paymentId = paymentId;
+    }
+
+    public Order(int orderId, String status) {
+        this.orderId = orderId;
+        this.status = status;
     }
 
     public int getOrderId() {
@@ -90,7 +97,5 @@ public class Order {
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
     }
-    
-    
-    
+
 }
