@@ -6,15 +6,14 @@ package Models;
 
 
 public class Product {
-
-    private String productId;
+    private int productId;
     private String name;
     private String description;
     private long price;
     private String image;
     private int categoryId;
 
-    public Product(String productId, String name, String description, long price, String image, int categoryId) {
+    public Product(int productId, String name, String description, long price, String image, int categoryId) {
         this.productId = productId;
         this.name = name;
         this.description = description;
@@ -23,11 +22,11 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -70,5 +69,7 @@ public class Product {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
+
+    
 
 }

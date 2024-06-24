@@ -6,31 +6,31 @@ package Models;
 
 
 public class EmployeeProfile {
-    private String employeeId;
-    private String accountId;
+    private int employeeId;
+    private int accountId;
     private String cccd;
     private String employeeCode;
 
-    public EmployeeProfile(String employeeId, String accountId, String cccd, String employeeCode) {
+    public EmployeeProfile(int employeeId, int accountId, String cccd, String employeeCode) {
         this.employeeId = employeeId;
         this.accountId = accountId;
         this.cccd = cccd;
         this.employeeCode = employeeCode;
     }
 
-    public String getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
 
-    public String getAccountId() {
+    public int getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(String accountId) {
+    public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
@@ -50,6 +50,4 @@ public class EmployeeProfile {
         this.employeeCode = employeeCode;
     }
 
-   
-    
 }

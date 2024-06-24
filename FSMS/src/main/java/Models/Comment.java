@@ -10,13 +10,13 @@ import java.sql.Timestamp;
 public class Comment {
     private int commentId;
     private int productId;
-    private String customerId;
+    private int customerId;
     private String comment;
     private int rating;
-    private int image;
+    private String image;
     private Timestamp createAt;
 
-    public Comment(int commentId, int productId, String customerId, String comment, int rating, int image, Timestamp createAt) {
+    public Comment(int commentId, int productId, int customerId, String comment, int rating, String image, Timestamp createAt) {
         this.commentId = commentId;
         this.productId = productId;
         this.customerId = customerId;
@@ -42,11 +42,11 @@ public class Comment {
         this.productId = productId;
     }
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
@@ -66,11 +66,11 @@ public class Comment {
         this.rating = rating;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -81,6 +81,8 @@ public class Comment {
     public void setCreateAt(Timestamp createAt) {
         this.createAt = createAt;
     }
+
+    
 
     
 }

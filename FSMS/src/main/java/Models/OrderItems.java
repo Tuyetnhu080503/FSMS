@@ -7,13 +7,13 @@ package Models;
 
 public class OrderItems {
     private int orderItemsId;
-    private String orderId;
-    private String productId;
+    private int orderId;
+    private int productId;
     private int quantity;
     private long unitPrice;
     private long totalPrice;
 
-    public OrderItems(int orderItemsId, String orderId, String productId, int quantity, long unitPrice, long totalPrice) {
+    public OrderItems(int orderItemsId, int orderId, int productId, int quantity, long unitPrice, long totalPrice) {
         this.orderItemsId = orderItemsId;
         this.orderId = orderId;
         this.productId = productId;
@@ -30,19 +30,19 @@ public class OrderItems {
         this.orderItemsId = orderItemsId;
     }
 
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -69,4 +69,6 @@ public class OrderItems {
     public void setTotalPrice(long totalPrice) {
         this.totalPrice = totalPrice;
     }
+
+    
 }

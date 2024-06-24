@@ -6,21 +6,21 @@ package Models;
 
 
 public class CustomerProfile {
-    private String customerId;
+    private int customerId;
     private int accountId;
     private String deliveryAddress;
 
-    public CustomerProfile(String customerId, int accountId, String deliveryAddress) {
+    public CustomerProfile(int customerId, int accountId, String deliveryAddress) {
         this.customerId = customerId;
         this.accountId = accountId;
         this.deliveryAddress = deliveryAddress;
     }
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
@@ -40,4 +40,5 @@ public class CustomerProfile {
         this.deliveryAddress = deliveryAddress;
     }
 
+   
 }
