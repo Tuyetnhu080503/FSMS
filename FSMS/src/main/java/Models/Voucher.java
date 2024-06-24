@@ -4,20 +4,21 @@
  */
 package Models;
 
-import java.sql.Timestamp;
+import java.sql.Date;
+import java.sql.Date;
 
 
 public class Voucher {
     private int voucherId;
     private int discountAmount;
     private int discountPercentage;
-    private Timestamp expiryDate;
+    private Date expiryDate;
     private boolean isActive;
-    private Timestamp createdDate;
+    private Date createdDate;
     private int quantity;
     private int minimumPrice;
 
-    public Voucher(int voucherId, int discountAmount, int discountPercentage, Timestamp expiryDate, boolean isActive, Timestamp createdDate, int quantity, int minimumPrice) {
+    public Voucher(int voucherId, int discountAmount, int discountPercentage, Date expiryDate, boolean isActive, Date createdDate, int quantity, int minimumPrice) {
         this.voucherId = voucherId;
         this.discountAmount = discountAmount;
         this.discountPercentage = discountPercentage;
@@ -52,11 +53,11 @@ public class Voucher {
         this.discountPercentage = discountPercentage;
     }
 
-    public Timestamp getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Timestamp expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -68,11 +69,11 @@ public class Voucher {
         this.isActive = isActive;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
