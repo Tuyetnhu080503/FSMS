@@ -16,7 +16,7 @@
                                         Account account = (Account) session.getAttribute("acc");
                                     %>
                                     <div class="d-flex flex-column">
-                                        <img style="width:100px; display: block; " src="../assets/images/avatar/<%= account.getAvatar() %>" alt="alt"/>
+                                        <img class="avatar avatar-lg" style="width:100px; display: block; " src="../assets/images/avatar/<%= account.getAvatar() %>" alt="alt"/>
                                         <span style="display: block; margin-left: 30px;margin-bottom: 20px">Avatar</span>
                                     </div>
                                     <h5 class="card-title d-flex justify-content-between">

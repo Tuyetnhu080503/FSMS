@@ -83,20 +83,20 @@
     %>
 </script>
 
-<script>
-    <%
-        String successUpdateNewPassword = (String) session.getAttribute("successUpdateNewPassword");
-        if (successUpdateNewPassword != null) {
-            
-    %>
-    Swal.fire({
-        icon: "success",
-        title: "Reset Password Sucessfully!",
-        showConfirmButton: false,
-        timer: 2000
-    });
-     
-    <% }
-        session.removeAttribute("successUpdateNewPassword");
-    %>
-</script>
+    <script>
+        <%
+            String successUpdateNewPassword = (String) session.getAttribute("successUpdateNewPassword");
+            if (successUpdateNewPassword != null) {
+
+        %>
+        Swal.fire({
+            icon: "success",
+            title: "Reset Password Sucessfully!",
+            showConfirmButton: false,
+            timer: 2000
+        });
+
+        <% }
+            session.removeAttribute("successUpdateNewPassword");
+        %>
+    </script>

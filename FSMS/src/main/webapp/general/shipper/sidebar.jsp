@@ -1,14 +1,18 @@
+<%@page import="Models.Account"%>
+<%
+    Account acc = (Account) session.getAttribute("acc");
+%>
 <aside class="main-sidebar">
     <!-- sidebar-->
     <section class="sidebar position-relative">	
         <div class="user-profile px-40 py-15">
             <div class="d-flex align-items-center">			
                 <div class="image">
-                    <img src="../../assets/assets_admin/images/avatar/1.jpg" class="avatar avatar-lg" alt="User Image">
+                    <img src="${pageContext.request.contextPath}/assets/images/avatar/<%=acc.getAvatar() %>" class="avatar avatar-lg" alt="User Image">
                 </div>
                 <div class="info ms-10">
                     <p class="mb-0">Welcome</p>
-                    <h5 class="mb-0">Joan Wilkins</h5>
+                    <h5 class="mb-0"><%=acc.getUsername()%></h5>
                 </div>
             </div>
         </div>
@@ -31,11 +35,6 @@
                     </li>
                 </ul>
 
-                <div class="sidebar-widgets">				
-                    <div class="copyright text-start m-25">
-                        <p><strong class="d-block">Master Admin Dashboard</strong> © 2024 All Rights Reserved</p>
-                    </div>
-                </div>
             </div>
         </div>
     </section>

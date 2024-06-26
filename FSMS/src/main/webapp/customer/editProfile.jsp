@@ -39,7 +39,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Avatar</label>
                                                     <div style="margin-bottom: 20px" class="profile-image">
-                                                        <img id="avatarImg" width="100" alt="User Image" src="/assets/images/avatar/<%= account.getAvatar()%>">
+                                                        <img class="avatar avatar-lg" id="avatarImg" width="100" alt="User Image" src="/assets/images/avatar/<%= account.getAvatar()%>">
                                                     </div>
                                                     <div class="upload">
                                                         <input name="avatar" type="file" id="uploadAvatar" class="form-control form-control-sm">
