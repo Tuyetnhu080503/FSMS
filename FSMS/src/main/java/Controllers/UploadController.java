@@ -66,7 +66,7 @@ public class UploadController extends HttpServlet {
                 avatar = acc.getAvatar();
             } else {
                 try {
-                    String realPath = request.getServletContext().getRealPath("/assets/avatar");
+                    String realPath = request.getServletContext().getRealPath("/assets/images/avatar");
                     avatar = Paths.get(part.getSubmittedFileName()).toString();
                     part.write(realPath + "/" + avatar);
                 } catch (Exception ex) {

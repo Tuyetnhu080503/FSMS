@@ -16,7 +16,7 @@
                                         Account account = (Account) session.getAttribute("acc");
                                     %>
                                     <div class="d-flex flex-column">
-                                        <img style="width:100px; display: block; b" src="../assets/images/avatar/<%= account.getAvatar() %>" alt="alt"/>
+                                        <img style="width:100px; display: block; " src="../assets/images/avatar/<%= account.getAvatar() %>" alt="alt"/>
                                         <span style="display: block; margin-left: 30px;margin-bottom: 20px">Avatar</span>
                                     </div>
                                     <h5 class="card-title d-flex justify-content-between">
@@ -81,5 +81,24 @@
 
     <% }
         session.removeAttribute("changePassword");
+    %>
+</script>
+
+
+<script>
+    <%
+        String editStatus = (String) session.getAttribute("editStatus");
+        if (editStatus == "success") {
+            
+    %>
+    Swal.fire({
+        icon: "success",
+        title: "Update Profile Successfully!",
+        showConfirmButton: false,
+        timer: 2000
+    });
+     
+    <% }
+        session.removeAttribute("editStatus");
     %>
 </script>

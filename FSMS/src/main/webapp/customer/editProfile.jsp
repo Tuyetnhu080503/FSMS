@@ -151,3 +151,21 @@
         ]
     });
 </script>
+
+<script>
+    <%
+        String failUpdate = (String) session.getAttribute("editStatus");
+        if (failUpdate == "fail") {
+            
+    %>
+    Swal.fire({
+        icon: "error",
+        title: "Fail Update!",
+        showConfirmButton: false,
+        timer: 1000
+    });
+     
+    <% }
+        session.removeAttribute("editStatus");
+    %>
+</script>
