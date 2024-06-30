@@ -75,7 +75,7 @@
                             <p><strong>Email:  </strong> <span> <a href="mailto:demo@example.com">demo@example.com</a></span></p>
                         </div>
                         <div class="banner-footer">
-                            <img src="../../assets/assets_customer/img/add/menuadd.jpg" alt="GreenTech" />
+                            <img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd.jpg" alt="GreenTech" />
                         </div>
                     </div>
                     <!-- single-footer end -->
@@ -118,7 +118,7 @@
                     <div class="col-12 col-md-12 col-lg-4">
                         <!-- payment-logo start -->
                         <div class="payment-logo">
-                            <img src="../../assets/assets_customer/img/payment_1.png" alt="GreenTech Payment" />
+                            <img src="${pageContext.request.contextPath}/assets/assets_customer/img/payment_1.png" alt="GreenTech Payment" />
                         </div>
                         <!-- payment-logo end -->
                     </div>								
@@ -141,7 +141,7 @@
                                 <option value="">GreenTech</option>
                             </select>
                         </div>							
-                        <p class="copy-right">&copy; 2021 <strong>GreenTech</strong> Made with <i class="fa fa-heart"></i> by <a href="../../../hasthemes.com/index.html" target="_blank" rel="noopener noreferrer"><strong>HasThemes</strong></a></p>
+                        <p class="copy-right">&copy; 2021 <strong>GreenTech</strong> Made with <i class="fa fa-heart"></i> by <a href="${pageContext.request.contextPath}/../hasthemes.com/index.html" target="_blank" rel="noopener noreferrer"><strong>HasThemes</strong></a></p>
                     </div>
                     <!-- scroll-to-top-start -->
                     <div class="scroll-to-top">
@@ -157,34 +157,34 @@
 <!-- footer-area end -->
 
 <!-- jquery -->		
-<script src="../../assets/assets_customer/js/vendor/jquery-3.5.1.min.js"></script>
-<script src="../../assets/assets_customer/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/vendor/jquery-3.5.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/vendor/jquery-migrate-3.3.0.min.js"></script>
 <!-- popper js -->
-<script src="../../assets/assets_customer/js/popper.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/popper.min.js"></script>
 <!-- bootstrap js -->
-<script src="../../assets/assets_customer/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/bootstrap.min.js"></script>
 <!-- jqueryui js -->
-<script src="../../assets/assets_customer/js/jqueryui.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/jqueryui.js"></script>
 <!-- mobile menu js -->
-<script src="../../assets/assets_customer/js/jquery.meanmenu.js"></script>		
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/jquery.meanmenu.js"></script>		
 <!-- fancybox js -->
-<script src="../../assets/assets_customer/js/jquery.fancybox.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/jquery.fancybox.js"></script>
 <!-- elevatezoom js -->
-<script src="../../assets/assets_customer//js/jquery.elevatezoom.js"></script>		
+<script src="${pageContext.request.contextPath}/assets/assets_customer//js/jquery.elevatezoom.js"></script>		
 <!-- owl.carousel js -->
-<script src="../../assets/assets_customer/js/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/owl.carousel.min.js"></script>
 <!-- owl.carousel js -->
-<script src="../../assets/assets_customer/js/jquery.nivo.slider.pack.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/jquery.nivo.slider.pack.js"></script>
 <!-- jquery-counterup js -->
-<script src="../../assets/assets_customer/js/jquery.counterup.min.js"></script>		
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/jquery.counterup.min.js"></script>		
 <!-- wow js -->
-<script src="../../assets/assets_customer/js/wow.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/wow.js"></script>
 
 <script>
     new WOW().init();
 </script>		
 <!-- main js -->
-<script src="../../assets/assets_customer/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/assets/assets_customer/js/main.js"></script>
 </body>
 
 <!-- Mirrored from htmldemo.net/greentech/greentech/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 09 Jun 2024 03:49:07 GMT -->

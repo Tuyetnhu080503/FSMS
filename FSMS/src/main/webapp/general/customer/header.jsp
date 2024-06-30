@@ -16,37 +16,37 @@
         <!-- mobile meta -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="../../assets/assets_customer/img/favicon.ico">
+        <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/assets_customer/img/favicon.ico">
         <!-- fancybox -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/jquery.fancybox.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/jquery.fancybox.css">
         <!-- mobile menu -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/meanmenu.min.css">		
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/meanmenu.min.css">		
         <!-- jquery-ui-slider -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/jquery-ui-slider.css">		
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/jquery-ui-slider.css">		
         <!-- nivo-slider css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/nivo-slider.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/nivo-slider.css">
         <!-- owl.carousel css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/owl.carousel.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/owl.carousel.css">
         <!-- animate css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/animate.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/animate.css">
         <!-- fonts -->
-        <link href="../../../fonts.googleapis.com/cssb1e5.css?family=Poppins:200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css" />
+        <link href="${pageContext.request.contextPath}/../fonts.googleapis.com/cssb1e5.css?family=Poppins:200,300,400,500,600,700,800,900" rel="stylesheet" type="text/css" />
         <!-- font-awesome css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/font-awesome.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/font-awesome.min.css">
         <!-- bootstrap css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/bootstrap.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/bootstrap.min.css">
         <!-- style css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/style.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/style.css">
         <!-- responsive css -->
-        <link rel="stylesheet" href="../../assets/assets_customer/css/responsive.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/assets_customer/css/responsive.css">
         <!-- modernizr js -->
-        <script src="../../assets/assets_customer/js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/assets_customer/js/vendor/modernizr-2.6.2.min.js"></script>
         <!--[if lt IE 9]>
           <script src="js/vendor/html5shiv.min.js"></script>
           <script src="js/vendor/respond.min.js"></script>
         <![endif]-->
-        <script src="../../assets/assets_customer/js/Validator.js"></script>
-        <script src="../../assets/assets_customer/js/sweetalert2.all.min.js"></script>>
+        <script src="${pageContext.request.contextPath}/assets/assets_customer/js/Validator.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/assets_customer/js/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
         <style>
             .invalid div {
@@ -113,7 +113,7 @@
                         <div class="col-12 col-lg-3">
                             <!-- logo start -->
                             <div class="logo">
-                                <a href="index.html"><img src="../../assets/assets_customer/img/logo.png" alt="GreenTech" /></a>
+                                <a href="index.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/logo.png" alt="GreenTech" /></a>
                             </div>
                             <!-- logo end -->
                         </div>
@@ -153,7 +153,7 @@
                                         <div class="single-mycart-item">
                                             <div class="mycart-item-pro">
                                                 <div class="mycart-item-img">
-                                                    <a href="wishlist.html"><img src="../../assets/assets_customer/img/product/shoping-cart/4.jpg" alt="cart" /></a>
+                                                    <a href="wishlist.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/4.jpg" alt="cart" /></a>
                                                 </div>
                                                 <div class="mycart-item-text">
                                                     <a href="#" class="item-delete" title="delete">delete Item</a>	
@@ -169,7 +169,7 @@
                                         <div class="single-mycart-item">
                                             <div class="mycart-item-pro">
                                                 <div class="mycart-item-img">
-                                                    <a href="wishlist.html"><img src="../../assets/assets_customer/img/product/shoping-cart/5.jpg" alt="cart" /></a>
+                                                    <a href="wishlist.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/5.jpg" alt="cart" /></a>
                                                 </div>
                                                 <div class="mycart-item-text">
                                                     <a href="#" class="item-delete" title="delete">delete Item</a>	
@@ -184,7 +184,7 @@
                                         <div class="single-mycart-item">
                                             <div class="mycart-item-pro">
                                                 <div class="mycart-item-img">
-                                                    <a href="wishlist.html"><img src="../../assets/assets_customer/img/product/shoping-cart/2.jpg" alt="cart" /></a>
+                                                    <a href="wishlist.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/2.jpg" alt="cart" /></a>
                                                 </div>
                                                 <div class="mycart-item-text">
                                                     <a href="#" class="item-delete" title="delete">delete Item</a>	
@@ -206,7 +206,7 @@
                                         <div class="single-mycart-item">
                                             <div class="mycart-item-pro">
                                                 <div class="mycart-item-img">
-                                                    <a href="cart.html"><img src="../../assets/assets_customer/img/product/shoping-cart/1.jpg" alt="cart" /></a>
+                                                    <a href="cart.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/1.jpg" alt="cart" /></a>
                                                 </div>
                                                 <div class="mycart-item-text">
                                                     <p><a class="mycart-title" href="cart.html">Cras neque metus </a></p>
@@ -221,7 +221,7 @@
                                         <div class="single-mycart-item">
                                             <div class="mycart-item-pro">
                                                 <div class="mycart-item-img">
-                                                    <a href="cart.html"><img src="../../assets/assets_customer/img/product/shoping-cart/2.jpg" alt="cart" /></a>
+                                                    <a href="cart.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/2.jpg" alt="cart" /></a>
                                                 </div>
                                                 <div class="mycart-item-text">
                                                     <p><a class="mycart-title" href="cart.html">Proin lectus ipsum</a></p>
@@ -236,7 +236,7 @@
                                         <div class="single-mycart-item">
                                             <div class="mycart-item-pro">
                                                 <div class="mycart-item-img">
-                                                    <a href="cart.html"><img src="../../assets/assets_customer/img/product/shoping-cart/3.jpg" alt="cart" /></a>
+                                                    <a href="cart.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/3.jpg" alt="cart" /></a>
                                                 </div>
                                                 <div class="mycart-item-text">
                                                     <p><a class="mycart-title" href="cart.html">Donec ac tempus</a></p>
@@ -306,7 +306,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="single-cat-dropdown">
-                                                    <a href="shop-grid.html"><img src="../../assets/assets_customer/img/add/11.jpg" alt="product image" /></a>
+                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/11.jpg" alt="product image" /></a>
                                                 </div>
                                             </div>
                                         </li>
@@ -349,7 +349,7 @@
                                         <li><a href="shop-grid.html">Fashion & Dress</a><p>Offers a wide range of women's accessori</p>
                                             <div class="left-cat-dropdown left-cat-3">
                                                 <div class="single-cat-dropdown">
-                                                    <a href="shop-grid.html"><img src="../../assets/assets_customer/img/add/menuadd3.jpg" alt="product image" /></a>
+                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd3.jpg" alt="product image" /></a>
                                                 </div>											
                                                 <div class="single-cat-dropdown">
                                                     <div class="single-cat-item">
@@ -415,8 +415,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="menu-bottom-img-add">
-                                                    <a href="shop-grid.html"><img src="../../assets/assets_customer/img/add/menuadd.jpg" alt="product image" /></a>
-                                                    <a href="shop-grid.html"><img src="../../assets/assets_customer/img/add/menuadd4.jpg" alt="product image" /></a>
+                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd.jpg" alt="product image" /></a>
+                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd4.jpg" alt="product image" /></a>
                                                 </div>
                                             </div>											
                                         </li>
@@ -463,7 +463,7 @@
                                                         <a href="shop-grid.html">Car Electronics</a>
                                                     </div>
                                                     <div class="single-cat-item">
-                                                        <a href="shop-grid.html"><img src="../../assets/assets_customer/img/add/menuadd2.png" alt="product image" /></a>
+                                                        <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd2.png" alt="product image" /></a>
                                                     </div>
                                                 </div>
                                             </div>												

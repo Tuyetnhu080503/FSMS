@@ -22,6 +22,14 @@
 <!-- Master Admin App -->
 <script src="${pageContext.request.contextPath}/assets/assets_admin/js/template.js"></script>
 <script src="${pageContext.request.contextPath}/assets/assets_admin/js/pages/dashboard.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#viewAccounts").DataTable();
+    });
+</script>
+
 
 </body>
 

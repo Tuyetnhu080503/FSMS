@@ -1,5 +1,9 @@
 
 <style>
+    .login-danger,
+    .star-red {
+        color: #ff0000;
+    }
     #changePassword input{
         font-size: 14px;
     }

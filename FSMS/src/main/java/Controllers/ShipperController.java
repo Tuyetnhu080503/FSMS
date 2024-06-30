@@ -5,6 +5,8 @@
 
 package Controllers;
 
+import DAOs.AccountDAO;
+import Hash.MD5;
 import Models.Account;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -28,6 +30,14 @@ public class ShipperController extends HttpServlet {
                 session.setAttribute("tabId", 2);
                 request.getRequestDispatcher("/shipper.jsp").forward(request, response);
             }
+            else if(path.endsWith("/profile/edit")){
+                session.setAttribute("tabId", 3);
+                request.getRequestDispatcher("/shipper.jsp").forward(request, response);
+            }
+            else if(path.endsWith("/profile/changepassword")){
+                session.setAttribute("tabId", 4);
+                request.getRequestDispatcher("/shipper.jsp").forward(request, response);
+            }
             else{ // route = "/admin"
                 session.setAttribute("tabId", 1);
                 request.getRequestDispatcher("/shipper.jsp").forward(request, response);
@@ -41,6 +51,30 @@ public class ShipperController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        HttpSession mySession = request.getSession();
+        if (request.getParameter("changePassword") != null) {
+            String password = request.getParameter("oldpassword");
+            String newPassword = request.getParameter("newpassword");
+
+            String pass = MD5.getMd5(password);
+            
+            
+            AccountDAO accDAO = new AccountDAO();
+            Account curAcc = (Account) mySession.getAttribute("acc");
+            String email = curAcc.getEmail();
+
+            boolean isRightPassword = accDAO.checkRightPasswordByEmail(email, pass);
+
+            if (isRightPassword) {
+                String newpass = MD5.getMd5(newPassword);
+                accDAO.changePasswordByEmail(email, newpass);
+                mySession.setAttribute("changePassword", "yes");
+                response.sendRedirect("/shipper/profile");
+            } else {
+                request.setAttribute("wrongPass", "The old password is incorrect");
+                mySession.setAttribute("tabId", 4);
+                request.getRequestDispatcher("/shipper.jsp").forward(request, response);
+            }
+        }
     }
 }

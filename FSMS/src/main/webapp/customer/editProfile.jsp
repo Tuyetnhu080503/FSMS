@@ -144,6 +144,7 @@
             Validator.isRequire("#firstname", "First Name is required"),
             Validator.isRequire("#lastname", "Last Name is required"),
             Validator.isRequire("#birthdate", "Birthdate is required"),
+            Validator.isFutureDate("#birthdate", "Birthdate must be in past"),
             Validator.isRequire("#address", "Address is required"),
             Validator.isRequire("#phone", "Phone is required"),
             Validator.isPhone("#phone", "Phone is not valid"),

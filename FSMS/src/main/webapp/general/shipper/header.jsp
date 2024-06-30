@@ -24,7 +24,17 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css">
-
+        <script src="${pageContext.request.contextPath}/assets/assets_customer/js/Validator.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/assets_customer/js/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <style>
+            .invalid div {
+                color: red;
+            }
+            .invalid input {
+                border: 1px solid red;
+            }
+        </style>
     </head>
 
     <body class="hold-transition light-skin sidebar-mini theme-primary fixed">

@@ -22,13 +22,13 @@
                 <!-- sidebar menu-->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">Menu </li>
-                    <li>
+                    <li class="<%=(session.getAttribute("tabId").equals(1)||session.getAttribute("tabId").equals(2)||session.getAttribute("tabId").equals(3)||session.getAttribute("tabId").equals(4)) ? "active" : ""%>">
                         <a href="/admin">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/dashboard.svg" class="svg-icon" alt="">
                             <span>Home</span>
                         </a>
                     </li>
-                    <li class="treeview">
+                    <li class="treeview <%=(session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(6)||session.getAttribute("tabId").equals(7)) ? "menu-open active" : ""%>">
                         <a href="#">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
                             <span>Manage Accounts</span>
@@ -37,8 +37,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/account/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Accounts</a></li>
-                            <li><a href="/account"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Accounts</a></li>	
+                            <li class="<%=(session.getAttribute("tabId").equals(6)) ? "active" : ""%>"><a href="/admin/accounts/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Accounts</a></li>
+                            <li class="<%=(session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(7)) ? "active" : ""%>"><a href="/admin/accounts"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Accounts</a></li>	
                         </ul>
                     </li>
                     <li class="treeview">

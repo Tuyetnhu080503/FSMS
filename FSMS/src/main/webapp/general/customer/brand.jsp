@@ -6,47 +6,47 @@
             <div class="client-carousel owl-carousel">
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/1.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/1.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/2.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/2.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/3.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/3.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/4.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/4.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/5.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/5.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/1.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/1.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/2.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/2.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->	
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/3.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/3.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->	
                 <!-- single-client start -->
                 <div class="single-client">
-                    <img src="../../assets/assets_customer/img/client-logo/4.jpg" alt="GreenTech" />
+                    <img src="${pageContext.request.contextPath}/assets/assets_customer/img/client-logo/4.jpg" alt="GreenTech" />
                 </div>
                 <!-- single-client end -->							
             </div>

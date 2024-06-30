@@ -17,6 +17,11 @@ public class EmployeeProfile {
         this.cccd = cccd;
         this.employeeCode = employeeCode;
     }
+    public EmployeeProfile( int accountId, String cccd, String employeeCode) {
+        this.accountId = accountId;
+        this.cccd = cccd;
+        this.employeeCode = employeeCode;
+    }
 
     public int getEmployeeId() {
         return employeeId;

@@ -47,7 +47,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>admin</servlet-name>
-        <url-pattern>/admin</url-pattern>
+        <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>shipper</servlet-name>

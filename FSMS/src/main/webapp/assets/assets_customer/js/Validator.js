@@ -207,3 +207,16 @@ Validator.isExactNumber = (selector,valueNumber, invalidMessage) => {
     };
 }
 
+Validator.isFutureDate = (selector, invalidMessage) => {
+    return {
+        selector: selector,
+        test: function (value) {
+            const inputDate = new Date(value);
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+            return inputDate > currentDate ? invalidMessage : undefined;
+        }
+    };
+};
+
+
