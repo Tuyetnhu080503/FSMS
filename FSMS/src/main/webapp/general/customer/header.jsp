@@ -79,25 +79,13 @@
                                             %>
                                             <ul>
                                                 <%=acc == null ? "" : "<li><a href=\"/account/profile\">My Account</a></li>"%>
-                                                <li><a href="wishlist.html">My Wishlist</a></li>
-                                                <li><a href="cart.html">My Cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
+                                                <li><a href="/cart">My Cart</a></li>
+                                                <li><a href="/checkout">Checkout</a></li>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
 
                                             </ul>
                                         </li>
-                                        <li class="last"><a href="#">usd</a><i class="fa fa-angle-down"></i>
-                                            <ul>
-                                                <li><a href="#">eur</a></li>
-                                                <li><a href="#">usd</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="last"><a href="#">English</a><i class="fa fa-angle-down"></i>
-                                            <ul>
-                                                <li><a href="#">English</a></li>
-                                                <li><a href="#">France</a></li>
-                                            </ul>
-                                        </li>
+                                        
                                     </ul>
                                 </nav>
                             </div>								
@@ -146,7 +134,7 @@
                             <!-- category search end -->
                             <!-- top-shoping-cart start -->
                             <div class="top-shoping-cart">
-                                <div class="top-wishlist">
+<!--                                <div class="top-wishlist">
                                     <a class="top-wishlist-link" href="wishlist.html"><span>3</span></a>
                                     <div class="wishlist-box-overlay">
                                         <p class="last-added-item">last added item</p>
@@ -199,7 +187,7 @@
                                         </div>
                                         <p class="go-to-wishlist"><a href="wishlist.html">Go to Wishlist</a></p>
                                     </div>										
-                                </div>
+                                </div>-->
                                 <div class="top-mycart">
                                     <a class="top-mycart-link" href="cart.html">my cart <span>(3) item: <strong>$975.00</strong></span></a>
                                     <div class="top-mycart-overlay">
@@ -497,41 +485,9 @@
                             <div class="mainmenu">
                                 <nav>
                                     <ul>
-                                        <li class="active"><a href="index.html">Home</a><i class="fa fa-angle-down"></i>
-                                            <ul>
-                                                <li><a href="index-2.html">Home Version 2</a></li>
-                                                <li><a href="index-3.html">Home Version 3</a></li>
-                                                <li><a href="index-4.html">Home Version 4</a></li>
-                                            </ul>
+                                        <li class="active"><a href="index.html">Home</a>
                                         </li>
-                                        <li><a href="about-us.html">About Us</a></li>
-                                        <li><a href="shop-grid.html">shop</a></li>
-                                        <li><a href="blog.html">Blog</a><i class="fa fa-angle-down"></i>
-                                            <ul>
-                                                <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                                <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                                                <li><a href="single-blog.html">Single Blog</a></li>
-                                            </ul>											
-                                        </li>
-                                        <li><a href="#">Pages</a><i class="fa fa-angle-down"></i>
-                                            <ul>
-                                                <li><a href="shop-grid.html">shop grid</a></li>
-                                                <li><a href="shop-list.html">shop list</a></li>
-                                                <li><a href="single-product.html">single product</a></li>
-                                                <li><a href="cart.html">cart</a></li>
-                                                <li><a href="checkout.html">checkout</a></li>
-                                                <li><a href="my-account.html">my account</a></li>
-                                                <li><a href="wishlist.html">wishlist</a></li>						
-                                                <li><a href="blog.html">Blog</a></li>
-                                                <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                                <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                                                <li><a href="single-blog.html">Single Blog</a></li>
-                                                <li><a href="about-us.html">about us</a></li>
-                                                <li><a href="contact-us.html">contact us</a></li>
-                                                <li><a href="404.html">404 Page</a></li>
-                                            </ul>													
-                                        </li>
-                                        <li><a href="contact-us.html">Contact Us</a></li>
+                                        <li><a href="/products">Products</a></li>
                                     </ul>
                                 </nav>
                             </div>
