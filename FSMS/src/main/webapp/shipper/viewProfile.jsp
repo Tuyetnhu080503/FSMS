@@ -20,7 +20,7 @@
                                         Account account = (Account) session.getAttribute("acc");
                                         EmployeeDAO emDAO = new EmployeeDAO();
                                         
-                                        EmployeeProfile empyPro = emDAO.getEmployeeProfileByAccontID(account.getAccountId());
+                                        EmployeeProfile empyPro = emDAO.getEmployeeProfileByAccountID(account.getAccountId());
                                     %>
                                     <div class="d-flex flex-column">
                                         <img style="width:100px; display: block; " src="../assets/images/avatar/<%= account.getAvatar()%>" alt="alt"/>

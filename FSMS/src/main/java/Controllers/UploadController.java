@@ -221,6 +221,48 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/admin/accounts");
             }
 
+        } else if (request.getParameter("registerAccount") != null) {
+            String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            String pass_hash = MD5.getMd5(password);
+            String firstName = request.getParameter("firstname");
+            String lastName = request.getParameter("lastname");
+            String gender = request.getParameter("gender");
+            Date birthdate = Date.valueOf(request.getParameter("birthdate"));
+            String email = request.getParameter("email");
+            String phone = request.getParameter("phone");
+            String address = request.getParameter("address");
+            String role = "Customer";
+            int roleId = 4;
+             String avatar = "";
+            Part part = request.getPart("avatar");
+            if (Paths.get(part.getSubmittedFileName()).toString().isEmpty()) {
+                avatar = acc.getAvatar();
+            } else {
+                try {
+                    String realPath = request.getServletContext().getRealPath("/assets/images/avatar");
+                    avatar = Paths.get(part.getSubmittedFileName()).toString();
+                    part.write(realPath + "/" + avatar);
+                } catch (Exception ex) {
+                    session.setAttribute("registerAccount", "fail");
+                    response.sendRedirect("/account/register");
+                }
+            }
+
+            Account accProfile = new Account(username, pass_hash, email, firstName, lastName, birthdate, avatar, gender, phone, address, true, roleId);
+
+            AccountDAO accDAO = new AccountDAO();
+
+            Account returnAccount = accDAO.addAccount(accProfile);
+
+            if (returnAccount == null) {
+                session.setAttribute("registerAccount", "fail");
+                response.sendRedirect("/account/register");
+            } else {
+                session.setAttribute("registerAccount", "success");
+                response.sendRedirect("/login");
+            }
+
         }
     }
 

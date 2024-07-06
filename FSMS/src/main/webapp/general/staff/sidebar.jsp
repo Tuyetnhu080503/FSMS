@@ -28,31 +28,16 @@
                             <span>Home</span>
                         </a>
                     </li>
-                    <li class="treeview <%=(session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(6)||session.getAttribute("tabId").equals(7)) ? "menu-open active" : ""%>">
-                        <a href="#">
-                            <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
-                            <span>Manage Accounts</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-right pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li class="<%=(session.getAttribute("tabId").equals(6)) ? "active" : ""%>"><a href="/admin/accounts/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Accounts</a></li>
-                            <li class="<%=(session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(7)) ? "active" : ""%>"><a href="/admin/accounts"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Accounts</a></li>	
-                        </ul>
-                    </li>
+                 
                     <li class="treeview">
                         <a href="#">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
-                            <span>Manage Products</span>
+                            <span>View list Product</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-right pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/product/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Products</a></li>
-                            <li><a href="/product"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Accounts</a></li>	
-                        </ul>
+                
                     </li>
 
                     <li class="treeview">
@@ -75,34 +60,7 @@
                         </a>
                     </li>
 
-                    <li class="treeview">
-                        <a href="#">
-                            <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
-                            <span>Manage Notifications</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-right pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/notification/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Notifications</a></li>
-                            <li><a href="/notification"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Notifications</a></li>	
-                        </ul>
-                    </li>
-
-                    <li class="treeview">
-                        <a href="#">
-                            <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
-                            <span>Manage Banners</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-right pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/banner/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Banners</a></li>
-                            <li><a href="/banner"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Banners</a></li>	
-                        </ul>
-                    </li>
-
+                    
                 </ul>
             </div>
         </div>

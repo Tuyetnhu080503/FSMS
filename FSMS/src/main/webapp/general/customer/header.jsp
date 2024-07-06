@@ -82,7 +82,7 @@
                                                 <li><a href="/cart">My Cart</a></li>
                                                 <li><a href="/checkout">Checkout</a></li>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
-
+                                                 <li><a href="/account/register">Register Account</a></li>
                                             </ul>
                                         </li>
                                         

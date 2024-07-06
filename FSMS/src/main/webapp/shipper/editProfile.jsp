@@ -38,7 +38,7 @@
                                                     Account account = (Account) session.getAttribute("acc");
                                                     EmployeeDAO emDAO = new EmployeeDAO();
 
-                                                    EmployeeProfile empyPro = emDAO.getEmployeeProfileByAccontID(account.getAccountId());
+                                                    EmployeeProfile empyPro = emDAO.getEmployeeProfileByAccountID(account.getAccountId());
                                                 %>
                                                 <div class="row">
                                                     <div class="col-lg-12">
