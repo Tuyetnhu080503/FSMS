@@ -18,7 +18,7 @@
                                                 <div class="method-right col-12 col-md-6">
                                                     <h2>Login</h2>
                                                     <a style="display: block;margin-bottom: 10px" id="loginGoogle" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login&response_type=code&client_id=457078457719-toc7bkb07iv1f0agnf4otfeusnegdhev.apps.googleusercontent.com&approval_prompt=force" class="btn btn-primary btn-block"><i style="margin-right:15px;font-size: 18px;" class="fab fa-google-plus-g"></i>Login With Google</a>
-                                                    <label>Already registered?</label> <a href="/register" style="color: #00A0DC; text-decoration: underline">Register now!</a>
+                                                    <label>Already registered?</label> <a href="/account/register" style="color: #00A0DC; text-decoration: underline">Register now!</a>
                                                     <form id="login" action="/login" method="post">
                                                         <div class="form-group">
                                                             <label>Username <sup>*</sup></label>

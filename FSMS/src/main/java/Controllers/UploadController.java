@@ -260,6 +260,7 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/account/register");
             } else {
                 session.setAttribute("registerAccount", "success");
+                
                 response.sendRedirect("/login");
             }
 
