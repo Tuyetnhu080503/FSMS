@@ -50,8 +50,8 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/product/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Products</a></li>
-                            <li><a href="/product"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Accounts</a></li>	
+                            <li><a href="/admin/product/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Products</a></li>
+                            <li><a href="/admin/product"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Products</a></li>	
                         </ul>
                     </li>
 
@@ -64,7 +64,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/order"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Orders</a></li>	
+                            <li><a href="admin/order"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Orders</a></li>	
                         </ul>
                     </li>
 

@@ -6,24 +6,24 @@ package Models;
 
 
 public class ProductType {
-    private int productId;
+    
     private String color;
     private String size;
     private int quantity;
+    private int productId;
 
-    public ProductType(int productId, String color, String size, int quantity) {
+    public ProductType(String color, String size, int quantity, int productId) {
+        this.color = color;
+        this.size = size;
+        this.quantity = quantity;
         this.productId = productId;
+    } public ProductType(String color, String size, int quantity) {
         this.color = color;
         this.size = size;
         this.quantity = quantity;
     }
 
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
+    public ProductType() {
     }
 
     public String getColor() {
@@ -50,5 +50,12 @@ public class ProductType {
         this.quantity = quantity;
     }
 
- 
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
 }

@@ -14,11 +14,11 @@ import java.util.logging.Logger;
 public class DBConnection {
 
     public static Connection connect() throws SQLException {
-        String server = "DESKTOP-7UI977G\\SQLEXPRESS";
+        String server = "MSI";
         String port = "1433";
         String database = "finaldtb";
         String user = "sa";
-        String password = "123456";
+        String password = "DLY#5572";
         Connection conn = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -31,5 +31,18 @@ public class DBConnection {
         }
 
         return conn;
+    }
+    public static void main(String[] args) {
+        try {
+            Connection connection = connect();
+            if (connection != null && !connection.isClosed()) {
+                System.out.println("Database connection established.");
+                connection.close(); // Close the connection if not needed further
+            } else {
+                System.out.println("Failed to make connection!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

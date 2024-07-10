@@ -1,14 +1,17 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers;
 
 import DAOs.AccountDAO;
 import DAOs.EmployeeDAO;
+import DAOs.ProductDAO;
 import Hash.MD5;
 import Models.Account;
 import Models.EmployeeProfile;
+import Models.Product;
+import Models.ProductType;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -19,7 +22,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.nio.file.Paths;
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10)
 public class UploadController extends HttpServlet {
@@ -68,14 +70,14 @@ public class UploadController extends HttpServlet {
             }
 
             String avatar = "";
-            Part part = request.getPart("avatar");
-            if (Paths.get(part.getSubmittedFileName()).toString().isEmpty()) {
+            Part avatarPart = request.getPart("avatar");
+            if (Paths.get(avatarPart.getSubmittedFileName()).toString().isEmpty()) {
                 avatar = acc.getAvatar();
             } else {
                 try {
                     String realPath = request.getServletContext().getRealPath("/assets/images/avatar");
-                    avatar = Paths.get(part.getSubmittedFileName()).toString();
-                    part.write(realPath + "/" + avatar);
+                    avatar = Paths.get(avatarPart.getSubmittedFileName()).toString();
+                    avatarPart.write(realPath + "/" + avatar);
                 } catch (Exception ex) {
                     session.setAttribute("editStatus", "fail");
                     response.sendRedirect(role + "/profile/edit");
@@ -123,30 +125,28 @@ public class UploadController extends HttpServlet {
             }
 
             String avatar = "";
-            Part part = request.getPart("avatar");
-            if (Paths.get(part.getSubmittedFileName()).toString().isEmpty()) {
+            Part avatarPart = request.getPart("avatar");
+            if (Paths.get(avatarPart.getSubmittedFileName()).toString().isEmpty()) {
                 avatar = acc.getAvatar();
             } else {
                 try {
                     String realPath = request.getServletContext().getRealPath("/assets/images/avatar");
-                    avatar = Paths.get(part.getSubmittedFileName()).toString();
-                    part.write(realPath + "/" + avatar);
+                    avatar = Paths.get(avatarPart.getSubmittedFileName()).toString();
+                    avatarPart.write(realPath + "/" + avatar);
                 } catch (Exception ex) {
                     session.setAttribute("createAccount", "fail");
                     response.sendRedirect("/admin/accounts/create");
+                    return;
                 }
             }
 
             Account accProfile = new Account(username, pass_hash, email, firstName, lastName, birthdate, avatar, gender, phone, address, true, roleId);
 
             AccountDAO accDAO = new AccountDAO();
-
             Account returnAccount = accDAO.addAccount(accProfile);
 
             EmployeeDAO emDAO = new EmployeeDAO();
-
             int accountID = emDAO.getAccountIdByUsername(returnAccount.getUsername());
-
             emDAO.addEmployee(new EmployeeProfile(accountID, cccd, employeeCode));
 
             if (returnAccount == null) {
@@ -167,16 +167,15 @@ public class UploadController extends HttpServlet {
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
             String address = request.getParameter("address");
-            
-            
-            //check duplicate email
+
+            // Check duplicate email
             AccountDAO accDAO = new AccountDAO();
-            if(accDAO.checkDuplicateEmail(email, accountId)){
+            if (accDAO.checkDuplicateEmail(email, accountId)) {
                 session.setAttribute("duplicateEmail", "fail");
                 response.sendRedirect("/admin/accounts/update/" + accountId);
                 return;
             }
-            
+
             if (roleId != 4) {
                 String employeeCode = request.getParameter("employeeCode");
                 String cccd = request.getParameter("cccd");
@@ -185,7 +184,7 @@ public class UploadController extends HttpServlet {
                     roleId = 2;
                 } else if (role.equals("shipper")) {
                     roleId = 3;
-                } else{
+                } else {
                     roleId = 1;
                 }
                 EmployeeDAO emDAO = new EmployeeDAO();
@@ -193,25 +192,23 @@ public class UploadController extends HttpServlet {
             }
 
             String avatar = "";
-            Part part = request.getPart("avatar");
-           
-            if (Paths.get(part.getSubmittedFileName()).toString().isEmpty()) {
+            Part avatarPart = request.getPart("avatar");
+            if (Paths.get(avatarPart.getSubmittedFileName()).toString().isEmpty()) {
                 avatar = accDAO.getAvatarByAccountId(accountId);
             } else {
                 try {
                     String realPath = request.getServletContext().getRealPath("/assets/images/avatar");
-                    avatar = Paths.get(part.getSubmittedFileName()).toString();
-                    part.write(realPath + "/" + avatar);
+                    avatar = Paths.get(avatarPart.getSubmittedFileName()).toString();
+                    avatarPart.write(realPath + "/" + avatar);
                 } catch (Exception ex) {
                     session.setAttribute("updateAccount", "fail");
                     response.sendRedirect("/admin/accounts/update/" + accountId);
+                    return;
                 }
             }
 
             Account accProfile = new Account(accountId, "", "", email, firstName, lastName, birthdate, avatar, gender, phone, address, true, roleId);
-
             Account returnAccount = accDAO.updateAccount(accProfile);
-            
 
             if (returnAccount == null) {
                 session.setAttribute("updateAccount", "fail");
@@ -220,8 +217,115 @@ public class UploadController extends HttpServlet {
                 session.setAttribute("updateAccount", "success");
                 response.sendRedirect("/admin/accounts");
             }
+        } else if (request.getParameter("createProduct") != null) {
+            String productName = request.getParameter("productName");
+            String description = request.getParameter("description");
+            long price = Long.parseLong(request.getParameter("price"));
+            int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+            String color = request.getParameter("color");
+            String size = request.getParameter("size");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
 
+            // Handling product image upload
+            String productImage = "";
+            Part productImagePart = request.getPart("productImage");
+            if (!Paths.get(productImagePart.getSubmittedFileName()).toString().isEmpty()) {
+                try {
+                    String realPath = request.getServletContext().getRealPath("/assets/images/product");
+                    productImage = Paths.get(productImagePart.getSubmittedFileName()).toString();
+                    productImagePart.write(realPath + "/" + productImage);
+                } catch (Exception ex) {
+                    session.setAttribute("createProduct", "fail");
+                    session.setAttribute("errorMessage", "Failed to upload product image: " + ex.getMessage());
+                    response.sendRedirect("/admin/product/create");
+                    return;
+                }
+            } else {
+                session.setAttribute("createProduct", "fail");
+                session.setAttribute("errorMessage", "Product image is required.");
+                response.sendRedirect("/admin/product/create");
+                return;
+            }
+
+            Product product = new Product(productName, description, price, productImage, categoryId);
+            ProductType productType = new ProductType(color, size, quantity);
+
+            ProductDAO productDAO = new ProductDAO();
+            try {
+                int result = productDAO.createProduct(product, productType);
+                if (result > 0) {
+                    session.setAttribute("createProduct", "success");
+                    session.setAttribute("errorMessage", "product added success.");
+
+                    response.sendRedirect("/admin/product");
+                } else {
+                    session.setAttribute("createProduct", "fail");
+                    session.setAttribute("errorMessage", "Failed to create product in the database.");
+                    response.sendRedirect("/admin/product/create");
+                }
+            } catch (Exception e) {
+                session.setAttribute("createProduct", "fail");
+                session.setAttribute("errorMessage", "Database error: " + e.getMessage());
+                response.sendRedirect("/admin/product/create");
+            }
+
+        } else if (request.getParameter("updateProduct") != null) {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            String productName = request.getParameter("productName");
+            String description = request.getParameter("description");
+            long price = Long.parseLong(request.getParameter("price"));
+            int categoryId = Integer.parseInt(request.getParameter("category"));
+            String color = request.getParameter("color");
+            String size = request.getParameter("size");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            String productImage = "";
+            Part productImagePart = request.getPart("productImage");
+            if (!Paths.get(productImagePart.getSubmittedFileName()).toString().isEmpty()) {
+                try {
+                    String realPath = request.getServletContext().getRealPath("/assets/images/product");
+                    productImage = Paths.get(productImagePart.getSubmittedFileName()).toString();
+                    productImagePart.write(realPath + "/" + productImage);
+                } catch (Exception ex) {
+                    session.setAttribute("createProduct", "fail");
+                    session.setAttribute("errorMessage", "Failed to upload product image: " + ex.getMessage());
+                    response.sendRedirect("/admin/product/update");
+                    return;
+                }
+            } else {
+                // If no new image is uploaded, use the existing image name
+                productImage = request.getParameter("productImage");
+            }
+
+            // Update Product and ProductType in database
+            Product product = new Product(productId, productName, description, price, productImage, categoryId);
+            ProductType productType = new ProductType(color, size, quantity);
+
+            ProductDAO productDAO = new ProductDAO();
+            try {
+                int result = productDAO.updateProduct(product, productType);
+                if (result > 0) {
+                    session.setAttribute("updateProduct", "success");
+                    response.sendRedirect("/admin/product");
+                } else {
+                    session.setAttribute("updateProduct", "fail");
+                    response.sendRedirect("/admin/product/update/" + productId);
+                }
+            } catch (Exception e) {
+                session.setAttribute("updateProduct", "fail");
+                response.sendRedirect("/admin/product/update/" + productId);
+            }
+        } else if (request.getParameter("deleteProduct") != null) {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            ProductDAO productDAO = new ProductDAO();
+            int result = productDAO.deleteProduct(productId);
+            if (result > 0) {
+                session.setAttribute("deleteProduct", "success");
+            } else {
+                session.setAttribute("deleteProduct", "fail");
+            }
+            response.sendRedirect("/admin/product");
         }
+
     }
 
     private String getFileName(Part part) {
