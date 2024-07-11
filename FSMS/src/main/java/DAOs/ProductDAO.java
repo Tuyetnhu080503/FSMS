@@ -30,13 +30,13 @@ public class ProductDAO {
     }
 
     public ResultSet getAllProducts() {
-       ResultSet rs = null;
+        ResultSet rs = null;
         try {
             Statement st = conn.createStatement();
             rs = st.executeQuery("SELECT p.ProductID, p.Name, p.Description, p.Price, p.Image, c.Name AS CategoryName, pt.Color, pt.Size, pt.Quantity "
-                + "FROM Product p "
-                + "JOIN ProductType pt ON p.ProductID = pt.ProductID "
-                + "JOIN Category c ON c.CategoryID = p.CategoryID");
+                    + "FROM Product p "
+                    + "JOIN ProductType pt ON p.ProductID = pt.ProductID "
+                    + "JOIN Category c ON c.CategoryID = p.CategoryID");
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -231,23 +231,36 @@ public class ProductDAO {
         }
         return products;
     }
-public static void main(String[] args) {
-    
-    ProductDAO productDAO = new ProductDAO();
 
-    try {
-        // Attempt to update the product
-        int result = productDAO.deleteProduct(1);
-
-        if (result > 0) {
-            System.out.println("Update successful");
-        } else {
-            System.out.println("Update failed");
+    public static void main(String[] args) {
+        ProductDAO productDAO = new ProductDAO();
+        try {
+            // Attempt to update the product
+            ProductType result = productDAO.getProductTypeByProductId(4);
+            if (result != null) {
+                System.out.println("hi" + result.getQuantity());
+            } else {
+                System.out.println("fuck");
+            }
+        } catch (Exception ex) {
+            System.err.println("Exception occurred:");
+            ex.printStackTrace();
         }
-    } catch (Exception ex) {
-        System.err.println("Exception occurred:");
-        ex.printStackTrace();
     }
-}
+
+    public String getImgPathByProductId(int productId) {
+        String img = "";
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Product where ProductID = ?");
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                img = rs.getString("Image");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return img;
+    }
 
 }

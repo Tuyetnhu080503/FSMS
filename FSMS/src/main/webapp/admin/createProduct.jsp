@@ -1,6 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.sql.ResultSet" %>
-
+<style>
+    .message {
+        color: red; /* Change message color to red */
+    }
+</style>
 <div class="content-wrapper">
     <div class="container-full">
         <section class="content">
@@ -52,13 +56,13 @@
                                             <select id="category" name="categoryId" class="form-control">
                                                 <option value="">Select Category</option>
                                                 <%
-                                                    DAOs.categoryDAO dao = new DAOs.categoryDAO();
+                                                    DAOs.CategoryDAO dao = new DAOs.CategoryDAO();
                                                     ResultSet rs = dao.getAllCategory();
                                                     while (rs.next()) {
                                                         int categoryId = rs.getInt("CategoryID");
                                                         String categoryName = rs.getString("Name");
                                                 %>
-                                                <option value="<%= categoryId %>"><%= categoryName %></option>
+                                                <option value="<%= categoryId%>"><%= categoryName%></option>
                                                 <% } %>
                                             </select>
                                             <div class="message"></div>
@@ -114,7 +118,7 @@
                                     if (errorMessage != null) {
                             %>
                             <div class="alert alert-danger mt-3">
-                                <%= errorMessage %>
+                                <%= errorMessage%>
                             </div>
                             <script>
                                 Swal.fire({
@@ -137,3 +141,22 @@
         </section>
     </div>
 </div>
+<script>
+// Initialize Validator
+    Validator({
+        form: "#formCreateProduct",
+        message: ".message",
+        invalid: "login-danger",
+        rules: [
+            Validator.isRequire("#uploadProductImage", "Product Image is required"),
+            Validator.isRequire("#productName", "Product Name is required"),
+            Validator.isRequire("#description", "Description is required"),
+            Validator.isRequire("#price", "Price is required"),
+            Validator.isPositive("#price", "Product price must be greater than 0"),
+            Validator.isRequire("#category", "Category is required"),
+            Validator.isRequire("#color", "Color is required"),
+            Validator.isRequire("#size", "Size is required"),
+            Validator.isRequire("#quantity", "Quantity is required")
+        ]
+    });
+</script>

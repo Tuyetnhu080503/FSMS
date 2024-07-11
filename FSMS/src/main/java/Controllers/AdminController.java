@@ -7,19 +7,21 @@ package Controllers;
 import DAOs.AccountDAO;
 import DAOs.EmployeeDAO;
 import DAOs.ProductDAO;
-import DAOs.categoryDAO;
+import DAOs.OrderDAO;
+import DAOs.VoucherDAO;
 import Hash.MD5;
 import Models.Account;
 import Models.EmployeeProfile;
+import Models.Order;
 import Models.Product;
 import Models.ProductType;
+import Models.Voucher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,7 +86,7 @@ public class AdminController extends HttpServlet {
                 session.setAttribute("tabId", 8);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
             } else if (path.endsWith("/product/create")) {
-              
+
                 session.setAttribute("tabId", 9);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
             } else if (path.startsWith("/admin/products/update")) {
@@ -100,6 +102,40 @@ public class AdminController extends HttpServlet {
                 session.setAttribute("tabId", 10);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
 
+            } else if (path.endsWith("/admin/order")) {
+                session.setAttribute("tabId", 11);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            } else if (path.startsWith("/admin/orders/update")) {
+                try {
+                    String[] idArray = path.split("/");
+                    int orderId = Integer.parseInt(idArray[idArray.length - 1]);
+                    OrderDAO oDao = new OrderDAO();
+                    Order order = oDao.getOrderById(orderId);
+                    request.setAttribute("order", order);
+                    session.setAttribute("tabId", 12);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (path.endsWith("/admin/voucher")) {
+                session.setAttribute("tabId", 13);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            } else if (path.startsWith("/admin/vouchers/update")) {
+                try {
+                    String[] idArray = path.split("/");
+                    int voucherId = Integer.parseInt(idArray[idArray.length - 1]);
+                    VoucherDAO vdao = new VoucherDAO();
+                    Voucher voucher = vdao.getVoucherByID(voucherId);
+                    request.setAttribute("voucher", voucher);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                session.setAttribute("tabId", 14);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            } else if (path.endsWith("/voucher/create")) {
+                session.setAttribute("tabId", 15);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
             } else { // route = "/admin"
                 session.setAttribute("tabId", 1);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);

@@ -12,17 +12,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class categoryDAO {
+public class CategoryDAO {
 
     private Connection conn = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-    public categoryDAO()  {
+    public CategoryDAO()  {
         try {
             conn = DBConnection.DBConnection.connect();
         } catch (SQLException ex) {
-            Logger.getLogger(categoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -55,14 +55,14 @@ public class categoryDAO {
                 ));
             }
         } catch (SQLException ex) {
-            Logger.getLogger(categoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
 
     public static void main(String[] args) {
         try {
-            categoryDAO dao = new categoryDAO();
+            CategoryDAO dao = new CategoryDAO();
             ResultSet rs = dao.getAllCategory();
             
             while (rs.next()) {
@@ -73,7 +73,7 @@ public class categoryDAO {
             }
             
         } catch (SQLException ex) {
-            Logger.getLogger(categoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

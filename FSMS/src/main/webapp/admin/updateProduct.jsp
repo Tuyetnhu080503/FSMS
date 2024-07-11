@@ -1,3 +1,4 @@
+<%@page import="java.sql.ResultSet"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="Models.Product"%>
 <%@ page import="DAOs.ProductDAO"%>
@@ -28,9 +29,8 @@
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group students-up-files">
                                                             <label>Upload Product Image</label>
-                                                            <div class="profile-image">
-                                                                <img id="productImg" width="100" alt="Product Image" src="<%= product != null ? product.getImage(): "" %>" style="display: <%= product != null && product.getImage()!= null && !product.getImage().isEmpty() ? "block" : "none" %>">
-                                                            </div>
+                                                            <img name="productImg" id="profile-image" width="100" alt="User Image"
+                                                                     src="/assets/images/product/<%= product.getImage()%>">
                                                             <div class="upload">
                                                                 <input id="uploadProductImage" name="productImage" type="file" class="form-control form-control-sm">
                                                                 <div class="message"></div>
@@ -41,56 +41,64 @@
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Product Name <span class="login-danger">*</span></label>
-                                                            <input id="productName" name="productName" class="form-control" type="text" placeholder="Enter Product Name" value="<%= product != null ? product.getName() : "" %>">
+                                                            <input id="productName" name="productName" class="form-control" type="text" placeholder="Enter Product Name" value="<%=product.getName()%>">
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Description <span class="login-danger">*</span></label>
-                                                            <textarea id="description" name="description" class="form-control" rows="3" placeholder="Enter Product Description"><%= product != null ? product.getDescription() : "" %></textarea>
+                                                            <textarea id="description" name="description" class="form-control" rows="3" placeholder="Enter Product Description"><%= product.getDescription()%></textarea>
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Price <span class="login-danger">*</span></label>
-                                                            <input id="price" name="price" class="form-control" type="number" placeholder="Enter Product Price" value="<%= product != null ? product.getPrice() : "" %>">
+                                                            <input id="price" name="price" class="form-control" type="number" placeholder="Enter Product Price" value="<%= product.getPrice()%>">
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Category <span class="login-danger">*</span></label>
-                                                            <select name="category" class="form-select form-control select">
-                                                                <!-- Populate categories dynamically -->
-                                                                <option value="1">Category 1</option>
-                                                                <option value="2">Category 2</option>
+                                                            <select id="category" name="categoryId" class="form-control">
+                                                                <option value="">Select Category</option>
+                                                                <%
+                                                                    DAOs.CategoryDAO dao = new DAOs.CategoryDAO();
+                                                                    ResultSet rs = dao.getAllCategory();
+                                                                    while (rs.next()) {
+                                                                        int categoryId = rs.getInt("CategoryID");
+                                                                        String categoryName = rs.getString("Name");
+                                                                %>
+                                                                <option value="<%= categoryId%>" <%= categoryId == product.getCategoryId() ? "selected" : "" %>><%= categoryName%></option>
+                                                                <% }%>
                                                             </select>
+                                                            <div class="message"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Color <span class="login-danger">*</span></label>
-                                                            <input id="color" name="color" class="form-control" type="text" placeholder="Enter Product Color" value="<%= productType != null ? productType.getColor() : "" %>">
+                                                            <input id="color" name="color" class="form-control" type="text" placeholder="Enter Product Color" value="<%= productType.getColor()%>">
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Size <span class="login-danger">*</span></label>
-                                                            <input id="size" name="size" class="form-control" type="text" placeholder="Enter Product Size" value="<%= productType != null ? productType.getSize() : "" %>">
+                                                            <input id="size" name="size" class="form-control" type="text" placeholder="Enter Product Size" value="<%=productType.getSize()%>">
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Quantity <span class="login-danger">*</span></label>
-                                                            <input id="quantity" name="quantity" class="form-control" type="number" placeholder="Enter Product Quantity" value="<%= productType != null ? productType.getQuantity() : "" %>">
+                                                            <input id="quantity" name="quantity" class="form-control" type="number" placeholder="Enter Product Quantity" value="<%=productType.getQuantity()%>">
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
-                                                    <input type="hidden" name="productId" value="<%= product != null ? product.getProductId() : "" %>">
+                                                    <input type="hidden" name="productId" value="<%= product.getProductId()%>">
 
                                                     <input type="hidden" name="updateProduct" value="updateProduct">
                                                     <div class="col-12">
@@ -100,14 +108,14 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                            <% 
+                                            <%
                                                 String createProduct = (String) session.getAttribute("updateProduct");
                                                 if ("fail".equals(createProduct)) {
                                                     String errorMessage = (String) session.getAttribute("errorMessage");
                                                     if (errorMessage != null) {
                                             %>
                                             <div class="alert alert-danger">
-                                                <%= errorMessage %>
+                                                <%= errorMessage%>
                                             </div>
                                             <script>
                                                 Swal.fire({
@@ -117,7 +125,7 @@
                                                     timer: 2000
                                                 });
                                             </script>
-                                            <% 
+                                            <%
                                                         session.removeAttribute("errorMessage");
                                                     }
                                                 }

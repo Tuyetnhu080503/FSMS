@@ -1,5 +1,15 @@
-<%@ page import="DAOs.ProductDAO" %>
+<%@ page import="DAOs.OrderDAO" %>
 <%@ page import="java.sql.ResultSet" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>View Orders</title>
+    <link rel="stylesheet" href="path/to/your/css/file.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 <div class="content-wrapper">
     <div class="container-full">
         <!-- Main content -->
@@ -18,59 +28,50 @@
                                             <div class="page-header">
                                                 <div class="row align-items-center">
                                                     <div class="col">
-                                                        <h3 class="page-title">View Products</h3>
+                                                        <h3 class="page-title">View Orders</h3>
                                                     </div>
-                                                    <div class="form-group">
+                                                     <div class="form-group">
                                                         <input type="text" id="searchInput" class="form-control" placeholder="Search...">
                                                     </div>
-                                                    <div class="col-auto text-end float-end ms-auto download-grp">
-                                                        <a style="background: #ea7127;border-color:#ea7127 " href="/admin/product/create" class="btn btn-primary"><i class="fas fa-plus"></i> Add Product</a>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
 
                                             <div class="table-responsive">
-                                                <table id="viewProducts" class="table table-hover table-striped table-bordered">
+                                                <table id="viewOrders" class="table table-hover table-striped table-bordered">
                                                     <thead class="student-thread">
                                                         <tr>
                                                             <th>No.</th>
-                                                            <th>Name</th>
-                                                            <th>Description</th>
-                                                            <th>Price</th>
-                                                            <th>Image</th>
-                                                            <th>Category Name</th>
-                                                            <th>Color</th>
-                                                            <th>Size</th>
-                                                            <th>Quantity</th>
+                                                            <th>Last Name</th>
+                                                            <th>Phone Number</th>
+                                                            <th>Status</th>
+                                                            <th>Payment Method</th>
+                                                            <th>Delivery Address</th>
                                                             <th class="text-end">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <%
-                                                            ProductDAO productDAO = new ProductDAO();
-                                                            ResultSet rs = productDAO.getAllProducts();
+                                                            OrderDAO orderDAO = new OrderDAO();
+                                                            ResultSet rs = orderDAO.getAllOrder();
                                                             int count = 1;
-                                                            while (rs.next()) {%> 
+                                                            while (rs.next()) { %> 
                                                         <tr>
                                                             <td><%=count++%></td>
-                                                            <td><%=rs.getString("Name")%></td>
-                                                            <td><%=rs.getString("Description")%></td>
-                                                            <td><%=rs.getLong("Price")%></td>
-                                                            <td><img  src="${pageContext.request.contextPath}/assets/images/product/<%=rs.getString("Image")%>" alt="Avatar"></td>
-                                                            <td><%=rs.getString("CategoryName")%></td>
-                                                            <td><%=rs.getString("Color")%></td>
-                                                            <td><%=rs.getString("Size")%></td>
-                                                            <td><%=rs.getInt("Quantity")%></td>
+                                                            <td><%=rs.getString("Lastname")%></td>
+                                                            <td><%=rs.getString("Phonenumber")%></td>
+                                                            <td><%=rs.getString("Status")%></td>
+                                                            <td><%=rs.getString("PaymentMethod")%></td>
+                                                            <td><%=rs.getString("Deliveryaddress")%></td>
                                                             <td>
-                                                                <a href="/admin/products/update/<%=rs.getInt("ProductID")%>">
+                                                                <a href="/admin/orders/update/<%=rs.getInt("OrderID")%>">
                                                                     <button style="background:#ea7127 ;border-color: #ea7127;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail</button>
                                                                 </a>
                                                             </td>
                                                             <td>
-                                                                <form id="formDeleteProduct" action="/upload/deleteProduct"
-                                                                      method="post" enctype="multipart/form-data">
-                                                                    <input type="hidden" name="productId" value="<%=rs.getInt("ProductID")%>">
-                                                                    <button type="submit" name="deleteProduct" style="background:red;border-color: red;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-danger"><i class="feather-trash-2"></i>Delete</button>
+                                                                <form id="formDeleteOrder" action="/upload/deleteOrder" method="post">
+                                                                    <input type="hidden" name="orderId" value="<%=rs.getInt("OrderID")%>">
+                                                                    <button type="submit" name="deleteOrder" style="background:red;border-color: red;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-danger"><i class="feather-trash-2"></i>Delete</button>
                                                                 </form>
                                                             </td>
                                                         </tr>
@@ -79,7 +80,6 @@
                                                         %>
                                                     </tbody>
                                                 </table>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -96,47 +96,46 @@
 
 <!-- Optional: Include script for showing success message -->
 <script>
-    <% String createProduct = (String) session.getAttribute("createProduct");
-        if (createProduct != null && createProduct.equals("success")) { %>
+    <% String createOrder = (String) session.getAttribute("createOrder");
+        if (createOrder != null && createOrder.equals("success")) { %>
     Swal.fire({
         icon: "success",
-        title: "Create Product Successfully!",
+        title: "Create Order Successfully!",
         showConfirmButton: false,
         timer: 2000
     });
-    <% session.removeAttribute("createProduct");
+    <% session.removeAttribute("createOrder");
         } %>
 </script>
 
 <script>
-    <% String updateProduct = (String) session.getAttribute("updateProduct");
-        if (updateProduct != null && updateProduct.equals("success")) { %>
+    <% String updateOrder = (String) session.getAttribute("updateOrder");
+        if (updateOrder != null && updateOrder.equals("success")) { %>
     Swal.fire({
         icon: "success",
-        title: "Update Product Successfully!",
+        title: "Update Order Successfully!",
         showConfirmButton: false,
         timer: 2000
     });
-    <% session.removeAttribute("updateProduct");
+    <% session.removeAttribute("updateOrder");
         }%>
 </script>
 <script>
-    <% String deleteProduct = (String) session.getAttribute("deleteProduct");
-        if (deleteProduct != null && deleteProduct.equals("success")) { %>
+    <% String deleteOrder = (String) session.getAttribute("deleteOrder");
+        if (deleteOrder != null && deleteOrder.equals("success")) { %>
     Swal.fire({
         icon: "success",
-        title: "Delete Product Successfully!",
+        title: "Delete Order Successfully!",
         showConfirmButton: false,
         timer: 2000
     });
-    <% session.removeAttribute("deleteProduct");
+    <% session.removeAttribute("deleteOrder");
         }%>
 </script>
-
 <script>
     document.getElementById('searchInput').addEventListener('input', function () {
         var filter = this.value.toUpperCase();
-        var rows = document.querySelector('#viewProducts tbody').rows;
+        var rows = document.querySelector('#viewOrders tbody').rows;
 
         for (var i = 0; i < rows.length; i++) {
             var visible = false;
@@ -154,3 +153,6 @@
         }
     });
 </script>
+
+</body>
+</html>

@@ -15,7 +15,23 @@ public class Order {
     private int voucherId;
     private String paymentMethod;
     private String paymentId;
+    private String lastname;
+    private String phonenumber;
+    private String deliveryaddress;
 
+    public Order(int orderId, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress) {
+        this.orderId = orderId;
+        this.status = status;
+        this.paymentMethod = paymentMethod;
+        this.lastname = lastname;
+        this.phonenumber = phonenumber;
+        this.deliveryaddress = deliveryaddress;
+    }
+
+    public Order() {
+    }
+    
+    
     public Order(int orderId, int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId) {
         this.orderId = orderId;
         this.customerId = customerId;
@@ -25,6 +41,30 @@ public class Order {
         this.voucherId = voucherId;
         this.paymentMethod = paymentMethod;
         this.paymentId = paymentId;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public String getDeliveryaddress() {
+        return deliveryaddress;
+    }
+
+    public void setDeliveryaddress(String deliveryaddress) {
+        this.deliveryaddress = deliveryaddress;
     }
 
     public int getOrderId() {
