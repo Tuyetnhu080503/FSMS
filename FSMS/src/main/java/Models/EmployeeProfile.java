@@ -4,37 +4,39 @@
  */
 package Models;
 
-/**
- *
- * @author DELL
- */
-public class EmployeeProfile {
-    private String employeeId;
-    private String accountID;
-    private String cccd;
-    private String name;
 
-    public EmployeeProfile(String employeeId, String accountID, String cccd, String name) {
+public class EmployeeProfile {
+    private int employeeId;
+    private int accountId;
+    private String cccd;
+    private String employeeCode;
+
+    public EmployeeProfile(int employeeId, int accountId, String cccd, String employeeCode) {
         this.employeeId = employeeId;
-        this.accountID = accountID;
+        this.accountId = accountId;
         this.cccd = cccd;
-        this.name = name;
+        this.employeeCode = employeeCode;
+    }
+    public EmployeeProfile( int accountId, String cccd, String employeeCode) {
+        this.accountId = accountId;
+        this.cccd = cccd;
+        this.employeeCode = employeeCode;
     }
 
-    public String getEmployeeId() {
+    public int getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(String employeeId) {
+    public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
 
-    public String getAccountID() {
-        return accountID;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 
     public String getCccd() {
@@ -45,12 +47,12 @@ public class EmployeeProfile {
         this.cccd = cccd;
     }
 
-    public String getName() {
-        return name;
+    public String getEmployeeCode() {
+        return employeeCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmployeeCode(String employeeCode) {
+        this.employeeCode = employeeCode;
     }
-    
+
 }

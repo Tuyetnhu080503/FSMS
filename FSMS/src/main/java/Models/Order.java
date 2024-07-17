@@ -4,40 +4,42 @@
  */
 package Models;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
-/**
- *
- * @author DELL
- */
 public class Order {
-    private String orderId;
-    private String customerId;
+    private int orderId;
+    private int customerId;
     private String status;
-    private int totalPrice;
-    private Date createdAt;
+    private long totalPrice;
+    private Timestamp createAt;
+    private int voucherId;
+    private String paymentMethod;
+    private String paymentId;
 
-    public Order(String orderId, String customerId, String status, int totalPrice, Date createdAt) {
+    public Order(int orderId, int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.status = status;
         this.totalPrice = totalPrice;
-        this.createdAt = createdAt;
+        this.createAt = createAt;
+        this.voucherId = voucherId;
+        this.paymentMethod = paymentMethod;
+        this.paymentId = paymentId;
     }
 
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
 
@@ -49,20 +51,51 @@ public class Order {
         this.status = status;
     }
 
-    public int getTotalPrice() {
+    public long getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(long totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Timestamp getCreateAt() {
+        return createAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setCreateAt(Timestamp createAt) {
+        this.createAt = createAt;
     }
 
+    public int getVoucherId() {
+        return voucherId;
+    }
+
+    public void setVoucherId(int voucherId) {
+        this.voucherId = voucherId;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" + "orderId=" + orderId + ", customerId=" + customerId + ", status=" + status + ", totalPrice=" + totalPrice + ", createAt=" + createAt + ", voucherId=" + voucherId + ", paymentMethod=" + paymentMethod + ", paymentId=" + paymentId + '}';
+    }
+    
+    
+    
 }

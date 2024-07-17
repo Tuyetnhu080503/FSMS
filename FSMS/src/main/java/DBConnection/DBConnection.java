@@ -10,18 +10,15 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author DELL
- */
+
 public class DBConnection {
 
     public static Connection connect() throws SQLException {
-        String server = "VIETNGUYEN\\SQLEXPRESS";
+        String server = "DESKTOP-C4JDBT0\\SQLEXPRESS";
         String port = "1433";
-        String database = "SROMS";
+        String database = "finaldtbb";
         String user = "sa";
-        String password = "Vietnguyen02";
+        String password = "123456";
         Connection conn = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

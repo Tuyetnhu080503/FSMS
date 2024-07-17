@@ -4,29 +4,25 @@
  */
 package Models;
 
-/**
- *
- * @author DELL
- */
-public class ProductType {
 
-    private String productId;
+public class ProductType {
+    private int productId;
     private String color;
     private String size;
     private int quantity;
 
-    public ProductType(String productId, String color, String size, int quantity) {
+    public ProductType(int productId, String color, String size, int quantity) {
         this.productId = productId;
         this.color = color;
         this.size = size;
         this.quantity = quantity;
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -53,4 +49,6 @@ public class ProductType {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+ 
 }

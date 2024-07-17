@@ -4,46 +4,45 @@
  */
 package Models;
 
-/**
- *
- * @author DELL
- */
-public class OrderItems {
-     private int orderDetailId;
-    private String orderId;
-    private String productId;
-    private int quantity;
-    private int unitPrice;
 
-    public OrderItems(int orderDetailId, String orderId, String productId, int quantity, int unitPrice) {
-        this.orderDetailId = orderDetailId;
+public class OrderItems {
+    private int orderItemsId;
+    private int orderId;
+    private int productId;
+    private int quantity;
+    private long unitPrice;
+    private long totalPrice;
+
+    public OrderItems(int orderItemsId, int orderId, int productId, int quantity, long unitPrice, long totalPrice) {
+        this.orderItemsId = orderItemsId;
         this.orderId = orderId;
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
     }
 
-    public int getOrderDetailId() {
-        return orderDetailId;
+    public int getOrderItemsId() {
+        return orderItemsId;
     }
 
-    public void setOrderDetailId(int orderDetailId) {
-        this.orderDetailId = orderDetailId;
+    public void setOrderItemsId(int orderItemsId) {
+        this.orderItemsId = orderItemsId;
     }
 
-    public String getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -55,12 +54,21 @@ public class OrderItems {
         this.quantity = quantity;
     }
 
-    public int getUnitPrice() {
+    public long getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(int unitPrice) {
+    public void setUnitPrice(long unitPrice) {
         this.unitPrice = unitPrice;
     }
+
+    public long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     
 }
