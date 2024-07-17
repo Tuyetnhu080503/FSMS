@@ -258,6 +258,13 @@ public class UploadController extends HttpServlet {
 
             ProductDAO productDAO = new ProductDAO();
             try {
+                boolean isExist = productDAO.isProductExist(productName, color, size);
+                if (isExist) {
+                    session.setAttribute("createProduct", "fail");
+                    session.setAttribute("errorMessage", "Product already exists.");
+                    response.sendRedirect("/admin/product/create");
+                    return;
+                }
                 int result = productDAO.createProduct(product, productType);
                 if (result > 0) {
                     session.setAttribute("createProduct", "success");
@@ -276,7 +283,7 @@ public class UploadController extends HttpServlet {
             }
 
         } else if (request.getParameter("updateProduct") != null) {
-            ProductDAO dao =  new ProductDAO();
+            ProductDAO dao = new ProductDAO();
             int productId = Integer.parseInt(request.getParameter("productId"));
             String productName = request.getParameter("productName");
             String description = request.getParameter("description");
@@ -286,7 +293,7 @@ public class UploadController extends HttpServlet {
             String size = request.getParameter("size");
             int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-              String productImage = "";
+            String productImage = "";
             Part productImagePart = request.getPart("productImage");
             if (Paths.get(productImagePart.getSubmittedFileName()).toString().isEmpty()) {
                 productImage = dao.getImgPathByProductId(productId);

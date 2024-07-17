@@ -49,7 +49,9 @@
                                                     <select name="status" id="status" class="form-control">
                                                         <option value="Pending" <%= "Pending".equals(order.getStatus()) ? "selected" : ""%>>Pending</option>
                                                         <option value="Processing" <%= "Processing".equals(order.getStatus()) ? "selected" : ""%>>Processing</option>
-                                                        <option value="Completed" <%= "Completed".equals(order.getStatus()) ? "selected" : ""%>>Completed</option>
+                                                        <option value="Delivering" <%= "Delivering".equals(order.getStatus()) ? "selected" : ""%>>Delivering</option>
+                                                        <option value="Delivered" <%= "Delivered".equals(order.getStatus()) ? "selected" : ""%>>Delivered</option>
+                                                        <option value="Returns" <%= "Returns".equals(order.getStatus()) ? "selected" : ""%>>Returns</option>
                                                     </select>
                                                 </div>
                                                 <input type="hidden" name="updateOrder" value="updateOrder">

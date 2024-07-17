@@ -263,4 +263,23 @@ public class ProductDAO {
         return img;
     }
 
+    public boolean isProductExist(String productName, String color, String size) {
+        String sql = "SELECT * FROM Product AS p "
+                + "JOIN ProductType pt ON p.ProductID = pt.ProductID "
+                + "WHERE p.Name = ? AND pt.Color = ? AND pt.Size = ?";
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, productName);
+            ps.setString(2, color);
+            ps.setString(3, size);
+            rs = ps.executeQuery();
+            if (rs.next()) { // Sử dụng rs.next() để kiểm tra nếu có bản ghi nào được trả về
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
 }
