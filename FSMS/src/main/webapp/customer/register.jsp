@@ -1,17 +1,36 @@
-<div class="content-wrapper">
-    <div class="container-full">
-        <!-- Main content -->
-        <section class="content">			
-            <div class="row">
+<style>
+    .login-danger,
+    .star-red {
+        color: #ff0000;
+    }
+    #formRegisterAccountCustomer input{
+        font-size: 14px;
+    }
+    #formRegisterAccountCustomer button{
+        font-size: 14px;
+    }
+    #formRegisterAccountCustomer a{ 
+        font-size: 14px;
+    }
+    #formRegisterAccountCustomer textarea{ 
+        font-size: 14px;
+    }
+</style>
+<section class="main-content-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-xl-3"></div>
+            <div class="col-12 col-md-12 col-lg-9 col-xl-9">
                 <div class="myaccount-dashboard-area cart-page-main-area">
-                    <div class="page-wrapper">
-                        <div class="content container-fluid">
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="card comman-shadow">
-                                        <div class="card-body">
-                                            <form id="formRegisterAccountCustomer" action="/upload/createAccount"
+                    <div class="sec-heading-area">
+                        <h2>Register Account</h2>
+                    </div>
+                  
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form id="formRegisterAccountCustomer" action="/upload/createAccount"
                                                   method="post" enctype="multipart/form-data">
                                                 <div class="row">
                                                     <div class="col-12">
@@ -117,18 +136,20 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
+
             </div>
-        </section>
-        <!-- /.content -->
-    </div>
-</div>
+
+        </div>
+    </div>	
+</section>
+
 
 <script>
     Validator({
@@ -141,6 +162,7 @@
             Validator.isRequire("#firstname", "First Name is required"),
             Validator.isRequire("#lastname", "Last Name is required"),
             Validator.isRequire("#birthdate", "Birthdate is required"),
+            Validator.isFutureDate("#birthdate", "Birthdate must be in past"),
             Validator.isRequire("#email", "Email is required"),
             Validator.isEmail("#email", "Email is not valid format"),
             Validator.isRequire("#phone", "Phone is required"),

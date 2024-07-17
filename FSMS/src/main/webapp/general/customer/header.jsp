@@ -84,7 +84,6 @@
                                                 <li><a href="/cart">My Cart</a></li>
                                                 <li><a href="/checkout">Checkout</a></li>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
-                                                 <li><a href="/account/register">Register Account</a></li>
                                             </ul>
                                         </li>
                                         
@@ -115,7 +114,7 @@
                                      
                                         <option value="1">All Categories</option>
                                           <% CategoryDAO cateDAO = new CategoryDAO();
-                    ResultSet rs = cateDAO.getAllCategoryReturnResultSet();
+                    ResultSet rs = cateDAO.getAllCategory();
                     int i=0;
                     while(rs.next()){
                     %>
@@ -259,7 +258,7 @@
                                 <h3 class="cat-toggle-heading">category</h3>
                                 <div class="left-category-menu" <%=(session.getAttribute("tabId").equals(1)) ? "" : "style=\"display:none\""%>>
                                     <ul>
-                                        <%       ResultSet rn = cateDAO.getAllCategoryReturnResultSet();
+                                        <%       ResultSet rn = cateDAO.getAllCategory();
                     while(rn.next()){
                     %>
                                         <li>

@@ -1,21 +1,29 @@
-
 package Models;
 
-import java.sql.Timestamp;
-
+import java.util.Date;
 
 public class Voucher {
-    private int voucherId;
+    private int voucherID;
     private int discountAmount;
-    private int discountPercentage;
-    private Timestamp expiryDate;
+    private Integer discountPercentage;
+    private Date expiryDate;
     private boolean isActive;
-    private Timestamp createdDate;
-    private int quantity;
-    private int minimumPrice;
+    private Date createdDate;
+    private Integer quantity;
+    private Integer minimumPrice;
 
-    public Voucher(int voucherId, int discountAmount, int discountPercentage, Timestamp expiryDate, boolean isActive, Timestamp createdDate, int quantity, int minimumPrice) {
-        this.voucherId = voucherId;
+    public Voucher() {
+    }
+ public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive,  Integer quantity, Integer minimumPrice) {
+        this.voucherID = voucherID;
+        this.discountAmount = discountAmount;
+        this.discountPercentage = discountPercentage;
+        this.expiryDate = expiryDate;
+        this.isActive = isActive;
+        this.quantity = quantity;
+        this.minimumPrice = minimumPrice;
+    }
+  public Voucher( int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive,Date createdDate , Integer quantity, Integer minimumPrice) {
         this.discountAmount = discountAmount;
         this.discountPercentage = discountPercentage;
         this.expiryDate = expiryDate;
@@ -24,13 +32,14 @@ public class Voucher {
         this.quantity = quantity;
         this.minimumPrice = minimumPrice;
     }
-
-    public int getVoucherId() {
-        return voucherId;
+    
+    // Getters and Setters
+    public int getVoucherID() {
+        return voucherID;
     }
 
-    public void setVoucherId(int voucherId) {
-        this.voucherId = voucherId;
+    public void setVoucherID(int voucherID) {
+        this.voucherID = voucherID;
     }
 
     public int getDiscountAmount() {
@@ -41,54 +50,51 @@ public class Voucher {
         this.discountAmount = discountAmount;
     }
 
-    public int getDiscountPercentage() {
+    public Integer getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDiscountPercentage(int discountPercentage) {
+    public void setDiscountPercentage(Integer discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
 
-    public Timestamp getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Timestamp expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
-    public boolean isIsActive() {
+    public boolean isActive() {
         return isActive;
     }
 
-    public void setIsActive(boolean isActive) {
+    public void setActive(boolean isActive) {
         this.isActive = isActive;
     }
 
-    public Timestamp getCreatedDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Timestamp createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public int getMinimumPrice() {
+    public Integer getMinimumPrice() {
         return minimumPrice;
     }
 
-    public void setMinimumPrice(int minimumPrice) {
+    public void setMinimumPrice(Integer minimumPrice) {
         this.minimumPrice = minimumPrice;
     }
-    
-    
-    
 }

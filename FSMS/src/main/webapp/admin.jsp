@@ -22,5 +22,29 @@
     <c:when test="${sessionScope.tabId == 7}">
         <%@include file="./admin/updateAccount.jsp" %>
     </c:when>
+       <c:when test="${sessionScope.tabId == 8}">
+        <%@include file="./admin/viewProduct.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 9}">
+        <%@include file="./admin/createProduct.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 10}">
+        <%@include file="./admin/updateProduct.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 11}">
+        <%@include file="./admin/viewOrder.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 12}">
+        <%@include file="./admin/updateOrder.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 13}">
+        <%@include file="./admin/viewVoucher.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 14}">
+        <%@include file="./admin/updateVoucher.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 15}">
+        <%@include file="./admin/createVoucher.jsp" %>
+    </c:when>
 </c:choose>
 <%@include file="./general/admin/footer.jsp" %>
