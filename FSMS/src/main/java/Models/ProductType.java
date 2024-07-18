@@ -17,7 +17,8 @@ public class ProductType {
         this.size = size;
         this.quantity = quantity;
         this.productId = productId;
-    } public ProductType(String color, String size, int quantity) {
+    } 
+    public ProductType(String color, String size, int quantity) {
         this.color = color;
         this.size = size;
         this.quantity = quantity;

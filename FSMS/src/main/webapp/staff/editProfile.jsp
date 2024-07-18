@@ -118,7 +118,7 @@
                                                                         <div class="col-12">
                                                                             <div class="student-submit">
                                                                                 <button name="submit" style="background: #ea7127;border-color:#ea7127" type="submit" class="btn btn-primary" value="editProfile">Submit</button>
-                                                                                <a style="margin-left: 10px" href="/shipper/profile" class="btn btn-primary">Back</a>
+                                                                                <a style="margin-left: 10px" href="/staff/profile" class="btn btn-primary">Back</a>
                                                                             </div>
                                                                         </div>
                                                                     </div>

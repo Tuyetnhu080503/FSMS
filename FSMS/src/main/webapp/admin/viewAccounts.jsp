@@ -2,7 +2,6 @@
 <%@page import="DAOs.AccountDAO"%>
 <%@page import="java.sql.ResultSet"%>
 <div class="content-wrapper">
-    hi
     <div class="container-full">
         <!-- Main content -->
         <section class="content">			

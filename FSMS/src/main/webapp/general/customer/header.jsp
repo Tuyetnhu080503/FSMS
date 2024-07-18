@@ -1,3 +1,5 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="DAOs.CategoryDAO"%>
 <%@page import="Models.Account"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -82,7 +84,6 @@
                                                 <li><a href="/cart">My Cart</a></li>
                                                 <li><a href="/checkout">Checkout</a></li>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
-
                                             </ul>
                                         </li>
                                         
@@ -110,18 +111,17 @@
                             <div class="category-search-area">
                                 <div class="search-cat">
                                     <select>
+                                     
                                         <option value="1">All Categories</option>
-                                        <option value="2">Games</option>
-                                        <option value="2">Software</option>
-                                        <option value="3">Laptop</option>
-                                        <option value="3">Computer</option>
-                                        <option value="4">Fashion</option>
-                                        <option value="4">Dress</option>
-                                        <option value="5">Toys</option>
-                                        <option value="5">Kids</option>
-                                        <option value="6">Sport</option>
-                                        <option value="6">Healthy</option>
-                                        <option value="7">Accessories</option>
+                                          <% CategoryDAO cateDAO = new CategoryDAO();
+                    ResultSet rs = cateDAO.getAllCategory();
+                    int i=0;
+                    while(rs.next()){
+                    %>
+                                        <option value="${i}"><%=rs.getString("Name")%></option>
+                                        <% i=i+1;
+                                        }
+                                        %>
                                     </select>
                                 </div>
                                 <div class="search-form">
@@ -253,239 +253,31 @@
                 <div class="container">
                     <div class="row">
                         <!-- left-category-menu-area start -->
-                        <div class="col-12 col-lg-3">
+                       <div class="col-12 col-lg-3">
                             <div class="left-category-menu-area">
                                 <h3 class="cat-toggle-heading">category</h3>
                                 <div class="left-category-menu" <%=(session.getAttribute("tabId").equals(1)) ? "" : "style=\"display:none\""%>>
                                     <ul>
+                                        <%       ResultSet rn = cateDAO.getAllCategory();
+                    while(rn.next()){
+                    %>
                                         <li>
-                                            <a href="shop-grid.html">Games & Software</a><p>Extensive games such as games online</p>
-                                            <div class="left-cat-dropdown left-cat-1">
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Desktops</a>
-                                                        <a href="shop-grid.html">Accessories</a>
-                                                        <a href="shop-grid.html">Car Electronics</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Accessories</a>
-                                                        <a href="shop-grid.html">Accessories</a>
-                                                        <a href="shop-grid.html">Car Electronics</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Phones</a>
-                                                        <a href="shop-grid.html">Accessories</a>
-                                                        <a href="shop-grid.html">Car Electronics</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Electronics</a>
-                                                        <a href="shop-grid.html">Accessories</a>
-                                                        <a href="shop-grid.html">Car Electronics</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/11.jpg" alt="product image" /></a>
-                                                </div>
-                                            </div>
+                                            <a href="shop-grid.html"><%= rn.getString("Name")%></a>
+                                            
                                         </li>
-                                        <li><a href="shop-grid.html">Laptop & Computer</a><p>Shop for multiple laptop styles includin</p>
-                                            <div class="left-cat-dropdown left-cat-2">
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Bags</a>
-                                                        <a href="shop-grid.html">Video & Home</a>
-                                                        <a href="shop-grid.html">Home Surveillance</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Telecommunications?</a>
-                                                        <a href="shop-grid.html">Lingerie</a>
-                                                        <a href="shop-grid.html">Electronics</a>
-                                                        <a href="shop-grid.html">Home Telephones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Portable Audio</a>
-                                                        <a href="shop-grid.html">Communication</a>
-                                                        <a href="shop-grid.html">Handbag</a>
-                                                        <a href="shop-grid.html">Vintage Electronics</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Clothing</a>
-                                                        <a href="shop-grid.html">Funiture</a>
-                                                        <a href="shop-grid.html">Car Electronics</a>
-                                                        <a href="shop-grid.html">Lifestyle</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                </div>
-                                            </div>										
-                                        </li>
-                                        <li><a href="shop-grid.html">Fashion & Dress</a><p>Offers a wide range of women's accessori</p>
-                                            <div class="left-cat-dropdown left-cat-3">
-                                                <div class="single-cat-dropdown">
-                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd3.jpg" alt="product image" /></a>
-                                                </div>											
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Footwear Man</a>
-                                                        <a href="shop-grid.html">Gold Ring</a>
-                                                        <a href="shop-grid.html">Platinum Rings</a>
-                                                        <a href="shop-grid.html">Silver Ring</a>
-                                                        <a href="shop-grid.html">Tungsten Ring</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Footwear Womens</a>
-                                                        <a href="shop-grid.html">Bands Gold</a>
-                                                        <a href="shop-grid.html">Platinum Bands</a>
-                                                        <a href="shop-grid.html">Silver Bands</a>
-                                                        <a href="shop-grid.html">Tungsten Bands</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Rings</a>
-                                                        <a href="shop-grid.html">Platinum Bracelets</a>
-                                                        <a href="shop-grid.html">Gold Ring</a>
-                                                        <a href="shop-grid.html">Silver Ring</a>
-                                                        <a href="shop-grid.html">Diamond Bracelets</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Bands</a>
-                                                        <a href="shop-grid.html">Platinum Necklaces </a>
-                                                        <a href="shop-grid.html">Gold Ring</a>
-                                                        <a href="shop-grid.html">Silver Ring</a>
-                                                        <a href="shop-grid.html">Sunglasses</a>					
-                                                    </div>
-                                                </div>
-                                            </div>										
-                                        </li>
-                                        <li><a href="shop-grid.html">Toys & Kids</a><p>Find toys and kids belongings for child</p>
-                                            <div class="left-cat-dropdown left-cat-4">
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Rings</a>
-                                                        <a href="shop-grid.html">Babies  2 months</a>
-                                                        <a href="shop-grid.html">3+ Years</a>
-                                                        <a href="shop-grid.html">Little Kids  1-5 years</a>
-                                                        <a href="shop-grid.html">Big Kids  6-9 years</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Dresses</a>
-                                                        <a href="shop-grid.html">Toys Just Landed</a>
-                                                        <a href="shop-grid.html">Shop All Toys</a>
-                                                        <a href="shop-grid.html">Clog sandals</a>
-                                                        <a href="shop-grid.html">Combat Boots</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="no-margin-r single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Accessories</a>
-                                                        <a href="shop-grid.html">Bootees Bags</a>
-                                                        <a href="shop-grid.html">Blazers</a>
-                                                        <a href="shop-grid.html">Jackets</a>
-                                                        <a href="shop-grid.html">Shoes</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="menu-bottom-img-add">
-                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd.jpg" alt="product image" /></a>
-                                                    <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd4.jpg" alt="product image" /></a>
-                                                </div>
-                                            </div>											
-                                        </li>
-                                        <li><a href="shop-grid.html">Sport & Healthy</a><p>Get your health, fitness and personal ca</p>
-                                            <div class="left-cat-dropdown left-cat-5">
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Nightwear</a>
-                                                        <a href="shop-grid.html">Briefs</a>
-                                                        <a href="shop-grid.html">Camis</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Shapewear</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Shoes</a>
-                                                        <a href="shop-grid.html">Digital SLRs</a>
-                                                        <a href="shop-grid.html">Digital Software</a>
-                                                        <a href="shop-grid.html">TV & Video</a>
-                                                        <a href="shop-grid.html">Books</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Handbags</a>
-                                                        <a href="shop-grid.html">Blazers</a>
-                                                        <a href="shop-grid.html">table</a>
-                                                        <a href="shop-grid.html">coats</a>
-                                                        <a href="shop-grid.html">kids</a>					
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Clothing</a>
-                                                        <a href="shop-grid.html">T-shirts</a>
-                                                        <a href="shop-grid.html">coats</a>
-                                                        <a href="shop-grid.html">Jackets</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>					
-                                                    </div>
-                                                </div>
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">jeans</a>
-                                                        <a href="shop-grid.html">Cell Phones</a>
-                                                        <a href="shop-grid.html">Desktops & Key</a>
-                                                        <a href="shop-grid.html">Accessories</a>
-                                                        <a href="shop-grid.html">Car Electronics</a>
-                                                    </div>
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/add/menuadd2.png" alt="product image" /></a>
-                                                    </div>
-                                                </div>
-                                            </div>												
-                                        </li>
-                                        <li class="extra_menu"><a href="shop-grid.html">Accessories</a>
-                                            <div class="left-cat-dropdown left-cat-6">
-                                                <div class="single-cat-dropdown">
-                                                    <div class="single-cat-item">
-                                                        <a href="shop-grid.html" class="single-cat-dropdown-title">Desktops</a>
-                                                        <a href="shop-grid.html">Accessories</a>
-                                                        <a href="shop-grid.html">Exercise & Fitness</a>
-                                                        <a href="shop-grid.html">Fitness Tech</a>
-                                                        <a href="shop-grid.html">Indoor Games</a>					
-                                                        <a href="shop-grid.html">Play Centres</a>					
-                                                        <a href="shop-grid.html">Pools & Slides</a>					
-                                                        <a href="shop-grid.html">Skateboarding</a>					
-                                                    </div>
-                                                </div>
-                                            </div>											
-                                        </li>
-                                    </ul>
-                                    <div class="more-cat">
-                                        <span class="more-view">More Categories</span>
-                                    </div>									
+                                        <%}%>
+                                    </ul>									
                                 </div>
                             </div>
                         </div>
-                        <!-- left-category-menu-area end -->
+                        
+                                        
                         <!-- mainmenu start -->						
                         <div class="col-12 col-lg-9">
                             <div class="mainmenu">
                                 <nav>
                                     <ul>
-                                        <li class="active"><a href="index.html">Home</a>
+                                        <li class="active"><a href="home">Home</a>
                                         </li>
                                         <li><a href="/products">Products</a></li>
                                     </ul>

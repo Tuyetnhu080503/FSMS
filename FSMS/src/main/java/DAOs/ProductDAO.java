@@ -38,7 +38,7 @@ public class ProductDAO {
                     + "JOIN ProductType pt ON p.ProductID = pt.ProductID "
                     + "JOIN Category c ON c.CategoryID = p.CategoryID");
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
@@ -87,6 +87,22 @@ public class ProductDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return productType;
+    }
+
+    public ResultSet getQuantityProduct() {
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("SELECT\n"
+                    + "  p.productID,\n"
+                    + "  COUNT(*) AS quantity\n"
+                    + "FROM Product p\n"
+                    + "JOIN ProductType pt ON p.productID = pt.productID\n"
+                    + "GROUP BY p.productID;");
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
     }
 
     public int createProduct(Product product, ProductType productType) {
@@ -203,6 +219,22 @@ public class ProductDAO {
         }
         return result;
     }
+    public int getTotalProductsCount(){
+     String sql = "SELECT COUNT(*) FROM Product";
+     int totalProducts = 0;  
+     try {
+            ps = conn.prepareStatement(sql);
+            rs= ps.executeQuery();
+            
+        if (rs.next()) {
+            totalProducts = rs.getInt(1);
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        return totalProducts;
+}
 
     public List<Product> searchProducts(String keyword) {
         List<Product> products = new ArrayList<>();

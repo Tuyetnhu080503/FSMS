@@ -48,6 +48,9 @@ public class AccountController extends HttpServlet {
         } else if (path.endsWith("/forgot")) {
             session.setAttribute("tabId", 3);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        } else if (path.endsWith("/register")) {
+            session.setAttribute("tabId", 9);
+            request.getRequestDispatcher("/customer.jsp").forward(request, response);
         } else if (path.endsWith("/otp") && (String) session.getAttribute("otp") != null) {
             session.setAttribute("tabId", 4);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);

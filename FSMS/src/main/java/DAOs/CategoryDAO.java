@@ -59,21 +59,21 @@ public class CategoryDAO {
         }
         return list;
     }
-
-    public static void main(String[] args) {
+    public ResultSet getQuantityProductInCategory() {
+        ResultSet rs = null;
         try {
-            CategoryDAO dao = new CategoryDAO();
-            ResultSet rs = dao.getAllCategory();
-            
-            while (rs.next()) {
-                int categoryId = rs.getInt("CategoryID");
-                String categoryName = rs.getString("Name");
-                
-                System.out.println(categoryId + ": " + categoryName);
-            }
-            
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("SELECT\n"
+                    + "  c.CategoryID,\n"
+                    + "  c.name AS category_name,\n"
+                    + "  COUNT(p.productID) AS quantity\n"
+                    + "FROM Category c\n"
+                    + "JOIN Product p ON c.CategoryID = p.categoryID\n"
+                    + "JOIN ProductType pt ON p.productID = pt.productID\n"
+                    + "GROUP BY c.CategoryID, c.name;");
         } catch (SQLException ex) {
-            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return rs;
     }
 }

@@ -24,6 +24,18 @@
     <c:when test="${sessionScope.tabId == 8}">
         <%@include file="./customer/changePassword.jsp" %>
     </c:when>
+    <c:when test="${sessionScope.tabId == 9}">
+        <%@include file="./customer/register.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 10}">
+        <%@include file="./customer/product/viewListProduct.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 11}">
+        <%@include file="./customer/product/viewListProduct2.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 12}">
+        <%@include file="./customer/product/detailProduct.jsp" %>
+    </c:when>
 </c:choose>
 <%@include file="./general/customer/brand.jsp" %>	
 <%@include file="./general/customer/footer.jsp" %>

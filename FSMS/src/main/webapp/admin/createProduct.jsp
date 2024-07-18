@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.sql.ResultSet" %>
+
 <div class="content-wrapper">
     <div class="container-full">
         <!-- Main content -->
@@ -128,7 +129,7 @@
     Validator({
         form: "#formCreateProduct",
         message: ".message",
-        invalid: "login-danger",
+        invalid: "invalid",
         rules: [
             Validator.isRequire("#uploadProductImage", "Product Image is required"),
             Validator.isImage("#uploadProductImage", "Product must be image"),

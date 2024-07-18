@@ -47,4 +47,4 @@
         <%@include file="./admin/createVoucher.jsp" %>
     </c:when>
 </c:choose>
-<%@include file="./general/admin/footer.jsp" %>z
+<%@include file="./general/admin/footer.jsp" %>

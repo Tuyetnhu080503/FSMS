@@ -13,6 +13,9 @@ public class Product {
     private String image;
     private int categoryId;
 
+    public Product() {
+    }
+
     public Product(int productId, String name, String description, long price, String image, int categoryId) {
         this.productId = productId;
         this.name = name;
@@ -22,9 +25,7 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public Product() {
-    }
-       public Product( String name, String description, long price, String image, int categoryId) {
+    public Product( String name, String description, long price, String image, int categoryId) {
         this.name = name;
         this.description = description;
         this.price = price;

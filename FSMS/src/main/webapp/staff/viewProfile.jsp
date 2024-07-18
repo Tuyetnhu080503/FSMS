@@ -28,7 +28,7 @@
                                     </div>
                                     <h5 class="card-title d-flex justify-content-between">
                                         <span>General Information</span>
-                                        <a class="edit-link" href="/shipper/profile/edit"><i class="far fa-edit me-1"></i>Edit</a>
+                                        <a class="edit-link" href="/staff/profile/edit"><i class="far fa-edit me-1"></i>Edit</a>
                                     </h5>
                                     <div class="row">
                                         <p class="col-sm-3 text-muted text-sm-end mb-0 mb-sm-3">Username</p>
@@ -66,7 +66,7 @@
                                         <p class="col-sm-3 text-muted text-sm-end mb-0">CCCD</p>
                                         <p class="col-sm-9"><%= empyPro.getCccd()%></p>
                                     </div>
-                                    <h5 class="card-title d-flex justify-content-between"><a class="edit-link" href="/shipper/profile/changepassword"><i class="far fa-edit me-1"></i>Change Password</a>
+                                    <h5 class="card-title d-flex justify-content-between"><a class="edit-link" href="/staff/profile/changepassword"><i class="far fa-edit me-1"></i>Change Password</a>
                                     </h5>
 
                                 </div>
