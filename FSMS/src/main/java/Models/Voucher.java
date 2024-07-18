@@ -8,16 +8,16 @@ public class Voucher {
     private int voucherID;
     private int discountAmount;
     private Integer discountPercentage;
-    private Date expiryDate;
+    private Timestamp expiryDate;
     private boolean isActive;
-    private Date createdDate;
+    private Timestamp createdDate;
     private Integer quantity;
     private Integer minimumPrice;
 
     public Voucher() {
     }
 
-    public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive, Integer quantity, Integer minimumPrice) {
+ public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Timestamp expiryDate, boolean isActive,  Integer quantity, Integer minimumPrice) {
         this.voucherID = voucherID;
         this.discountAmount = discountAmount;
         this.discountPercentage = discountPercentage;
@@ -27,18 +27,8 @@ public class Voucher {
         this.minimumPrice = minimumPrice;
     }
 
-    public Voucher(int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive, Date createdDate, Integer quantity, Integer minimumPrice) {
-        this.discountAmount = discountAmount;
-        this.discountPercentage = discountPercentage;
-        this.expiryDate = expiryDate;
-        this.isActive = isActive;
-        this.createdDate = createdDate;
-        this.quantity = quantity;
-        this.minimumPrice = minimumPrice;
-    }
 
-    public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive, Date createdDate, Integer quantity, Integer minimumPrice) {
-        this.voucherID = voucherID;
+  public Voucher( int discountAmount, Integer discountPercentage, Timestamp expiryDate, boolean isActive,Timestamp createdDate , Integer quantity, Integer minimumPrice) {
         this.discountAmount = discountAmount;
         this.discountPercentage = discountPercentage;
         this.expiryDate = expiryDate;
@@ -73,11 +63,11 @@ public class Voucher {
         this.discountPercentage = discountPercentage;
     }
 
-    public Date getExpiryDate() {
+    public Timestamp getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(Timestamp expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -93,7 +83,7 @@ public class Voucher {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
     }
 

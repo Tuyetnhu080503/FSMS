@@ -13,6 +13,11 @@
     <c:when test="${sessionScope.tabId == 4}">
         <%@include file="./staff/changePassword.jsp" %>
     </c:when>
-    
+     <c:when test="${sessionScope.tabId == 5}">
+        <%@include file="./staff/viewOrder.jsp" %>
+    </c:when>
+     <c:when test="${sessionScope.tabId == 6}">
+        <%@include file="./staff/updateOrder.jsp" %>
+    </c:when>
 </c:choose>
 <%@include file="./general/staff/footer.jsp" %>

@@ -92,7 +92,7 @@
                                                                     </td>
 
                                                                     <td>
-                                                                        <a href="/admin/orders/update/<%=rs.getInt("OrderID")%>">
+                                                                        <a href="/shipper/orders/update/<%=rs.getInt("OrderID")%>">
                                                                             <button style="background:#ea7127 ;border-color: #ea7127;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail</button>
                                                                         </a>
                                                                     </td>
