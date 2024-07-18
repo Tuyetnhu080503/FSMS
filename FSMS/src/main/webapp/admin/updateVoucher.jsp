@@ -1,3 +1,5 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.sql.Timestamp"%>
 <%@page import="java.sql.ResultSet"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="Models.Voucher"%>
@@ -21,10 +23,10 @@
                                         <div class="card-body">
                                             <form id="formUpdateVoucher" action="/upload/updateVoucher" method="post" enctype="multipart/form-data">
                                                 <div class="row">
-                                                    <div class="col-12">
+                                                    <div class="col-12"> 
                                                         <h5 class="form-title student-info">Voucher Information</h5>
                                                     </div>
-                                                     <div class="col-12">
+                                                    <div class="col-12">
                                                         <a id="banVoucher" href="/admin/vouchers/block/<%=voucher.getVoucherID()%>" style='display: none'><button class="mb-2 mr-2 btn-icon btn btn-danger"><i class="pe-7s-trash btn-icon-wrapper"></i>Lock Voucher</button></a> 
                                                         <a id="unbanVoucher" href="/admin/vouchers/unblock/<%=voucher.getVoucherID()%>" style='display: none'><button class="mb-2 mr-2 btn-icon btn btn-primary"><i class="pe-7s-tools btn-icon-wrapper"> </i>Unlock Voucher</button></a> 
                                                     </div>
@@ -45,8 +47,19 @@
                                                     <div class="col-12 col-sm-4">
                                                         <div class="form-group local-forms">
                                                             <label>Expiry Date <span class="login-danger">*</span></label>
-                                                               <input id="expiryDate" name="expiryDate" class="form-control" type="date"
-                                                                   placeholder="DD-MM-YYYY" value="<%= voucher != null ? voucher.getExpiryDate().toString().substring(0, 10) : ""%>">
+                                                            <%
+                                                                Timestamp expiryDate = voucher.getExpiryDate(); // Assuming voucher.getExpiryDate() returns java.sql.Date
+                                                                String formattedExpiryDate = "";
+                                                                if (expiryDate != null) {
+                                                                    formattedExpiryDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(expiryDate);
+                                                                }
+                                                            %>
+
+                                                            <input id="expiryDate" name="expiryDate" class="form-control" type="datetime-local"
+                                                                   placeholder="YYYY-MM-DDTHH:mm"
+                                                                   value="<%= formattedExpiryDate%>"
+                                                                   >
+
                                                             <div class="message"></div>
                                                         </div>
                                                     </div>
@@ -77,7 +90,7 @@
                                                     <input type="hidden" name="voucherId" value="<%= voucher != null ? voucher.getVoucherID() : ""%>">
 
                                                     <input type="hidden" name="updateVoucher" value="updateVoucher">
-                                                    
+
                                                     <div class="col-12 col-sm-6">
                                                         <div class="student-submit">
                                                             <button style="background: #ea7127; border-color:#ea7127" type="submit" class="btn btn-primary">Submit</button>
@@ -120,17 +133,17 @@
         <!-- /.content -->
     </div>
 </div>
-                                        <script>
-            <%
+<script>
+    <%
                 if (voucher.isActive()) {%>
-        document.querySelector("#banVoucher").style.display = 'block';
-            <%} else {%>
-        document.querySelector("#unbanVoucher").style.display = 'block';
-            <%}
-            %>
-        </script>
-        
-        <script>
+                                            document.querySelector("#banVoucher").style.display = 'block';
+    <%} else {%>
+                                            document.querySelector("#unbanVoucher").style.display = 'block';
+    <%}
+    %>
+</script>
+
+<script>
     document.querySelector("#banVoucher").addEventListener("click", function (event) {
         event.preventDefault();
         Swal.fire({
@@ -165,7 +178,7 @@
         });
     });
 </script>
-    <script>
+<script>
     // Initialize Validator
     Validator({
         form: "#formUpdateVoucher",
@@ -182,4 +195,4 @@
             Validator.isPositive("#minimumPrice", "Minimum Price must be greater than 0")
         ]
     });
-    </script>
+</script>

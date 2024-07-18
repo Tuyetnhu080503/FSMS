@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -45,9 +46,9 @@ public class VoucherDAO {
                 voucher.setVoucherID(rs.getInt("VoucherID"));
                 voucher.setDiscountAmount(rs.getInt("DiscountAmount"));
                 voucher.setDiscountPercentage(rs.getInt("DiscountPercentage"));
-                voucher.setExpiryDate(rs.getDate("ExpiryDate"));
+                voucher.setExpiryDate(rs.getTimestamp("ExpiryDate"));
                 voucher.setActive(rs.getBoolean("IsActive"));
-                voucher.setCreatedDate(rs.getDate("CreatedDate"));
+                voucher.setCreatedDate(rs.getTimestamp("CreatedDate"));
                 voucher.setQuantity(rs.getInt("Quantity"));
                 voucher.setMinimumPrice(rs.getInt("MinimumPrice"));
             }
@@ -64,9 +65,9 @@ public class VoucherDAO {
             ps = conn.prepareStatement(query);
             ps.setInt(1, voucher.getDiscountAmount());
             ps.setInt(2, voucher.getDiscountPercentage());
-            ps.setDate(3, new Date(voucher.getExpiryDate().getTime()));
+            ps.setTimestamp(3, new Timestamp(voucher.getExpiryDate().getTime()));
             ps.setBoolean(4, voucher.isActive());
-            ps.setDate(5, new Date(voucher.getCreatedDate().getTime()));
+            ps.setTimestamp(5, new Timestamp(voucher.getCreatedDate().getTime()));
             ps.setInt(6, voucher.getQuantity());
             ps.setInt(7, voucher.getMinimumPrice());
             isSuccess = ps.executeUpdate() > 0;
@@ -83,7 +84,7 @@ public class VoucherDAO {
             ps = conn.prepareStatement(query);
             ps.setInt(1, voucher.getDiscountAmount());
             ps.setInt(2, voucher.getDiscountPercentage());
-            ps.setDate(3, new Date(voucher.getExpiryDate().getTime()));
+            ps.setTimestamp(3, new Timestamp(voucher.getExpiryDate().getTime()));
             ps.setBoolean(4, voucher.isActive());
             ps.setInt(5, voucher.getQuantity());
             ps.setInt(6, voucher.getMinimumPrice());
@@ -127,4 +128,29 @@ public class VoucherDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+
+    public static void main(String[] args) throws SQLException {
+        VoucherDAO dao = new VoucherDAO();
+
+        // Create a new Voucher object
+        Voucher voucher = new Voucher();
+        voucher.setDiscountAmount(10); // Set discount amount
+        voucher.setDiscountPercentage(5); // Set discount percentage
+        voucher.setExpiryDate(new Timestamp(System.currentTimeMillis() + (24 * 60 * 60 * 1000))); // Set expiry date (tomorrow) as Timestamp
+        voucher.setActive(true); // Set active status
+        voucher.setCreatedDate(new Timestamp(System.currentTimeMillis())); // Set created date as Timestamp
+        voucher.setQuantity(100); // Set quantity
+        voucher.setMinimumPrice(50); // Set minimum price
+
+        // Call addVoucher method to insert the voucher into the database
+        boolean isSuccess = dao.addVoucher(voucher);
+
+        if (isSuccess) {
+            System.out.println("Voucher added successfully.");
+        } else {
+            System.out.println("Failed to add voucher.");
+        }
+    }
+
 }

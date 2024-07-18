@@ -20,7 +20,7 @@
                                                     <div class="col">
                                                         <h3 class="page-title">View Vouchers</h3>
                                                     </div>
-                                                    
+
                                                     <div class="col-auto text-end float-end ms-auto download-grp">
                                                         <a style="background: #ea7127;border-color:#ea7127 " href="/admin/voucher/create" class="btn btn-primary"><i class="fas fa-plus"></i> Add Voucher</a>
                                                     </div>
@@ -47,7 +47,7 @@
                                                             VoucherDAO voucherDAO = new VoucherDAO();
                                                             ResultSet rs = voucherDAO.getAllVouchers();
                                                             int count = 1;
-                                                            while (rs.next()) { %> 
+                                                            while (rs.next()) {%> 
                                                         <tr>
                                                             <td><%=count++%></td>
                                                             <td><%=rs.getInt("DiscountAmount")%></td>
@@ -61,14 +61,13 @@
                                                                 <a href="/admin/vouchers/update/<%=rs.getInt("VoucherID")%>">
                                                                     <button style="background:#ea7127 ;border-color: #ea7127;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail</button>
                                                                 </a>
-                                                            </td>
-                                                            <td>
                                                                 <form id="formDeleteVoucher" action="/upload/deleteVoucher"
                                                                       method="post" enctype="multipart/form-data">
                                                                     <input type="hidden" name="voucherId" value="<%=rs.getInt("VoucherID")%>">
                                                                     <button type="submit" name="deleteVoucher" style="background:red;border-color: red;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-danger"><i class="feather-trash-2"></i>Delete</button>
                                                                 </form>
                                                             </td>
+
                                                         </tr>
                                                         <% }
                                                             rs.close();

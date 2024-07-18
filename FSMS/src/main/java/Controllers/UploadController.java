@@ -26,6 +26,10 @@ import jakarta.servlet.http.Part;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -354,7 +358,13 @@ public class UploadController extends HttpServlet {
                 e.printStackTrace();
                 session.setAttribute("updateOrder", "fail");
             }
-            response.sendRedirect("/admin/order");
+            AccountDAO accDAO = new AccountDAO();
+            Account account = accDAO.getAccountByAccountID(acc.getAccountId());
+            if (acc.getRoleId() == 1) {
+                response.sendRedirect("/admin/order");
+            } else if (acc.getRoleId() == 2) {
+                response.sendRedirect("/staff/orders");
+            }
         } else if (request.getParameter(
                 "deleteOrder") != null) {
             try {
@@ -370,12 +380,26 @@ public class UploadController extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(UploadController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (request.getParameter(
-                "updateVoucher") != null) {
+        } else if (request.getParameter("updateVoucher") != null) {
             int voucherId = Integer.parseInt(request.getParameter("voucherId"));
             int discountAmount = Integer.parseInt(request.getParameter("discountAmount"));
             Integer discountPercentage = Integer.parseInt(request.getParameter("discountPercentage"));
-            Date expiryDate = Date.valueOf("2024-12-31");
+
+            // Parse and handle expiryDate correctly
+            Timestamp expiryDate = null;
+            String expiryDateStr = request.getParameter("expiryDate");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            try {
+                java.util.Date parsedDate = dateFormat.parse(expiryDateStr);
+                expiryDate = new Timestamp(parsedDate.getTime());
+            } catch (ParseException e) {
+                // Handle parse exception, e.g., log the error or redirect with an error message
+                session.setAttribute("updateVoucher", "fail");
+                response.sendRedirect("/admin/voucher/update/" + voucherId);
+                return; // Exit the method if parsing fails
+            }
+
             boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
             Integer quantity = Integer.parseInt(request.getParameter("quantity"));
             Integer minimumPrice = Integer.parseInt(request.getParameter("minimumPrice"));
@@ -412,22 +436,39 @@ public class UploadController extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(UploadController.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (request.getParameter(
-                "createVoucher") != null) {
-            int discountAmount = Integer.parseInt(request.getParameter("discountAmount"));
-            int discountPercentage = Integer.parseInt(request.getParameter("discountPercentage"));
-            Date expiryDate = Date.valueOf(request.getParameter("expiryDate"));
-            boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
-            Date createdDate = new Date(System.currentTimeMillis()); // Assuming current date/time
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            int minimumPrice = Integer.parseInt(request.getParameter("minimumPrice"));
-
-            // Create a Voucher object
-            Voucher voucher = new Voucher(discountAmount, discountPercentage, expiryDate, isActive, createdDate, quantity, minimumPrice);
-
+        } else if (request.getParameter("createVoucher") != null) {
             try {
+                int discountAmount = Integer.parseInt(request.getParameter("discountAmount"));
+                int discountPercentage = Integer.parseInt(request.getParameter("discountPercentage"));
+
+                // Parse and handle expiryDate correctly
+                Timestamp expiryDate = null;
+                String expiryDateStr = request.getParameter("expiryDate");
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+                try {
+                    java.util.Date parsedDate = dateFormat.parse(expiryDateStr);
+                    expiryDate = new Timestamp(parsedDate.getTime());
+                } catch (ParseException e) {
+                    // Handle parse exception, e.g., log the error or redirect with an error message
+                    Logger.getLogger(UploadController.class.getName()).log(Level.SEVERE, "Error parsing expiryDate", e);
+                    session.setAttribute("createVoucher", "fail");
+                    response.sendRedirect("/admin/voucher/create");
+                    return; // Exit the method if parsing fails
+                }
+
+                boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+                Timestamp createdDate = new Timestamp(System.currentTimeMillis()); // Assuming current date/time
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                int minimumPrice = Integer.parseInt(request.getParameter("minimumPrice"));
+
+                // Create a Voucher object
+                Voucher voucher = new Voucher(discountAmount, discountPercentage, expiryDate, isActive, createdDate, quantity, minimumPrice);
+
+                // Use VoucherDAO to add voucher to database
                 VoucherDAO voucherDAO = new VoucherDAO();
                 boolean result = voucherDAO.addVoucher(voucher);
+
                 if (result) {
                     session.setAttribute("createVoucher", "success");
                     response.sendRedirect("/admin/voucher");
@@ -436,7 +477,7 @@ public class UploadController extends HttpServlet {
                     response.sendRedirect("/admin/voucher/create");
                 }
             } catch (Exception e) {
-                Logger.getLogger(UploadController.class.getName()).log(Level.SEVERE, null, e);
+                Logger.getLogger(UploadController.class.getName()).log(Level.SEVERE, "Error creating voucher", e);
                 session.setAttribute("createVoucher", "fail");
                 response.sendRedirect("/admin/voucher/create");
             }
@@ -453,7 +494,7 @@ public class UploadController extends HttpServlet {
             String address = request.getParameter("address");
             String role = "Customer";
             int roleId = 4;
-             String avatar = "";
+            String avatar = "";
             Part part = request.getPart("avatar");
             if (Paths.get(part.getSubmittedFileName()).toString().isEmpty()) {
                 avatar = acc.getAvatar();
@@ -479,7 +520,7 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/account/register");
             } else {
                 session.setAttribute("registerAccount", "success");
-                
+
                 response.sendRedirect("/login");
             }
         }
