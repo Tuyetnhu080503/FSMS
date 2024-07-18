@@ -108,36 +108,23 @@ public class VoucherDAO {
         return isSuccess;
     }
 
-    public static void main(String[] args) {
-    // Sample data for testing
-    int discountAmount = 10;
-    int discountPercentage = 20;
-    Date expiryDate = Date.valueOf("2024-12-31");
-    boolean isActive = true;
-    Date createdDate = new Date(System.currentTimeMillis()); // Assuming current date/time
-    int quantity = 100;
-    int minimumPrice = 50;
-
-    // Create a Voucher object
-    Voucher voucher = new Voucher(discountAmount, discountPercentage, expiryDate, isActive, createdDate, quantity, minimumPrice);
-
-    try {
-        // Instantiate VoucherDAO
-        VoucherDAO voucherDAO = new VoucherDAO();
-
-        // Call addVoucher method
-        boolean result = voucherDAO.addVoucher(voucher);
-
-        // Check result and print success/failure message
-        if (result) {
-            System.out.println("Voucher added successfully.");
-        } else {
-            System.out.println("Failed to add voucher.");
+    public void banVoucherById(int id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Voucher SET IsActive = 0 Where VoucherID = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (SQLException ex) {
-        // Handle SQL exceptions
-        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
     }
-}
 
+    public void unbanVoucherById(int id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Voucher SET IsActive = 1 Where VoucherID = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

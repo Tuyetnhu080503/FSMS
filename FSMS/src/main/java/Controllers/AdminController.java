@@ -1,6 +1,6 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers;
 
@@ -136,6 +136,42 @@ public class AdminController extends HttpServlet {
             } else if (path.endsWith("/voucher/create")) {
                 session.setAttribute("tabId", 15);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            } else if (path.startsWith("/admin/products/block/")) {
+                String[] idArray = path.split("/");
+                int id = Integer.parseInt(idArray[idArray.length - 1]);
+
+                ProductDAO pDAO = new ProductDAO();
+                pDAO.banProductById(id);
+                response.sendRedirect("/admin/products/update/" + id);
+            } else if (path.startsWith("/admin/products/unblock/")) {
+                String[] idArray = path.split("/");
+                int id = Integer.parseInt(idArray[idArray.length - 1]);
+
+                ProductDAO pDAO = new ProductDAO();
+                pDAO.unbanProductById(id);
+                response.sendRedirect("/admin/products/update/" + id);
+            } else if (path.startsWith("/admin/vouchers/block/")) {
+                try {
+                    String[] idArray = path.split("/");
+                    int id = Integer.parseInt(idArray[idArray.length - 1]);
+
+                    VoucherDAO vDAO = new VoucherDAO();
+                    vDAO.banVoucherById(id);
+                    response.sendRedirect("/admin/vouchers/update/" + id);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (path.startsWith("/admin/vouchers/unblock/")) {
+                try {
+                    String[] idArray = path.split("/");
+                    int id = Integer.parseInt(idArray[idArray.length - 1]);
+                    
+                    VoucherDAO vDAO = new VoucherDAO();
+                    vDAO.unbanVoucherById(id);
+                    response.sendRedirect("/admin/vouchers/update/" + id);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else { // route = "/admin"
                 session.setAttribute("tabId", 1);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);

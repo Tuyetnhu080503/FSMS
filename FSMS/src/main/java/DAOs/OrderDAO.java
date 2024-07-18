@@ -33,7 +33,7 @@ public class OrderDAO {
 
         try {
             Statement st = conn.createStatement();
-            rs = st.executeQuery("SELECT o.OrderID, a.Lastname, a.Phonenumber, o.Status, o.PaymentMethod, c.Deliveryaddress FROM [Order] o \n"
+            rs = st.executeQuery("SELECT o.OrderID, a. [Firstname], a.Lastname, a.Phonenumber, o.Status, o.PaymentMethod, c.Deliveryaddress FROM [Order] o \n"
                     + "join CustomerProfile as c on o.CustomerID = c.CustomerID\n"
                     + "join Voucher as v on o.VoucherID = v.VoucherID\n"
                     + "join Account as a on c.AccountID = a.AccountID");
@@ -46,7 +46,7 @@ public class OrderDAO {
 
     public Order getOrderById(int orderId) {
         Order order = null;
-        String sql = "SELECT o.OrderID, a.Lastname, a.Phonenumber, o.Status, o.PaymentMethod, c.Deliveryaddress FROM [Order] o \n"
+        String sql = "SELECT o.OrderID,a.[Firstname], a.Lastname, a.Phonenumber, o.Status, o.PaymentMethod, c.Deliveryaddress FROM [Order] o \n"
                 + "join CustomerProfile as c on o.CustomerID = c.CustomerID\n"
                 + "join Voucher as v on o.VoucherID = v.VoucherID\n"
                 + "join Account as a on c.AccountID = a.AccountID where o.OrderID = ?";
@@ -57,6 +57,7 @@ public class OrderDAO {
             if (rs.next()) {
                 order = new Order(
                         rs.getInt("OrderID"),
+                        rs.getString("Firstname"),
                         rs.getString("Lastname"),
                         rs.getString("Phonenumber"),
                         rs.getString("Status"),
