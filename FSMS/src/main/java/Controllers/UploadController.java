@@ -5,12 +5,14 @@
 package Controllers;
 
 import DAOs.AccountDAO;
+import DAOs.BannerDAO;
 import DAOs.EmployeeDAO;
 import DAOs.OrderDAO;
 import DAOs.ProductDAO;
 import DAOs.VoucherDAO;
 import Hash.MD5;
 import Models.Account;
+import Models.Banner;
 import Models.EmployeeProfile;
 import Models.Product;
 import Models.ProductType;
@@ -18,18 +20,22 @@ import Models.Voucher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.io.File;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxRequestSize = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10)
+@WebServlet("/UploadController")
 public class UploadController extends HttpServlet {
 
     @Override
@@ -43,7 +49,8 @@ public class UploadController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
-
+        String action = request.getParameter("action");
+        
         if (request.getParameter("editProfile") != null) {
             String role = "";
             switch (acc.getRoleId()) {
@@ -483,5 +490,130 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/login");
             }
         }
+        else if ("updateBanner".equals(action)) {
+            updateBanner(request, response);
+        } else if ("addBanner".equals(action)) {
+            addBanner(request, response);
+        }
     }
+    private void updateBanner(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    String sid = request.getParameter("bannerId");
+    String pbannerName = request.getParameter("bannerName");
+    String pcontent = request.getParameter("content");
+    boolean pisActive = Boolean.parseBoolean(request.getParameter("isActive"));
+
+    BannerDAO dao = new BannerDAO();
+    
+    if (dao.checkBannerNameExists(pbannerName)) {
+        session.setAttribute("updateBannerSameNameMessageError", "Banner with name '" + pbannerName + "' already exists.");
+        response.sendRedirect(request.getContextPath() + "/admin/banners/upbanner?sid=" + sid);
+        return;
+    }
+
+    String pimage = null;
+    Part part = request.getPart("newImage");
+    if (part != null && part.getSize() > 0) {
+        String fileName = UUID.randomUUID() + "_" + Paths.get(part.getSubmittedFileName()).getFileName().toString();
+        String realPath = request.getServletContext().getRealPath("/assets/images/imagebanner");
+
+        if (realPath != null) {
+            File uploadDir = new File(realPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+        } else {
+            session.setAttribute("updateBannerMessageError", "Server error: Upload directory not found.");
+            response.sendRedirect(request.getContextPath() + "/admin/banners/upbanner?sid=" + sid);
+            return;
+        }
+
+        try {
+            part.write(realPath + "/" + fileName);
+            pimage = "/assets/images/imagebanner/" + fileName;
+        } catch (IOException e) {
+            session.setAttribute("updateBannerMessageError", "Failed to upload image: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/admin/banners/upbanner?sid=" + sid);
+            return;
+        }
+    } else {
+        Banner existingBanner = dao.getBannerById(sid);
+        pimage = existingBanner.getImage(); // Use existing image if no new image is uploaded
+    }
+
+    try {
+        dao.updateBanner(pbannerName, pimage, pcontent, pisActive, sid);
+        session.setAttribute("updateBannerMessage", "Banner updated successfully!");
+    } catch (Exception e) {
+        session.setAttribute("updateBannerMessageError", "Failed to update banner: " + e.getMessage());
+    }
+    response.sendRedirect(request.getContextPath() + "/admin/banners");
+}
+    private void addBanner(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    String bannerName = request.getParameter("bannerName");
+    String content = request.getParameter("content");
+    boolean isActive = Boolean.parseBoolean(request.getParameter("isActive"));
+
+    BannerDAO bannerDAO = new BannerDAO();
+
+    // Check if banner name already exists
+    if (bannerDAO.checkBannerNameExists(bannerName)) {
+        session.setAttribute("addBannerSameNameMessageError", "Banner with name '" + bannerName + "' already exists.");
+        response.sendRedirect(request.getContextPath() + "/admin/banners/crbanner");
+        return;
+    }
+
+    // Handle file upload for banner image
+    Part part = request.getPart("image");
+    if (part == null || part.getSize() == 0) {
+        session.setAttribute("addBannerMessageError", "Image file is required.");
+        response.sendRedirect(request.getContextPath() + "/admin/banners/crbanner");
+        return;
+    }
+
+    String fileName = UUID.randomUUID() + "_" + Paths.get(part.getSubmittedFileName()).getFileName().toString();
+    String realPath = request.getServletContext().getRealPath("/assets/images/imagebanner");
+
+    if (realPath != null) {
+        File uploadDir = new File(realPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs(); // Create the directory if it does not exist
+        }
+    } else {
+        session.setAttribute("addBannerMessageError", "Server error: Upload directory not found.");
+        response.sendRedirect(request.getContextPath() + "/admin/banners/crbanner");
+        return;
+    }
+
+    try {
+        part.write(realPath + "/" + fileName);
+        String imagePath = "/assets/images/imagebanner/" + fileName;
+        bannerDAO.addBanner(bannerName, imagePath, content, isActive);
+        session.setAttribute("addBannerMessage", "Banner created successfully!");
+    } catch (IOException e) {
+        session.setAttribute("addBannerMessageError", "Failed to upload image: " + e.getMessage());
+        response.sendRedirect(request.getContextPath() + "/admin/banners/crbanner");
+        return;
+    } catch (Exception e) {
+        session.setAttribute("addBannerMessageError", "Failed to create banner: " + e.getMessage());
+        response.sendRedirect(request.getContextPath() + "/admin/banners/crbanner");
+        return;
+    }
+
+    response.sendRedirect(request.getContextPath() + "/admin/banners");
+}
+    private String getFileName(Part part) {
+        String contentDisposition = part.getHeader("content-disposition");
+        if (!contentDisposition.contains("filename=")) {
+            return null;
+        }
+        int beginIndex = contentDisposition.indexOf("filename=") + 10;
+        int endIndex = contentDisposition.length() - 1;
+
+        return contentDisposition.substring(beginIndex, endIndex);
+    }
+
 }

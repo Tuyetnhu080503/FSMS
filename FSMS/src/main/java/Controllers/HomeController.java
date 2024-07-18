@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controllers;
 
 import DAOs.AccountDAO;
+import DAOs.BannerDAO;
 import Models.Account;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -13,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 
 public class HomeController extends HttpServlet {
 
@@ -50,6 +48,7 @@ public class HomeController extends HttpServlet {
                             response.sendRedirect("/shipper");
                             break;
                         case 4:
+                            loadBannerImages(request);
                             session.setAttribute("tabId", 1);
                             request.getRequestDispatcher("/customer.jsp").forward(request, response);
                             break;
@@ -57,10 +56,12 @@ public class HomeController extends HttpServlet {
                             break;
                     }
                 } else {
+                    loadBannerImages(request);
                     session.setAttribute("tabId", 1);
                     request.getRequestDispatcher("/customer.jsp").forward(request, response);
                 }
             } else {
+                loadBannerImages(request);
                 session.setAttribute("tabId", 1);
                 request.getRequestDispatcher("/customer.jsp").forward(request, response);
             }
@@ -77,6 +78,7 @@ public class HomeController extends HttpServlet {
                     response.sendRedirect("/shipper");
                     break;
                 case 4:
+                    loadBannerImages(request);
                     session.setAttribute("tabId", 1);
                     request.getRequestDispatcher("/customer.jsp").forward(request, response);
                     break;
@@ -90,5 +92,11 @@ public class HomeController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+    }
+    
+    private void loadBannerImages(HttpServletRequest request) {
+        BannerDAO bannerDAO = new BannerDAO();
+        List<String> activeBannerImages = bannerDAO.getActiveBannerImages();
+        request.setAttribute("activeBannerImages", activeBannerImages);
     }
 }

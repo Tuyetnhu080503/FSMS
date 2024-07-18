@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 public class DBConnection {
 
     public static Connection connect() throws SQLException {
-        String server = "DESKTOP-7UI977G\\SQLEXPRESS";
+        String server = "DESKTOP-C4JDBT0\\SQLEXPRESS";
         String port = "1433";
-        String database = "finaldtb";
+        String database = "finaldtbb";
         String user = "sa";
         String password = "123456";
         Connection conn = null;

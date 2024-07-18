@@ -1,8 +1,10 @@
 package Models;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Voucher {
+
     private int voucherID;
     private int discountAmount;
     private Integer discountPercentage;
@@ -14,7 +16,8 @@ public class Voucher {
 
     public Voucher() {
     }
- public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive,  Integer quantity, Integer minimumPrice) {
+
+    public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive, Integer quantity, Integer minimumPrice) {
         this.voucherID = voucherID;
         this.discountAmount = discountAmount;
         this.discountPercentage = discountPercentage;
@@ -23,7 +26,8 @@ public class Voucher {
         this.quantity = quantity;
         this.minimumPrice = minimumPrice;
     }
-  public Voucher( int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive,Date createdDate , Integer quantity, Integer minimumPrice) {
+
+    public Voucher(int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive, Date createdDate, Integer quantity, Integer minimumPrice) {
         this.discountAmount = discountAmount;
         this.discountPercentage = discountPercentage;
         this.expiryDate = expiryDate;
@@ -32,7 +36,18 @@ public class Voucher {
         this.quantity = quantity;
         this.minimumPrice = minimumPrice;
     }
-    
+
+    public Voucher(int voucherID, int discountAmount, Integer discountPercentage, Date expiryDate, boolean isActive, Date createdDate, Integer quantity, Integer minimumPrice) {
+        this.voucherID = voucherID;
+        this.discountAmount = discountAmount;
+        this.discountPercentage = discountPercentage;
+        this.expiryDate = expiryDate;
+        this.isActive = isActive;
+        this.createdDate = createdDate;
+        this.quantity = quantity;
+        this.minimumPrice = minimumPrice;
+    }
+
     // Getters and Setters
     public int getVoucherID() {
         return voucherID;

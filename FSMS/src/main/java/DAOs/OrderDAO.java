@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import DBConnection.DBConnection;
 import Models.Order;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,7 @@ public class OrderDAO {
     private ResultSet rs = null;
 
     public OrderDAO() throws SQLException {
-        conn = DBConnection.DBConnection.connect();
+        conn = DBConnection.connect();
     }
 
     public ResultSet getAllOrder() {
@@ -43,6 +44,35 @@ public class OrderDAO {
         }
         return rs;
     }
+    public List<Order> getAllOrders() {
+    List<Order> list = new ArrayList<>();
+    String query = "SELECT * FROM [Order]"; // Ensure the table name is correct
+
+    try {
+        conn = DBConnection.connect();
+        ps = conn.prepareStatement(query);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            list.add(new Order(
+                    rs.getInt("OrderID"),
+                    rs.getInt("CustomerID"),
+                    rs.getString("Status"),
+                    rs.getLong("TotalPrice"),
+                    rs.getTimestamp("CreateAt"),
+                    rs.getInt("VoucherID"),
+                    rs.getString("PaymentMethod"),
+                    rs.getString("PaymentID")
+            ));
+        }
+        System.out.println("Number of orders retrieved: " + list.size()); // Debug statement
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        closeResources();
+    }
+    return list;
+}
 
     public Order getOrderById(int orderId) {
         Order order = null;
@@ -96,6 +126,54 @@ public class OrderDAO {
             return false;
         }
     }
+   public int getCustomerIdByAccountId(int accountId) {
+        int customerId = -1;
+        String query = "SELECT CustomerID FROM CustomerProfile WHERE AccountID = ?";
+        try {
+            conn = DBConnection.connect();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                customerId = rs.getInt("CustomerID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return customerId;
+    }
+
+    // Method to get orders by CustomerId
+   public List<Order> getOrdersByCustomerId(int customerId) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM [Order] WHERE CustomerID = ?";
+        try {
+            conn = DBConnection.connect();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, customerId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                orders.add(new Order(
+                    rs.getInt("OrderID"),
+                    rs.getInt("CustomerID"),
+                    rs.getString("Status"),
+                    rs.getLong("TotalPrice"),
+                    rs.getTimestamp("CreateAt"),
+                    rs.getInt("VoucherID"),
+                    rs.getString("PaymentMethod"),
+                    rs.getString("PaymentID")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
+        }
+        return orders;
+    }
+
 
 //    public static void main(String[] args) {
 //
@@ -137,6 +215,15 @@ public class OrderDAO {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+    private void closeResources() {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

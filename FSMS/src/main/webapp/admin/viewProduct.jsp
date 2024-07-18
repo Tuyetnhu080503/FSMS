@@ -43,6 +43,7 @@
                                                             <th>Size</th>
                                                             <th>Quantity</th>
                                                             <th class="text-end">Action</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>

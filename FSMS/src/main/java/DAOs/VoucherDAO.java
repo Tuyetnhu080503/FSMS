@@ -1,5 +1,6 @@
 package DAOs;
 
+import DBConnection.DBConnection;
 import Models.Voucher;
 import java.sql.Connection;
 import java.sql.Date;
@@ -19,7 +20,7 @@ public class VoucherDAO {
     private ResultSet rs = null;
 
     public VoucherDAO() throws SQLException {
-        conn = DBConnection.DBConnection.connect();
+        conn = DBConnection.connect();
     }
 
     public ResultSet getAllVouchers() {
@@ -107,37 +108,79 @@ public class VoucherDAO {
         }
         return isSuccess;
     }
-
-    public static void main(String[] args) {
-    // Sample data for testing
-    int discountAmount = 10;
-    int discountPercentage = 20;
-    Date expiryDate = Date.valueOf("2024-12-31");
-    boolean isActive = true;
-    Date createdDate = new Date(System.currentTimeMillis()); // Assuming current date/time
-    int quantity = 100;
-    int minimumPrice = 50;
-
-    // Create a Voucher object
-    Voucher voucher = new Voucher(discountAmount, discountPercentage, expiryDate, isActive, createdDate, quantity, minimumPrice);
-
-    try {
-        // Instantiate VoucherDAO
-        VoucherDAO voucherDAO = new VoucherDAO();
-
-        // Call addVoucher method
-        boolean result = voucherDAO.addVoucher(voucher);
-
-        // Check result and print success/failure message
-        if (result) {
-            System.out.println("Voucher added successfully.");
-        } else {
-            System.out.println("Failed to add voucher.");
+    public List<Voucher> getAllVoucher() {
+        List<Voucher> vouchers = new ArrayList<>();
+        String query = "SELECT * FROM Voucher";
+        
+        try (Connection conn = DBConnection.connect();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+             
+            while (rs.next()) {
+                Voucher voucher = new Voucher(
+                    rs.getInt("voucherId"),
+                    rs.getInt("discountAmount"),
+                    rs.getInt("discountPercentage"),
+                    rs.getDate("expiryDate"),
+                    rs.getBoolean("isActive"),
+                    rs.getDate("createdDate"),
+                    rs.getInt("quantity"),
+                    rs.getInt("minimumPrice")
+                );
+                vouchers.add(voucher);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException ex) {
-        // Handle SQL exceptions
-        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        
+        return vouchers;
     }
+
+    public static void main(String[] args) throws SQLException {
+    // Sample data for testing
+//    int discountAmount = 10;
+//    int discountPercentage = 20;
+//    Date expiryDate = Date.valueOf("2024-12-31");
+//    boolean isActive = true;
+//    Date createdDate = new Date(System.currentTimeMillis()); // Assuming current date/time
+//    int quantity = 100;
+//    int minimumPrice = 50;
+//
+//    // Create a Voucher object
+//    Voucher voucher = new Voucher(discountAmount, discountPercentage, expiryDate, isActive, createdDate, quantity, minimumPrice);
+//
+//    try {
+//        // Instantiate VoucherDAO
+//        VoucherDAO voucherDAO = new VoucherDAO();
+//
+//        // Call addVoucher method
+//        boolean result = voucherDAO.addVoucher(voucher);
+//
+//        // Check result and print success/failure message
+//        if (result) {
+//            System.out.println("Voucher added successfully.");
+//        } else {
+//            System.out.println("Failed to add voucher.");
+//        }
+//    } catch (SQLException ex) {
+//        // Handle SQL exceptions
+//        Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+//    }
+
+        VoucherDAO voucherDAO = new VoucherDAO();
+        List<Voucher> vouchers = voucherDAO.getAllVoucher();
+        
+        for (Voucher voucher : vouchers) {
+            System.out.println("Voucher ID: " + voucher.getVoucherID());
+            System.out.println("Discount Amount: " + voucher.getDiscountAmount());
+            System.out.println("Discount Percentage: " + voucher.getDiscountPercentage()+ "%");
+            System.out.println("Expiry Date: " + voucher.getExpiryDate());
+            System.out.println("Is Active: " + (voucher.isActive() ? "Yes" : "No"));
+            System.out.println("Created Date: " + voucher.getCreatedDate());
+            System.out.println("Quantity: " + voucher.getQuantity());
+            System.out.println("Minimum Price: " + voucher.getMinimumPrice());
+            System.out.println("---------------");
+        }
 }
 
 }

@@ -5,12 +5,14 @@
 package Controllers;
 
 import DAOs.AccountDAO;
+import DAOs.BannerDAO;
 import DAOs.EmployeeDAO;
 import DAOs.ProductDAO;
 import DAOs.OrderDAO;
 import DAOs.VoucherDAO;
 import Hash.MD5;
 import Models.Account;
+import Models.Banner;
 import Models.EmployeeProfile;
 import Models.Order;
 import Models.Product;
@@ -23,6 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -136,7 +139,68 @@ public class AdminController extends HttpServlet {
             } else if (path.endsWith("/voucher/create")) {
                 session.setAttribute("tabId", 15);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            } else { // route = "/admin"
+            }else if (path.endsWith("/banners")) {
+                try {
+                    BannerDAO bannerDAO = new BannerDAO();
+                    List<Banner> banners = bannerDAO.getAllBanners();
+                    request.setAttribute("Listb", banners);
+                    session.setAttribute("tabId", 16);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                } catch (Exception e) {
+                    // Handle exception appropriately
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, "Error fetching banners", e);
+                    // Redirect or display error message
+                    response.sendRedirect("/admin.jsp?error=fetching_banners");
+                }
+
+            }else if (path.endsWith("/crbanner")) {
+                session.setAttribute("tabId", 17);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            }  else if (path.endsWith("/admin/banners/upbanner")) {
+                String sid = request.getParameter("sid");
+                BannerDAO dao = new BannerDAO();
+                Banner p = dao.getBannerById(sid);
+                request.setAttribute("detail", p);
+                session.setAttribute("tabId", 18);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+            }else if (path.startsWith("/admin/banners/delete/")) {
+                try {
+                    String[] idArray = path.split("/");
+                    String bannerIdStr = idArray[idArray.length - 1];
+
+                    if (bannerIdStr != null && !bannerIdStr.isEmpty()) {
+                        int bannerId = Integer.parseInt(bannerIdStr);
+
+                        BannerDAO bannerDAO = new BannerDAO();
+                        bannerDAO.deleteBanner(bannerId);
+
+                        // Set success message in session
+                        session.setAttribute("deleteBannerMessage", "Banner deleted successfully.");
+                    } else {
+                        Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, "Banner ID is null or empty.");
+                    }
+                    response.sendRedirect("/admin/banners");
+                } catch (NumberFormatException e) {
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, "Invalid banner ID format: " + e.getMessage());
+                    session.setAttribute("deleteBannerError", "Failed to delete banner. Please try again.");
+                    response.sendRedirect("/admin/banners");
+                }
+            }   else if (path.endsWith("/hisOrder")) {
+                try {
+                    OrderDAO dao = new OrderDAO();
+                    List<Order> list = dao.getAllOrders();
+                    request.setAttribute("Listc", list);
+                    session.setAttribute("tabId", 19);
+                    request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                } catch (Exception e) {
+                    // Handle exception appropriately
+                    Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, "Error fetching orders", e);
+                    // Redirect or display error message
+                    response.sendRedirect("/admin.jsp?error=fetching_orders");
+                }
+            }
+            
+            else { // route = "/admin"
                 session.setAttribute("tabId", 1);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
             }
