@@ -10,6 +10,7 @@ Controllers\AdminController.class
 Hash\MD5.class
 Models\Category.class
 Models\Role.class
+DAOs\CartDAO.class
 Models\Product.class
 Controllers\UploadController.class
 Models\Account.class
@@ -34,3 +35,4 @@ Models\CustomerProfile.class
 Controllers\OrderController.class
 Models\Order.class
 Models\Comment.class
+Controllers\CartController.class

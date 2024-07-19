@@ -81,12 +81,12 @@
                                             %>
                                             <ul>
                                                 <%=acc == null ? "" : "<li><a href=\"/account/profile\">My Account</a></li>"%>
-                                                <li><a href="/cart">My Cart</a></li>
+                                                <li><a href="/carts">My Cart</a></li>
                                                 <li><a href="/checkout">Checkout</a></li>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
                                             </ul>
                                         </li>
-                                        
+
                                     </ul>
                                 </nav>
                             </div>								
@@ -111,16 +111,16 @@
                             <div class="category-search-area">
                                 <div class="search-cat">
                                     <select>
-                                     
+
                                         <option value="1">All Categories</option>
-                                          <% CategoryDAO cateDAO = new CategoryDAO();
-                    ResultSet rs = cateDAO.getAllCategory();
-                    int i=0;
-                    while(rs.next()){
-                    %>
+                                        <% CategoryDAO cateDAO = new CategoryDAO();
+                                            ResultSet rs = cateDAO.getAllCategory();
+                                            int i = 0;
+                                            while (rs.next()) {
+                                        %>
                                         <option value="${i}"><%=rs.getString("Name")%></option>
-                                        <% i=i+1;
-                                        }
+                                        <% i = i + 1;
+                                            }
                                         %>
                                     </select>
                                 </div>
@@ -134,112 +134,50 @@
                             <!-- category search end -->
                             <!-- top-shoping-cart start -->
                             <div class="top-shoping-cart">
-<!--                                <div class="top-wishlist">
-                                    <a class="top-wishlist-link" href="wishlist.html"><span>3</span></a>
-                                    <div class="wishlist-box-overlay">
-                                        <p class="last-added-item">last added item</p>
-                                        <div class="single-mycart-item">
-                                            <div class="mycart-item-pro">
-                                                <div class="mycart-item-img">
-                                                    <a href="wishlist.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/4.jpg" alt="cart" /></a>
-                                                </div>
-                                                <div class="mycart-item-text">
-                                                    <a href="#" class="item-delete" title="delete">delete Item</a>	
-                                                    <p><a class="mycart-title" href="wishlist.html">Cras neque metus </a></p>
-                                                    <div class="product-price">
-                                                        <span class="regular-price">$180.00</span>
-                                                        <span class="old-price">$300.00</span>
-                                                    </div>	
-                                                    <p><a class="t-w-add-cart" href="#" title="Add to Cart">Add to Cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="single-mycart-item">
-                                            <div class="mycart-item-pro">
-                                                <div class="mycart-item-img">
-                                                    <a href="wishlist.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/5.jpg" alt="cart" /></a>
-                                                </div>
-                                                <div class="mycart-item-text">
-                                                    <a href="#" class="item-delete" title="delete">delete Item</a>	
-                                                    <p><a class="mycart-title" href="wishlist.html">Cras neque metus </a></p>
-                                                    <div class="product-price">
-                                                        <span class="regular-price">$280.00</span>
-                                                    </div>	
-                                                    <p><a class="t-w-add-cart" href="#" title="Add to Cart">Add to Cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="single-mycart-item">
-                                            <div class="mycart-item-pro">
-                                                <div class="mycart-item-img">
-                                                    <a href="wishlist.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/2.jpg" alt="cart" /></a>
-                                                </div>
-                                                <div class="mycart-item-text">
-                                                    <a href="#" class="item-delete" title="delete">delete Item</a>	
-                                                    <p><a class="mycart-title" href="wishlist.html">Cras neque metus </a></p>
-                                                    <div class="product-price">
-                                                        <span class="regular-price">$220.00</span>
-                                                        <span class="old-price">$200.00</span>
-                                                    </div>	
-                                                    <p><a class="t-w-add-cart" href="#" title="Add to Cart">Add to Cart</a></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="go-to-wishlist"><a href="wishlist.html">Go to Wishlist</a></p>
-                                    </div>										
-                                </div>-->
+                                <!-- Wishlist section commented out -->
                                 <div class="top-mycart">
-                                    <a class="top-mycart-link" href="cart.html">my cart <span>(3) item: <strong>$975.00</strong></span></a>
+                                    <a class="top-mycart-link" href="cart.html">
+                                        my cart <span>(${cartItems.size()}) item: 
+                                            <strong>
+                                                <c:set var="totalPrice" value="0"/>
+                                                <c:forEach var="item" items="${cartItems}">
+                                                    <c:set var="totalPrice" value="${totalPrice + (item.quantity * item.product.price)}"/>
+                                                </c:forEach>
+                                                $${totalPrice}
+                                            </strong>
+                                        </span>
+                                    </a>
                                     <div class="top-mycart-overlay">
-                                        <div class="single-mycart-item">
-                                            <div class="mycart-item-pro">
-                                                <div class="mycart-item-img">
-                                                    <a href="cart.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/1.jpg" alt="cart" /></a>
+                                        <c:forEach var="item" items="${cartItems}">
+                                            <div class="single-mycart-item">
+                                                <div class="mycart-item-pro">
+                                                    <div class="mycart-item-img">
+                                                        <a href="cart.html">
+                                                            <img src="${item.product.image}" alt="${item.product.name}" />
+                                                        </a>
+                                                    </div>
+                                                    <div class="mycart-item-text">
+                                                        <p>
+                                                            <a class="mycart-title" href="cart.html">${item.product.name}</a>
+                                                        </p>
+                                                        <a href="#" class="cart-price">
+                                                            <strong>${item.quantity}</strong><sub>x</sub> <span>${item.product.price}</span>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="mycart-item-text">
-                                                    <p><a class="mycart-title" href="cart.html">Cras neque metus </a></p>
-                                                    <a href="#" class="cart-price"><strong>1</strong><sub>x</sub> <span>$160.00</span></a>
-                                                </div>
-                                            </div>
-                                            <div class="mycart-item-edit">
-                                                <a href="#" class="item-edit" title="edit">Edit Item</a>
-                                                <a href="#" class="item-delete" title="delete">delete Item</a>
-                                            </div>
-                                        </div>
-                                        <div class="single-mycart-item">
-                                            <div class="mycart-item-pro">
-                                                <div class="mycart-item-img">
-                                                    <a href="cart.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/2.jpg" alt="cart" /></a>
-                                                </div>
-                                                <div class="mycart-item-text">
-                                                    <p><a class="mycart-title" href="cart.html">Proin lectus ipsum</a></p>
-                                                    <a href="#" class="cart-price"><strong>2</strong><sub>x</sub> <span>$250.00</span></a>
+                                                <div class="mycart-item-edit">
+                                                    <a href="#" class="item-edit" title="edit">Edit Item</a>
+                                                    <a href="#" class="item-delete" title="delete">Delete Item</a>
                                                 </div>
                                             </div>
-                                            <div class="mycart-item-edit">
-                                                <a href="#" class="item-edit" title="edit">Edit Item</a>
-                                                <a href="#" class="item-delete" title="delete">delete Item</a>
-                                            </div>
-                                        </div>
-                                        <div class="single-mycart-item">
-                                            <div class="mycart-item-pro">
-                                                <div class="mycart-item-img">
-                                                    <a href="cart.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/product/shoping-cart/3.jpg" alt="cart" /></a>
-                                                </div>
-                                                <div class="mycart-item-text">
-                                                    <p><a class="mycart-title" href="cart.html">Donec ac tempus</a></p>
-                                                    <a href="#" class="cart-price"><strong>1</strong><sub>x</sub> <span>$190.00</span></a>
-                                                </div>
-                                            </div>
-                                            <div class="mycart-item-edit">
-                                                <a href="#" class="item-edit" title="edit">Edit Item</a>
-                                                <a href="#" class="item-delete" title="delete">delete Item</a>
-                                            </div>
-                                        </div>
+                                        </c:forEach>
                                         <div class="total-calculate">
-                                            <p><span>subtotal</span> $980.00<a class="topcart-check-btn" href="checkout.html">checkout</a></p>
+                                            <p>
+                                                <span>subtotal</span> $${totalPrice}
+                                                <a class="topcart-check-btn" href="checkout.html">checkout</a>
+                                            </p>
                                         </div>
-                                    </div>			
+                                    </div>
                                 </div>
                             </div>
                             <!-- top-shoping-cart end -->							
@@ -253,25 +191,25 @@
                 <div class="container">
                     <div class="row">
                         <!-- left-category-menu-area start -->
-                       <div class="col-12 col-lg-3">
+                        <div class="col-12 col-lg-3">
                             <div class="left-category-menu-area">
                                 <h3 class="cat-toggle-heading">category</h3>
                                 <div class="left-category-menu" <%=(session.getAttribute("tabId").equals(1)) ? "" : "style=\"display:none\""%>>
                                     <ul>
                                         <%       ResultSet rn = cateDAO.getAllCategory();
-                    while(rn.next()){
-                    %>
+                                            while (rn.next()) {
+                                        %>
                                         <li>
                                             <a href="shop-grid.html"><%= rn.getString("Name")%></a>
-                                            
+
                                         </li>
                                         <%}%>
                                     </ul>									
                                 </div>
                             </div>
                         </div>
-                        
-                                        
+
+
                         <!-- mainmenu start -->						
                         <div class="col-12 col-lg-9">
                             <div class="mainmenu">

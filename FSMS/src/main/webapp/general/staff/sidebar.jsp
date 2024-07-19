@@ -47,7 +47,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/order"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Orders</a></li>	
+                            <li><a href="/staff/orders"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Orders</a></li>	
                         </ul>
                     </li>
 

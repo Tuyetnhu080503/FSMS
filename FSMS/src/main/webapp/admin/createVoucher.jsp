@@ -54,7 +54,7 @@
                                                         <div class="col-12 col-sm-4">
                                                             <div class="form-group local-forms">
                                                                 <label>Expiry Date <span class="login-danger">*</span></label>
-                                                                <input id="expiryDate" name="expiryDate" class="form-control" type="date" placeholder="Enter Expiry Date" value="<%= voucher != null ? voucher.getExpiryDate().toString().substring(0, 10) : ""%>">
+                                                                <input id="expiryDate" name="expiryDate" class="form-control" type="datetime-local" placeholder="Enter Expiry Date" value="<%= voucher != null ? voucher.getExpiryDate().toString().substring(0, 10) : ""%>">
                                                                 <div class="message"></div>
                                                             </div>
                                                         </div>

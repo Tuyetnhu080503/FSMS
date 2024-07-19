@@ -32,7 +32,7 @@ public class CategoryDAO {
             Statement st = conn.createStatement();
             rs = st.executeQuery("select * from Category");
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
@@ -76,4 +76,20 @@ public class CategoryDAO {
         }
         return rs;
     }
+public static void main(String[] args) {
+        CategoryDAO categoryDAO = new CategoryDAO();
+        
+        ResultSet rs = categoryDAO.getAllCategory();
+        try {
+            while (rs.next()) {
+                int categoryId = rs.getInt("CategoryID");
+                String categoryName = rs.getString("name");
+                System.out.println("Category ID: " + categoryId + ", Category Name: " + categoryName);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+ 
 }

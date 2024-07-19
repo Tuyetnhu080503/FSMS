@@ -15,14 +15,16 @@ public class Order {
     private int voucherId;
     private String paymentMethod;
     private String paymentId;
+    private String firstName;
     private String lastname;
     private String phonenumber;
     private String deliveryaddress;
 
-    public Order(int orderId, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress) {
+    public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress) {
         this.orderId = orderId;
         this.status = status;
         this.paymentMethod = paymentMethod;
+        this.firstName = firstName;
         this.lastname = lastname;
         this.phonenumber = phonenumber;
         this.deliveryaddress = deliveryaddress;

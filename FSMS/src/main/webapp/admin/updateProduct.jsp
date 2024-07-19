@@ -30,12 +30,17 @@
                                                         <div class="form-group students-up-files">
                                                             <label>Upload Product Image</label>
                                                             <img name="productImg" id="profile-image" width="100" alt="User Image"
-                                                                     src="/assets/images/product/<%= product.getImage()%>">
+                                                                 src="/assets/images/product/<%= product.getImage()%>">
                                                             <div class="upload">
                                                                 <input id="uploadProductImage" name="productImage" type="file" class="form-control form-control-sm">
                                                                 <div class="message"></div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                  
+                                                    <div class="col-12 col-sm-4">
+                                                        <a id="banProduct" href="/admin/products/block/<%=product.getProductId()%>" style='display: none'><button class="mb-2 mr-2 btn-icon btn btn-danger"><i class="pe-7s-trash btn-icon-wrapper"></i>Lock Product</button></a> 
+                                                        <a id="unbanProduct" href="/admin/products/unblock/<%=product.getProductId()%>" style='display: none'><button class="mb-2 mr-2 btn-icon btn btn-primary"><i class="pe-7s-tools btn-icon-wrapper"> </i>Unlock Product</button></a> 
                                                     </div>
                                                     <div class="col-12 col-sm-8"></div>
                                                     <div class="col-12 col-sm-4">
@@ -71,7 +76,7 @@
                                                                         int categoryId = rs.getInt("CategoryID");
                                                                         String categoryName = rs.getString("Name");
                                                                 %>
-                                                                <option value="<%= categoryId%>" <%= categoryId == product.getCategoryId() ? "selected" : "" %>><%= categoryName%></option>
+                                                                <option value="<%= categoryId%>" <%= categoryId == product.getCategoryId() ? "selected" : ""%>><%= categoryName%></option>
                                                                 <% }%>
                                                             </select>
                                                             <div class="message"></div>
@@ -143,3 +148,67 @@
         <!-- /.content -->
     </div>
 </div>
+<script>
+            <%
+                if (product.isIsActive()) {%>
+        document.querySelector("#banProduct").style.display = 'block';
+            <%} else {%>
+        document.querySelector("#unbanProduct").style.display = 'block';
+            <%}
+            %>
+        </script>
+        
+        <script>
+    document.querySelector("#banProduct").addEventListener("click", function (event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure to block the product?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, block it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = document.querySelector("#banProduct").href;
+            }
+        });
+    });
+
+    document.querySelector("#unbanProduct").addEventListener("click", function (event) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to unblock the product?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, unblock it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = document.querySelector("#unbanProduct").href;
+            }
+        });
+    });
+</script>
+<script>
+// Initialize Validator
+    Validator({
+        form: "#formCreateProduct",
+        message: ".message",
+        invalid: "invalid",
+        rules: [
+            Validator.isImage("#uploadProductImage", "Product must be image"),
+            Validator.isRequire("#productName", "Product Name is required"),
+            Validator.isRequire("#description", "Description is required"),
+            Validator.isRequire("#price", "Price is required"),
+            Validator.isPositive("#price", "Product price must be greater than 0"),
+            Validator.isRequire("#category", "Category is required"),
+            Validator.isRequire("#color", "Color is required"),
+            Validator.isRequire("#size", "Size is required"),
+            Validator.isRequire("#quantity", "Quantity is required")
+        ]
+    });
+</script>

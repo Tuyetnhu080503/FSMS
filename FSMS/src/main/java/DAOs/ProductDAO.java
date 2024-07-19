@@ -33,7 +33,7 @@ public class ProductDAO {
         ResultSet rs = null;
         try {
             Statement st = conn.createStatement();
-            rs = st.executeQuery("SELECT p.ProductID, p.Name, p.Description, p.Price, p.Image, c.Name AS CategoryName, pt.Color, pt.Size, pt.Quantity "
+            rs = st.executeQuery("SELECT p.ProductID, p.Name, p.Description, p.Price, p.Image, c.Name AS CategoryName, pt.Color, pt.Size, pt.Quantity, p.IsActive "
                     + "FROM Product p "
                     + "JOIN ProductType pt ON p.ProductID = pt.ProductID "
                     + "JOIN Category c ON c.CategoryID = p.CategoryID");
@@ -45,9 +45,7 @@ public class ProductDAO {
 
     public Product getProductById(int productId) {
         Product product = null;
-        String sql = "SELECT * "
-                + "FROM Product p "
-                + "WHERE p.ProductID = ?";
+        String sql = "select * from Product where ProductID = ?";
         try {
             ps = conn.prepareStatement(sql);
             ps.setInt(1, productId);
@@ -59,7 +57,8 @@ public class ProductDAO {
                         rs.getString("Description"),
                         rs.getLong("Price"),
                         rs.getString("Image"),
-                        rs.getInt("CategoryID")
+                        rs.getInt("CategoryID"),
+                        rs.getBoolean("IsActive")
                 );
             }
         } catch (SQLException ex) {
@@ -107,7 +106,7 @@ public class ProductDAO {
 
     public int createProduct(Product product, ProductType productType) {
         int result = 0;
-        String insertProductSQL = "INSERT INTO Product (Name, Description, Price, Image, CategoryID) VALUES (?, ?, ?, ?, ?)";
+        String insertProductSQL = "INSERT INTO Product (Name, Description, Price, Image, CategoryID, IsActive) VALUES (?, ?, ?, ?, ?, ?)";
         String insertProductTypeSQL = "INSERT INTO ProductType (ProductID, Color, Size, Quantity) VALUES (?, ?, ?, ?)";
 
         try {
@@ -120,7 +119,7 @@ public class ProductDAO {
             ps.setLong(3, product.getPrice());
             ps.setString(4, product.getImage());
             ps.setInt(5, product.getCategoryId());
-
+            ps.setBoolean(6, true);
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows > 0) {
@@ -219,22 +218,23 @@ public class ProductDAO {
         }
         return result;
     }
-    public int getTotalProductsCount(){
-     String sql = "SELECT COUNT(*) FROM Product";
-     int totalProducts = 0;  
-     try {
+
+    public int getTotalProductsCount() {
+        String sql = "SELECT COUNT(*) FROM Product";
+        int totalProducts = 0;
+        try {
             ps = conn.prepareStatement(sql);
-            rs= ps.executeQuery();
-            
-        if (rs.next()) {
-            totalProducts = rs.getInt(1);
-        }
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                totalProducts = rs.getInt(1);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+
         return totalProducts;
-}
+    }
 
     public List<Product> searchProducts(String keyword) {
         List<Product> products = new ArrayList<>();
@@ -264,21 +264,7 @@ public class ProductDAO {
         return products;
     }
 
-    public static void main(String[] args) {
-        ProductDAO productDAO = new ProductDAO();
-        try {
-            // Attempt to update the product
-            ProductType result = productDAO.getProductTypeByProductId(4);
-            if (result != null) {
-                System.out.println("hi" + result.getQuantity());
-            } else {
-                System.out.println("fuck");
-            }
-        } catch (Exception ex) {
-            System.err.println("Exception occurred:");
-            ex.printStackTrace();
-        }
-    }
+  
 
     public String getImgPathByProductId(int productId) {
         String img = "";
@@ -312,6 +298,26 @@ public class ProductDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public void banProductById(int id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Product SET IsActive = 0 Where ProductID = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void unbanProductById(int id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Product SET IsActive = 1 Where ProductID = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

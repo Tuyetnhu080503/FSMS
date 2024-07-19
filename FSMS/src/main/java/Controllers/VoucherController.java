@@ -17,6 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.ResultSet;
 
 /**
  *
@@ -53,7 +54,7 @@ public class VoucherController extends HttpServlet {
             throws ServletException, IOException {
         try {
             VoucherDAO voucherDAO = new VoucherDAO();
-            List<Voucher> voucherList = voucherDAO.getAllVoucher();
+            ResultSet voucherList = voucherDAO.getAllVoucher();
             request.setAttribute("voucherList", voucherList);
             request.getSession().setAttribute("tabId", 14); // Set tabId to 9 for voucher list
             request.getRequestDispatcher("customer.jsp").forward(request, response);

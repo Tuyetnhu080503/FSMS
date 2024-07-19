@@ -35,6 +35,16 @@
         $("#viewProducts").DataTable();
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $("#viewVouchers").DataTable();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#viewOrders").DataTable();
+    });
+</script>
 
 
 </body>

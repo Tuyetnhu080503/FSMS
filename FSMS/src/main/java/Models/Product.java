@@ -12,8 +12,16 @@ public class Product {
     private long price;
     private String image;
     private int categoryId;
-
+    private boolean isActive;
     public Product() {
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Product(int productId, String name, String description, long price, String image, int categoryId) {
@@ -32,6 +40,17 @@ public class Product {
         this.image = image;
         this.categoryId = categoryId;
     }
+
+    public Product(int productId, String name, String description, long price, String image, int categoryId, boolean isActive) {
+        this.productId = productId;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.image = image;
+        this.categoryId = categoryId;
+        this.isActive = isActive;
+    }
+    
 
     public int getProductId() {
         return productId;
