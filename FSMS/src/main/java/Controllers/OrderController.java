@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -55,34 +56,31 @@ public class OrderController extends HttpServlet {
 
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
+        String path = request.getRequestURI();
 
         if (acc != null) {
-            try {
-                logger.log(Level.INFO, "Account ID: {0}", acc.getAccountId());
-                
-                // Retrieve orders for the logged-in customer
-                OrderDAO orderDAO = new OrderDAO();
-                int customerId = orderDAO.getCustomerIdByAccountId(acc.getAccountId());
-                logger.log(Level.INFO, "Customer ID: {0}", customerId);
-                
-                if (customerId != -1) {
-                    List<Order> customerOrderList = orderDAO.getOrdersByCustomerId(customerId);
-                    // Set orders and customerId as request attributes
-                    request.setAttribute("CustomerOrderList", customerOrderList);
-                    request.setAttribute("customerId", customerId);
-                } else {
-                    request.setAttribute("error", "Customer ID not found for the given Account ID.");
+            if (path.endsWith("/orders")) {
+                Account cuurentAcc = (Account) session.getAttribute("acc");
+                OrderDAO orDAO = null;
+                try {
+                    orDAO = new OrderDAO();
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                ResultSet rsoderIDs = orDAO.getAllsOrderID(cuurentAcc.getAccountId());
+
+                ResultSet rsoderIDInformation = orDAO.getAllOrdersInformation(cuurentAcc.getAccountId());
+
+                request.setAttribute("rsoderIDs", rsoderIDs);
+                request.setAttribute("rsoderIDInformation", rsoderIDInformation);
+
+                session.setAttribute("tabId", 16);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        }
         } else {
             logger.log(Level.SEVERE, "Account is null in session.");
             request.setAttribute("error", "Account not found in session.");
         }
-
-        session.setAttribute("tabId", 13);
-        request.getRequestDispatcher("/customer.jsp").forward(request, response);
     }
 
     /**

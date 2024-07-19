@@ -228,5 +228,38 @@ public class OrderDAO {
     }
     
     
+    public ResultSet getAllOrdersInformation(int accID) {
+        ResultSet rs = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select o.OrderID, o.CustomerID, o.[Status], o.TotalPrice,oi.UnitPrice, p.[Name], p.[Image], oi.Quantity from [Order] o \n"
+                    + "  inner join CustomerProfile c on o.CustomerID = c.CustomerID \n"
+                    + "  inner join OrderItems oi on o.OrderID = oi.OrderID\n"
+                    + "  inner join Product p on oi.ProductID = p.ProductID where c.AccountID = ?");
+            ps.setInt(1, accID);
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
+    public ResultSet getAllsOrderID(int accID) {
+        ResultSet rs = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select o.OrderID,c.AccountID from [Order] o \n"
+                    + "  inner join CustomerProfile c on o.CustomerID = c.CustomerID \n"
+                    + "  inner join OrderItems oi on o.OrderID = oi.OrderID\n"
+                    + "  inner join Product p on oi.ProductID = p.ProductID\n"
+                    + "  group by o.OrderID,c.AccountID having c.AccountID = ?");
+            ps.setInt(1, accID);
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+        
+    
+    }
+    
 
 }

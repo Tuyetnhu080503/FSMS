@@ -44,7 +44,7 @@ public class ProductController extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             ProductDAO proDAO = new ProductDAO();
             
-            Product pro = proDAO.getProductById(id);
+            Product pro = proDAO.getProductByIdOld(id);
             
             request.setAttribute("product", pro);
                     

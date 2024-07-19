@@ -45,7 +45,7 @@ public class ProductDAO {
 
     public Product getProductById(int productId) {
         Product product = null;
-        String sql = "select * from Product where ProductID = ?";
+        String sql = "select * from Product p where p.ProductID = ?";
         try {
             ps = conn.prepareStatement(sql);
             ps.setInt(1, productId);
@@ -331,5 +331,27 @@ public class ProductDAO {
         }
         return rs;
     }
-
+    
+    public Product getProductByIdOld(int productId) {
+        Product product = null;
+        String sql = "select * from Product p where p.ProductID = ?";
+        try {
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                product = new Product(
+                        rs.getInt("ProductID"),
+                        rs.getString("Name"),
+                        rs.getString("Description"),
+                        rs.getLong("Price"),
+                        rs.getString("Image"),
+                        rs.getInt("CategoryID")
+                );
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return product;
+    }
 }

@@ -83,6 +83,7 @@
                                                 <%=acc == null ? "" : "<li><a href=\"/account/profile\">My Account</a></li>"%>
                                                 <li><a href="/carts">My Cart</a></li>
                                                 <li><a href="/checkout">Checkout</a></li>
+                                                <%=acc != null ? "<li><a href=\"/orders\">My Orders</a></li>" : "<li><a href=\"/login\">My Orders</a></li>"%>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
                                             </ul>
                                         </li>
