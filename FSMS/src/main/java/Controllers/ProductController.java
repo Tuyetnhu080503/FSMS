@@ -5,6 +5,8 @@
 
 package Controllers;
 
+import DAOs.ProductDAO;
+import Models.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -38,7 +40,17 @@ public class ProductController extends HttpServlet {
       } else if(path.endsWith("/list2")) {
           session.setAttribute("tabId", 11);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);
-      } 
+      } else if (path.startsWith("/products/detail")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            ProductDAO proDAO = new ProductDAO();
+            
+            Product pro = proDAO.getProductById(id);
+            
+            request.setAttribute("product", pro);
+                    
+            session.setAttribute("tabId", 12);
+            request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        }
     }
 
     /** 

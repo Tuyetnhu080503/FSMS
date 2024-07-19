@@ -1,6 +1,39 @@
+<%@page import="Models.Product"%>
 <%@page import="DAOs.ProductDAO"%>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="DAOs.CategoryDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="DAOs.CategoryDAO"%>s
+
+
+<%
+    ProductDAO proDAO = new ProductDAO();
+    ResultSet rss = proDAO.getAlls();
+    List<Product> products = new ArrayList<>();
+
+    while (rss.next()) {
+        Product product = new Product();
+        product.setProductId(rss.getInt("ProductID"));
+        product.setName(rss.getString("Name"));
+        product.setPrice(rss.getLong("Price"));
+        product.setImage(rss.getString("Image"));
+        product.setDescription(rss.getString("Description"));
+        products.add(product);
+    }
+
+    int pageNumber = 1;
+    int productsPerPage = 5;
+    int totalProducts = products.size();
+    int totalPages = (int) Math.ceil((double) totalProducts / productsPerPage);
+
+    if (request.getParameter("page") != null) {
+        pageNumber = Integer.parseInt(request.getParameter("page"));
+    }
+
+    int start = (pageNumber - 1) * productsPerPage;
+    int end = Math.min(start + productsPerPage, totalProducts);
+%>
+
 <section class="main-content-area">
     <div class="container">
         <!-- bradcame start -->
@@ -8,8 +41,8 @@
             <div class="col-12">
                 <div class="greentect_bradcame">
                     <ul>
-                        <li><a href="index.html">home</a></li>
-                        <li>Games &amp; Software </li>
+                        <li><a href="/">home</a></li>
+                        <li>Products </li>
                     </ul>
                 </div>
             </div>
@@ -30,45 +63,14 @@
                                 <li class="active"><i class="fa fa-th-list"></i></li>
                             </ul>										
                         </div>
-                        <!-- view-systeam end -->	
-                        <!-- show-page start -->
-<!--                        <div class="show-page">
-                            <label>Show</label>
-                            <div class="per-page short-select-option">
-                                <select>
-                                    <option value="">3</option>
-                                    <option value="">6</option>
-                                    <option value="">8</option>
-                                    <option value="">12</option>
-                                </select>													
-                            </div>
-                            <span>per page</span>										
-                        </div>-->
-                        <!-- show-page end -->
-                        <!-- shoort-by start -->
-<!--                        <div class="shoort-by">
-                            <label>Sort by</label>
-                            <div class="short-select-option">
-                                <select>
-                                    <option value="">Position</option>
-                                    <option value="">Name</option>
-                                    <option value="">Price</option>
-                                </select>												
-                            </div>
-                            <a title="Set Descending Direction" href="#"><i class="fa fa-long-arrow-up"></i></a>
-                        </div>-->
-                        <!-- shoort-by end -->	
                     </div>
                     <!-- product-sgorting end -->
                     <!-- all-product start -->
                     <div class="row all-list-product">
                         
                         <!-- single-product-item start -->
-                        <% 
-                            
-                            ProductDAO proDAO = new ProductDAO();
-                            ResultSet pr = proDAO.getAllProducts();
-                            while (pr.next()) {
+                        <% for (int idx = start; idx < end; idx++) { 
+                            Product product = products.get(idx);
                         %>
                         <div class="col-12 col-md-12 col-lg-12 col-xl-12">
 
@@ -77,22 +79,22 @@
                                     <div class="product-sticker">
                                         <img src="../../assets/assets_customer/img/product/new1.png" alt="product sticker">
                                     </div>			
-                                    <a href="/products/detail" title=""><img src="<%=pr.getString("Image")%>" alt="product image"></a>
+                                    <a href="/products/detail" title=""><img src="${pageContext.request.contextPath}/assets/images/product/<%=product.getImage()%>" alt="product image"></a>
                                     <div class="single-product-overlay">
                                         <div class="product-quick-view">
                                             <ul>
-                                                <li><a href="/products/detail?id=<%=pr.getInt("ProductID")%>"><i class="fa fa-heart-o"></i></a></li>
-                                                <li><a href="/products/detail?id=<%=pr.getInt("ProductID")%>"><i class="fa fa-copy"></i></a></li>
-                                                <li><a href="/products/detail?id=<%=pr.getInt("ProductID")%>"><i class="fa fa-search"></i></a></li>
+                                                <li><a href="/products/detail?id=<%=product.getProductId()%>"><i class="fa fa-heart-o"></i></a></li>
+                                                <li><a href="/products/detail?id=<%=product.getProductId()%>"><i class="fa fa-copy"></i></a></li>
+                                                <li><a href="/products/detail?id=<%=product.getProductId()%>"><i class="fa fa-search"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="single-product-text">
-                                    <h2><a class="product-title" href="/products/detail" title=""><%=pr.getString("Name")%></a></h2>
+                                    <h2><a class="product-title" href="/products/detail?id=<%=product.getProductId()%>" title=""><%=product.getName()%></a></h2>
                                     <div class="price-rate-box">
                                         <div class="product-price">
-                                            <span class="regular-price"><%=pr.getLong("Price")%>VND</span>
+                                            <span class="regular-price"><%=product.getPrice()%>vnd</span>
                                         </div>											
                                         <div class="rating-box">
                                             <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
@@ -103,7 +105,7 @@
                                         </div>
                                     </div>
                                     <div class="product-description">
-                                        <p><%=pr.getString("Description")%></p>                                    </div>
+                                        <p><%=product.getDescription()%></p>                                    </div>
                                     <div class="pro-add-to-cart">
                                         <p><a href="/cart/add" title="Add to Cart">Add to Cart</a></p>
                                     </div>
@@ -128,12 +130,11 @@
                         <div class="pagination-bar">
                             <label>Page:</label>
                             <ul>
-                                <li><a href="#">1</a></li>
-                                <li class="active"><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#"><i class="fa fa-arrow-right"></i></a></li>
+                                 <% for (int index = 1; index <= totalPages; index++) { %>
+                                    <li class="<%= (index == pageNumber) ? "active" : "" %>">
+                                        <a href="?page=<%=index%>"><%=index%></a>
+                                    </li>
+                                <% } %>
                             </ul>										
                         </div>
                         <!-- show-page end -->

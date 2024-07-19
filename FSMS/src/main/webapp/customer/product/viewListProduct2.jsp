@@ -1,6 +1,38 @@
+<%@page import="Models.Product"%>
 <%@page import="DAOs.ProductDAO"%>
 <%@page import="java.sql.ResultSet"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="DAOs.CategoryDAO"%>
+
+
+<%
+    ProductDAO proDAO = new ProductDAO();
+    ResultSet rss = proDAO.getAlls();
+    List<Product> products = new ArrayList<>();
+
+    while (rss.next()) {
+        Product product = new Product();
+        product.setProductId(rss.getInt("ProductID"));
+        product.setName(rss.getString("Name"));
+        product.setPrice(rss.getLong("Price"));
+        product.setImage(rss.getString("Image"));
+        products.add(product);
+    }
+
+    int pageNumber = 1;
+    int productsPerPage = 8;
+    int totalProducts = products.size();
+    int totalPages = (int) Math.ceil((double) totalProducts / productsPerPage);
+
+    if (request.getParameter("page") != null) {
+        pageNumber = Integer.parseInt(request.getParameter("page"));
+    }
+
+    int start = (pageNumber - 1) * productsPerPage;
+    int end = Math.min(start + productsPerPage, totalProducts);
+%>
+
 <section class="main-content-area">
     <div class="container">
         <!-- bradcame start -->
@@ -8,8 +40,8 @@
             <div class="col-12">
                 <div class="greentect_bradcame">
                     <ul>
-                        <li><a href="index.html">home</a></li>
-                        <li>Games &amp; Software </li>
+                        <li><a href="/">home</a></li>
+                        <li>Products </li>
                     </ul>
                 </div>
             </div>
@@ -30,20 +62,6 @@
                                 <li><a href="/products"><i class="fa fa-th-list"></i></a></li>
                             </ul>										
                         </div>
-                        <!-- view-systeam end -->	
-                        <!-- show-page start -->
-                        <div class="show-page">
-                            <label>Show</label>
-                            <div class="per-page short-select-option">
-                                <select>
-                                    <option value="">3</option>
-                                    <option value="">6</option>
-                                    <option value="">8</option>
-                                    <option value="">12</option>
-                                </select>													
-                            </div>
-                            <span>per page</span>										
-                        </div>
                         <!-- show-page end -->
                         <!-- shoort-by start -->
                         <div class="shoort-by">
@@ -63,20 +81,15 @@
                     <!-- all-product start -->
                     <div class="row all-grid-product">
                         <!-- single-product-item start -->
-                        <% ProductDAO proDAO = new ProductDAO();
-                            ResultSet pp = proDAO.getAllProducts();
-                            while (pp.next()) {
+                        <% for (int idx = start; idx < end; idx++) { 
+                            Product product = products.get(idx);
                         %>
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                       <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                             <div class="single-product-item">
                                 <div class="product-image">
-                                    <div class="sale-stiker product-sticker">
-                                        <img src="<%=pp.getString("Image")%>" alt="product sticker" />
-                                    </div>	
-                                    <div class="product-sticker">
-                                        <img src="<%=pp.getString("Image")%>" alt="product sticker" />
-                                    </div>			
-                                    <a href="/products/detail" title=""><img src="<%=pp.getString("Image")%>" alt="product image" /></a>
+                                    <a href="/products/detail?id=<%=product.getProductId()%>" title="">
+                                        <img src="${pageContext.request.contextPath}/assets/images/product/<%=product.getImage()%>" alt="product image" />
+                                    </a>
                                     <div class="single-product-overlay">
                                         <div class="rating-box">
                                             <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
@@ -95,10 +108,9 @@
                                     </div>
                                 </div>
                                 <div class="single-product-text">
-                                    <h2><a class="product-title" href="/products/detail" title=""><%=pp.getString("Name")%></a></h2>
+                                    <h2><a class="product-title" href="/products/detail?id=<%=product.getProductId()%>" title=""><%=product.getName()%></a></h2>
                                     <div class="product-price">
-
-                                        <span class="regular-price"><%=pp.getLong("Price")%>VND</span>
+                                        <span class="regular-price"><%=product.getPrice()%>vnd</span>
                                     </div>
                                     <div class="pro-add-to-cart">
                                         <p><a href="#" title="Add to Cart">Add to Cart</a></p>
@@ -124,12 +136,11 @@
                         <div class="pagination-bar">
                             <label>Page:</label>
                             <ul>
-                                <li><a href="#">1</a></li>
-                                <li class="active"><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#"><i class="fa fa-arrow-right"></i></a></li>
+                                <% for (int index = 1; index <= totalPages; index++) { %>
+                                    <li class="<%= (index == pageNumber) ? "active" : "" %>">
+                                        <a href="?page=<%=index%>"><%=index%></a>
+                                    </li>
+                                <% } %>
                             </ul>										
                         </div>
                         <!-- show-page end -->
@@ -169,7 +180,7 @@
                         </div>
                         <!-- price-filter end -->
                         <!-- category-list-pro start -->
-                        <div class="category-list-pro sidebar-list">
+                        <div class="category-list-pro sidebar-list" >
                             <h3>Category</h3>
                             <ul>
                                 <% CategoryDAO catDAO = new CategoryDAO();
@@ -190,76 +201,7 @@
                                 <p><input class="range_value_1" type="text" id="slidevalue"></p>
                             </div>									
                         </div>
-                        <!--                         price-rang-filter end 
-                                                 Manufacturer start 
-                                                <div class="manufacturer sidebar-list">
-                                                    <h3>Manufacturer</h3>
-                                                    <ul>
-                                                        <li><a href="#">Adidas</a><span>7</span></li>
-                                                        <li><a href="#">Chanel</a><span>9</span></li>
-                                                        <li><a href="#">Dolce</a><span>1</span></li>
-                                                        <li><a href="#">Gabbana</a><span>3</span></li>
-                                                        <li><a href="#">Nike</a><span>9</span></li>
-                                                        <li><a href="#">Vogue</a><span>5</span></li>
-                                                    </ul>									
-                                                </div>
-                                                 Manufacturer end 
-                                                 color-list start 
-                                                <div class="color-list sidebar-list">
-                                                    <h3>Color</h3>
-                                                    <ul>
-                                                        <li><a href="#">Black</a><span>8</span></li>
-                                                        <li><a href="#">Blue</a><span>3</span></li>
-                                                        <li><a href="#">Red</a><span>5</span></li>
-                                                        <li><a href="#">Yellow</a><span>9</span></li>
-                                                        <li><a href="#">While</a><span>1</span></li>
-                                                        <li><a href="#">Green</a><span>2</span></li>										
-                                                    </ul>									
-                                                </div>
-                                                 color-list end 								
-                                            </div>
-                                             shop-by-area end 
-                                             Compare Products start 
-                                            <div class="compare-products single-sidebar">
-                                                <h2>Compare Products (3)</h2>
-                                                <div class="all-compare-product">
-                                                    <ul>
-                                                        <li><p><a href="#">Bncover humour</a></p><a href="#" class="remove-icon-btn">remove</a></li>
-                                                        <li><p><a href="#">Facilisis sagit</a></p><a href="#" class="remove-icon-btn">remove</a></li>
-                                                        <li><p><a href="#">Etiam gravida</a></p><a href="#" class="remove-icon-btn">remove</a></li>
-                                                    </ul>
-                                                    <div class="compare-action">
-                                                        <a href="#">Clear All</a>
-                                                        <a href="#" class="compare-btn">Compare</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                             Compare Products end 
-                                             single-img-add start 
-                                            <div class="single-img-add single-sidebar">
-                                                <a href="#"><img src="img/add/banner33.jpg" alt="banner33"></a>
-                                            </div>
-                                             single-img-add end 
-                                             popular tag start 
-                                            <div class="popular-tag single-sidebar">
-                                                <h2>Popular Tags</h2>
-                                                <div class="popular-tag-list">
-                                                    <a href="#">Clothing</a>
-                                                    <a href="#">accessories</a>
-                                                    <a href="#">fashion</a>
-                                                    <a href="#">footwear</a>
-                                                    <a href="#">kid</a>
-                                                    <a href="#">good</a>
-                                                    <a href="#">men</a>
-                                                    <a href="#">women</a>
-                                                    <a href="#">chowa</a>
-                                                    <a href="#">Clock</a>
-                                                    <div class="view-all-tag">
-                                                        <a href="#">View All Tags</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                             popular tag end 						-->
+
                     </div>
                 </div>
             </div>	
