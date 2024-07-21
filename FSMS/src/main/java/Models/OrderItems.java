@@ -9,9 +9,21 @@ public class OrderItems {
     private int orderItemsId;
     private int orderId;
     private int productId;
+    private int productTypeId;
     private int quantity;
     private long unitPrice;
     private long totalPrice;
+
+    
+    public OrderItems(int orderItemsId, int orderId, int productId, int productTypeId, int quantity, long unitPrice, long totalPrice) {
+        this.orderItemsId = orderItemsId;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.productTypeId = productTypeId;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.totalPrice = totalPrice;
+    }
 
     public OrderItems(int orderItemsId, int orderId, int productId, int quantity, long unitPrice, long totalPrice) {
         this.orderItemsId = orderItemsId;
@@ -22,6 +34,14 @@ public class OrderItems {
         this.totalPrice = totalPrice;
     }
 
+    public int getProductTypeId() {
+        return productTypeId;
+    }
+
+    public void setProductTypeId(int productTypeId) {
+        this.productTypeId = productTypeId;
+    }
+    
     public int getOrderItemsId() {
         return orderItemsId;
     }

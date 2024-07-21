@@ -13,6 +13,7 @@ public class Product {
     private String image;
     private int categoryId;
     private boolean isActive;
+    
     public Product() {
     }
 

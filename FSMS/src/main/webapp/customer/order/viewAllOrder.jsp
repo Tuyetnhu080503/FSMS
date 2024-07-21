@@ -1,4 +1,7 @@
 
+<%@page import="DTO.ViewOrder"%>
+<%@page import="DTO.ViewOrderIDs"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="Models.Account"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="DAOs.OrderDAO"%>
@@ -85,10 +88,10 @@
 
 
 <%
-    
-    ResultSet rsoderIDs = (ResultSet)request.getAttribute("rsoderIDs");
 
-    ResultSet rsoderIDInformation = (ResultSet)request.getAttribute("rsoderIDInformation");
+    ArrayList<ViewOrderIDs> orderIDList = (ArrayList<ViewOrderIDs>) request.getAttribute("orderIDList");
+
+    ArrayList<ViewOrder> orderList = (ArrayList<ViewOrder>) request.getAttribute("orderList");
 %>
 
 <div class="container mt-5">
@@ -113,59 +116,277 @@
     <div class="tab-content" id="orderStatusTabContent">
         <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
             <div class="order-list">
-                <%while (rsoderIDs.next()) {%> 
-                <!-- Render pending orders here -->
-                <%while (rsoderIDInformation.next()) { %>
-                <%if(rsoderIDs.getInt("OrderID") == rsoderIDInformation.getInt("OrderID")){%>
+                <%
+                    boolean isHaveOrderPending = false ;
+                    for (ViewOrderIDs orderID : orderIDList) {
+                        if (orderID.getStatus().trim().equals("Pending")) {
+                            isHaveOrderPending = true;
+                %>
                 <div class="order-item">
                     <div class="product-list">
-                        <%if(rsoderIDInformation.getString("Status").trim().equals("Pending")){%>
-                            <div class="product-item">
+                        <%  
+                            for (ViewOrder order : orderList) {
+                                if (orderID.getId()== order.getId()) {
+                        %>
+                        <div class="product-item">
+                            <img src="${pageContext.request.contextPath}/assets/images/product/<%=order.getImage() %>" alt="Product Image">
+                            <div class="product-details">
+                                <p><%=order.getName()%></p>
+                                <p>Size: <%=order.getSize()%></p>
+                                <p>Color: <%=order.getColor()%></p>
+                                <p>Quantity: <%=order.getQuantity() %></p>
+                                <p>Price: <%=order.getUnitPrice() %></p>
                             </div>
+                        </div>
                         <%}%>
+
+                        <%
+                    }%>
                     </div>
                     <div class="order-footer">
                         <div class="total-price">
+                            <strong>Total Price: <span style="color:#ee4d2d"><%=orderID.getTotalPrice()%>vnd</span></strong>
                         </div>
                     </div>
                     <div style="display: flex;justify-content: end">
-                        <a href="#"><button  style="margin-right: 30px; background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Pay Again</button></a>
                         <a href="/orders/detail"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
                     </div>
                 </div>
-                    <%}%>
-                    <%}
+                <%
+                        }
+                    }
+                %>
+                
+                <%
+                    if(isHaveOrderPending==false){
                     %>
-                <%}
+                    <h2>
+                        No orders yet
+                    </h2>
+                    <%
+                    }
                 %>
             </div>
         </div>
         <div class="tab-pane fade" id="processing" role="tabpanel" aria-labelledby="processing-tab">
-            <h3 class="mt-3">Processing Orders</h3>
             <div class="order-list">
                 <!-- Render processing orders here -->
+                <%
+                    boolean isHaveOrderProcessing = false ;
+                    for (ViewOrderIDs orderID : orderIDList) {
+                        if (orderID.getStatus().trim().equals("Processing")) {
+                            isHaveOrderProcessing = true ;
+                %>
+                <div class="order-item">
+                    <div class="product-list">
+                        <%  
+                            for (ViewOrder order : orderList) {
+                                if (orderID.getId()== order.getId()) {
+                        %>
+                        <div class="product-item">
+                            <img src="${pageContext.request.contextPath}/assets/images/product/<%=order.getImage() %>" alt="Product Image">
+                            <div class="product-details">
+                                <p><%=order.getName()%></p>
+                                <p>Size: <%=order.getSize()%></p>
+                                <p>Color: <%=order.getColor()%></p>
+                                <p>Quantity: <%=order.getQuantity() %></p>
+                                <p>Price: <%=order.getUnitPrice() %></p>
+                            </div>
+                        </div>
+                        <%}%>
 
+                        <%
+                    }%>
+                    </div>
+                    <div class="order-footer">
+                        <div class="total-price">
+                            <strong>Total Price: <span style="color:#ee4d2d"><%=orderID.getTotalPrice()%>vnd</span></strong>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: end">
+                        <a href="/orders/detail"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
+                    </div>
+                </div>
+                <%
+                        }
+                    }
+                %>
+                
+                <%
+                    if(isHaveOrderProcessing==false){
+                    %>
+                    <h2>
+                        No orders yet
+                    </h2>
+                    <%
+                    }
+                %>
+                
             </div>
         </div>
         <div class="tab-pane fade" id="shipped" role="tabpanel" aria-labelledby="shipped-tab">
-            <h3 class="mt-3">Shipped Orders</h3>
             <div class="order-list">
                 <!-- Render shipped orders here -->
+                <%
+                    boolean isHaveOrderDelivering = false ;
+                    for (ViewOrderIDs orderID : orderIDList) {
+                        if (orderID.getStatus().trim().equals("Delivering")) {
+                            isHaveOrderDelivering = true ;
+                %>
+                <div class="order-item">
+                    <div class="product-list">
+                        <%  
+                            for (ViewOrder order : orderList) {
+                                if (orderID.getId()== order.getId()) {
+                        %>
+                        <div class="product-item">
+                            <img src="${pageContext.request.contextPath}/assets/images/product/<%=order.getImage() %>" alt="Product Image">
+                            <div class="product-details">
+                                <p><%=order.getName()%></p>
+                                <p>Size: <%=order.getSize()%></p>
+                                <p>Color: <%=order.getColor()%></p>
+                                <p>Quantity: <%=order.getQuantity() %></p>
+                                <p>Price: <%=order.getUnitPrice() %></p>
+                            </div>
+                        </div>
+                        <%}%>
 
+                        <%
+                    }%>
+                    </div>
+                    <div class="order-footer">
+                        <div class="total-price">
+                            <strong>Total Price: <span style="color:#ee4d2d"><%=orderID.getTotalPrice()%>vnd</span></strong>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: end">
+                        <a href="/orders/detail"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
+                    </div>
+                </div>
+                <%
+                        }
+                    }
+                %>
+                
+                <%
+                    if(isHaveOrderDelivering==false){
+                    %>
+                    <h2>
+                        No orders yet
+                    </h2>
+                    <%
+                    }
+                %>
             </div>
         </div>
         <div class="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
-            <h3 class="mt-3">Delivered Orders</h3>
             <div class="order-list">
                 <!-- Render delivered orders here -->
+                <%
+                    boolean isHaveOrderDelivered = false ;
+                    for (ViewOrderIDs orderID : orderIDList) {
+                        if (orderID.getStatus().trim().equals("Delivered")) {
+                            isHaveOrderDelivered = true ;
+                %>
+                <div class="order-item">
+                    <div class="product-list">
+                        <%  
+                            for (ViewOrder order : orderList) {
+                                if (orderID.getId()== order.getId()) {
+                        %>
+                        <div class="product-item">
+                            <img src="${pageContext.request.contextPath}/assets/images/product/<%=order.getImage() %>" alt="Product Image">
+                            <div class="product-details">
+                                <p><%=order.getName()%></p>
+                                <p>Size: <%=order.getSize()%></p>
+                                <p>Color: <%=order.getColor()%></p>
+                                <p>Quantity: <%=order.getQuantity() %></p>
+                                <p>Price: <%=order.getUnitPrice() %></p>
+                            </div>
+                        </div>
+                        <%}%>
 
+                        <%
+                    }%>
+                    </div>
+                    <div class="order-footer">
+                        <div class="total-price">
+                            <strong>Total Price: <span style="color:#ee4d2d"><%=orderID.getTotalPrice()%>vnd</span></strong>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: end">
+                        <a href="/orders/detail"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
+                    </div>
+                </div>
+                <%
+                        }
+                    }
+                %>
+                
+                <%
+                    if(isHaveOrderDelivered==false){
+                    %>
+                    <h2>
+                        No orders yet
+                    </h2>
+                    <%
+                    }
+                %>
             </div>
         </div>
         <div class="tab-pane fade" id="return" role="tabpanel" aria-labelledby="return-tab">
-            <h3 class="mt-3">Return Orders</h3>
             <div class="order-list">
                 <!-- Render return orders here -->
+                <%
+                    boolean isHaveOrderReturns = false ;
+                    for (ViewOrderIDs orderID : orderIDList) {
+                        if (orderID.getStatus().trim().equals("Returns")) {
+                            isHaveOrderReturns = true ;
+                %>
+                <div class="order-item">
+                    <div class="product-list">
+                        <%  
+                            for (ViewOrder order : orderList) {
+                                if (orderID.getId()== order.getId()) {
+                        %>
+                        <div class="product-item">
+                            <img src="${pageContext.request.contextPath}/assets/images/product/<%=order.getImage() %>" alt="Product Image">
+                            <div class="product-details">
+                                <p><%=order.getName()%></p>
+                                <p>Size: <%=order.getSize()%></p>
+                                <p>Color: <%=order.getColor()%></p>
+                                <p>Quantity: <%=order.getQuantity() %></p>
+                                <p>Price: <%=order.getUnitPrice() %></p>
+                            </div>
+                        </div>
+                        <%}%>
 
+                        <%
+                    }%>
+                    </div>
+                    <div class="order-footer">
+                        <div class="total-price">
+                            <strong>Total Price: <span style="color:#ee4d2d"><%=orderID.getTotalPrice()%>vnd</span></strong>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: end">
+                        <a href="/orders/detail"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
+                    </div>
+                </div>
+                <%
+                        }
+                    }
+                %> 
+                
+                <%
+                    if(isHaveOrderReturns==false){
+                    %>
+                    <h2>
+                        No orders yet
+                    </h2>
+                    <%
+                    }
+                %>
             </div>
         </div>
     </div>

@@ -2,6 +2,8 @@ package Controllers;
 
 import Models.Account;
 import DAOs.OrderDAO;
+import DTO.ViewOrder;
+import DTO.ViewOrderIDs;
 import Models.Order;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * OrderController handles order-related requests.
@@ -60,22 +63,40 @@ public class OrderController extends HttpServlet {
 
         if (acc != null) {
             if (path.endsWith("/orders")) {
-                Account cuurentAcc = (Account) session.getAttribute("acc");
-                OrderDAO orDAO = null;
                 try {
-                    orDAO = new OrderDAO();
+                    Account cuurentAcc = (Account) session.getAttribute("acc");
+                    OrderDAO orDAO = null;
+                    try {
+                        orDAO = new OrderDAO();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ResultSet rsoderIDs = orDAO.getAllsOrderID(cuurentAcc.getAccountId());
+                    
+                    ResultSet rsoderIDInformation = orDAO.getAllOrdersInformation(cuurentAcc.getAccountId());
+                    
+                    ArrayList<ViewOrderIDs> orderIDList = new ArrayList<>();
+                    
+                    ArrayList<ViewOrder> orderList = new ArrayList<>();
+                    
+                    while(rsoderIDs.next()){
+                        orderIDList.add(new ViewOrderIDs(rsoderIDs.getInt("OrderID"), rsoderIDs.getString("Status"), rsoderIDs.getInt("TotalPrice")));
+                    }
+                    
+                    while(rsoderIDInformation.next()){
+                        orderList.add(new ViewOrder(rsoderIDInformation.getInt("OrderID"), rsoderIDInformation.getString("Image"), rsoderIDInformation.getString("Name"),rsoderIDInformation.getInt("Quantity"), rsoderIDInformation.getInt("UnitPrice"),rsoderIDInformation.getString("Size"), rsoderIDInformation.getString("Color")));
+                    }
+                    
+                    
+                    
+                    request.setAttribute("orderIDList", orderIDList);
+                    request.setAttribute("orderList", orderList);
+                    
+                    session.setAttribute("tabId", 16);
+                    request.getRequestDispatcher("/customer.jsp").forward(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                ResultSet rsoderIDs = orDAO.getAllsOrderID(cuurentAcc.getAccountId());
-
-                ResultSet rsoderIDInformation = orDAO.getAllOrdersInformation(cuurentAcc.getAccountId());
-
-                request.setAttribute("rsoderIDs", rsoderIDs);
-                request.setAttribute("rsoderIDInformation", rsoderIDInformation);
-
-                session.setAttribute("tabId", 16);
-                request.getRequestDispatcher("/customer.jsp").forward(request, response);
         }
         } else {
             logger.log(Level.SEVERE, "Account is null in session.");

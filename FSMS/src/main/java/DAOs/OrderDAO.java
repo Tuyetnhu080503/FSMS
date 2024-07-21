@@ -44,35 +44,36 @@ public class OrderDAO {
         }
         return rs;
     }
+
     public List<Order> getAllOrders() {
-    List<Order> list = new ArrayList<>();
-    String query = "SELECT * FROM [Order]"; // Ensure the table name is correct
+        List<Order> list = new ArrayList<>();
+        String query = "SELECT * FROM [Order]"; // Ensure the table name is correct
 
-    try {
-        conn = DBConnection.connect();
-        ps = conn.prepareStatement(query);
-        rs = ps.executeQuery();
+        try {
+            conn = DBConnection.connect();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
 
-        while (rs.next()) {
-            list.add(new Order(
-                    rs.getInt("OrderID"),
-                    rs.getInt("CustomerID"),
-                    rs.getString("Status"),
-                    rs.getLong("TotalPrice"),
-                    rs.getTimestamp("CreateAt"),
-                    rs.getInt("VoucherID"),
-                    rs.getString("PaymentMethod"),
-                    rs.getString("PaymentID")
-            ));
+            while (rs.next()) {
+                list.add(new Order(
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getString("Status"),
+                        rs.getLong("TotalPrice"),
+                        rs.getTimestamp("CreateAt"),
+                        rs.getInt("VoucherID"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentID")
+                ));
+            }
+            System.out.println("Number of orders retrieved: " + list.size()); // Debug statement
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources();
         }
-        System.out.println("Number of orders retrieved: " + list.size()); // Debug statement
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } finally {
-        closeResources();
+        return list;
     }
-    return list;
-}
 
     public Order getOrderById(int orderId) {
         Order order = null;
@@ -127,7 +128,8 @@ public class OrderDAO {
             return false;
         }
     }
-   public int getCustomerIdByAccountId(int accountId) {
+
+    public int getCustomerIdByAccountId(int accountId) {
         int customerId = -1;
         String query = "SELECT CustomerID FROM CustomerProfile WHERE AccountID = ?";
         try {
@@ -147,7 +149,7 @@ public class OrderDAO {
     }
 
     // Method to get orders by CustomerId
-   public List<Order> getOrdersByCustomerId(int customerId) {
+    public List<Order> getOrdersByCustomerId(int customerId) {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM [Order] WHERE CustomerID = ?";
         try {
@@ -157,14 +159,14 @@ public class OrderDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 orders.add(new Order(
-                    rs.getInt("OrderID"),
-                    rs.getInt("CustomerID"),
-                    rs.getString("Status"),
-                    rs.getLong("TotalPrice"),
-                    rs.getTimestamp("CreateAt"),
-                    rs.getInt("VoucherID"),
-                    rs.getString("PaymentMethod"),
-                    rs.getString("PaymentID")
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getString("Status"),
+                        rs.getLong("TotalPrice"),
+                        rs.getTimestamp("CreateAt"),
+                        rs.getInt("VoucherID"),
+                        rs.getString("PaymentMethod"),
+                        rs.getString("PaymentID")
                 ));
             }
         } catch (SQLException e) {
@@ -174,7 +176,6 @@ public class OrderDAO {
         }
         return orders;
     }
-
 
 //    public static void main(String[] args) {
 //
@@ -217,24 +218,33 @@ public class OrderDAO {
         }
         return result;
     }
+
     private void closeResources() {
         try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (conn != null) conn.close();
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
-    
+
     public ResultSet getAllOrdersInformation(int accID) {
         ResultSet rs = null;
         try {
-            PreparedStatement ps = conn.prepareStatement("select o.OrderID, o.CustomerID, o.[Status], o.TotalPrice,oi.UnitPrice, p.[Name], p.[Image], oi.Quantity from [Order] o \n"
-                    + "  inner join CustomerProfile c on o.CustomerID = c.CustomerID \n"
-                    + "  inner join OrderItems oi on o.OrderID = oi.OrderID\n"
-                    + "  inner join Product p on oi.ProductID = p.ProductID where c.AccountID = ?");
+            PreparedStatement ps = conn.prepareStatement("select o.OrderID, o.CustomerID, o.[Status], o.TotalPrice,oi.UnitPrice, p.[Name], p.[Image], oi.Quantity, pt.Size, pt.Color from [Order] o \n"
+                    + "inner join CustomerProfile c on o.CustomerID = c.CustomerID \n"
+                    + "inner join OrderItems oi on o.OrderID = oi.OrderID\n"
+                    + "inner join Product p on oi.ProductID = p.ProductID\n"
+                    + "inner join ProductType pt on oi.ProductTypeID = pt.ProductTypeID\n"
+                    + "where c.AccountID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, accID);
             rs = ps.executeQuery();
         } catch (SQLException ex) {
@@ -246,20 +256,18 @@ public class OrderDAO {
     public ResultSet getAllsOrderID(int accID) {
         ResultSet rs = null;
         try {
-            PreparedStatement ps = conn.prepareStatement("select o.OrderID,c.AccountID from [Order] o \n"
-                    + "  inner join CustomerProfile c on o.CustomerID = c.CustomerID \n"
-                    + "  inner join OrderItems oi on o.OrderID = oi.OrderID\n"
-                    + "  inner join Product p on oi.ProductID = p.ProductID\n"
-                    + "  group by o.OrderID,c.AccountID having c.AccountID = ?");
+            PreparedStatement ps = conn.prepareStatement("select o.OrderID, c.AccountID,o.[Status],o.TotalPrice from [Order] o\n"
+                    + "                      inner join CustomerProfile c on o.CustomerID = c.CustomerID\n"
+                    + "                    inner join OrderItems oi on o.OrderID = oi.OrderID\n"
+                    + "                     inner join Product p on oi.ProductID = p.ProductID\n"
+                    + "                    group by o.OrderID,c.AccountID, o.[Status],o.TotalPrice having c.AccountID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, accID);
             rs = ps.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
-        
-    
-    }
-    
 
+    }
 }
