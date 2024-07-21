@@ -10,118 +10,117 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 
 @WebServlet("/CartController")
 public class CartController extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(CartController.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
-        
-        if (!isLoggedIn(request)) {
-            session.setAttribute("tabId", 2);
-            response.sendRedirect("/customer.jsp");
-            return;
-        }
-        
+        String path = request.getRequestURI();
         Account acc = (Account) session.getAttribute("acc");
 
-        if (acc != null) {
-            try {
-                CartDAO dao = new CartDAO();
-                int customerId = dao.getCustomerIdByAccountId(acc.getAccountId());
-
-                if (customerId != -1) {
-                    List<Cart> cartList = dao.getProductAndQuantityByCustomerID(customerId);
-                    request.setAttribute("cartItems", cartList);
-                    session.setAttribute("tabId", 15); // Set tabId to 15 to show cart
-                } else {
-                    request.setAttribute("error", "Customer ID not found for the given Account ID.");
-                    session.setAttribute("tabId", 2); // Set tabId to 2 in case of error
-                }
-            } catch (Exception e) {
-                request.setAttribute("error", "Error retrieving cart details.");
-                logger.log(Level.SEVERE, "Error retrieving cart details", e);
-                session.setAttribute("tabId", 2); // Set tabId to 2 in case of error
-            }
-        } else {
-            session.setAttribute("tabId", 2); // Set tabId to 2 if account is not found
-            response.sendRedirect("/customer.jsp");
+        if (!isLoggedIn(request)) {
+            session.setAttribute("tabId", 2);
+            request.getRequestDispatcher("/customer.jsp").forward(request, response);
             return;
         }
-        
-        request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        else if(path.endsWith("/cart")){
+            CartDAO cartDAO = new CartDAO();
+            ResultSet cartItems = cartDAO.getAllProductsInCart(acc.getAccountId());
+            
+            request.setAttribute("cartItems", cartItems);
+            
+            session.setAttribute("tabId", 15);
+            request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        }
+        else if(path.startsWith("/cart/delete")){
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            int productTypeID = Integer.parseInt(request.getParameter("productTypeID"));
+            
+            CartDAO cartDAO = new CartDAO();
+            cartDAO.deleteCartItems(acc.getAccountId(), productID, productTypeID);
+            
+            
+            response.sendRedirect("/cart");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
-        
-        if (acc == null) {
-            session.setAttribute("tabId", 2);
-            response.sendRedirect("/customer.jsp");
-            return;
-        }
+        if (request.getParameter("addToCart") != null) {
+            // Set the response content type
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
 
-        try {
-            CartDAO dao = new CartDAO();
-            int customerId = dao.getCustomerIdByAccountId(acc.getAccountId());
+            // Retrieve form parameters
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int productTypeID = Integer.parseInt(request.getParameter("productTypeID"));
+
+            // Process the form data (e.g., save to database or session)
+            // For demonstration, we'll just print the data to the server console
+            System.out.println("Product ID: " + productID);
+            System.out.println("Quantity: " + quantity);
+            System.out.println("productTypeID: " + productTypeID);
             
-            if (customerId != -1) {
-                String action = request.getParameter("action");
-                int productId = Integer.parseInt(request.getParameter("productId"));
-                int quantity = request.getParameter("quantity") != null ? Integer.parseInt(request.getParameter("quantity")) : 1; // Default quantity to 1 if not present
-
-                switch (action) {
-                    case "increment":
-                        dao.updateCartItem(customerId, productId, quantity + 1);
-                        break;
-                    case "decrement":
-                        if (quantity > 1) {
-                            dao.updateCartItem(customerId, productId, quantity - 1);
-                        }
-                        break;
-                    case "delete":
-                        dao.deleteCartItem(customerId, productId);
-                        break;
-                    default:
-                        request.setAttribute("error", "Invalid action.");
-                        session.setAttribute("tabId", 15);
-                        request.getRequestDispatcher("/customer.jsp").forward(request, response);
-                        return;
-                }
+            JSONObject jsonResponse = new JSONObject();
+            
+            CartDAO cartDAO = new CartDAO();
+            boolean isExceed = false;
+            
+            if(cartDAO.checkProductExist(acc.getAccountId(), productID, productTypeID)){
+                isExceed = cartDAO.addMoreQuantity(acc.getAccountId(), productID, productTypeID, quantity);
                 
-                // Reload cart items and set tabId to 15
-                List<Cart> cartList = dao.getProductAndQuantityByCustomerID(customerId);
-                request.setAttribute("cartItems", cartList);
-                session.setAttribute("tabId", 15);
-                request.getRequestDispatcher("/customer.jsp").forward(request, response);
-            } else {
-                request.setAttribute("error", "Customer ID not found for the given Account ID.");
-                session.setAttribute("tabId", 15);
-                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+                if(isExceed){
+                    System.out.println("Vuot qua ");
+                    jsonResponse.put("status", "fail");
+                }
+                else{
+                     System.out.println("Trung nhung khong vuot ");
+                    jsonResponse.put("status", "success");
+                }
             }
-        } catch (Exception e) {
-            request.setAttribute("error", "Error processing cart update.");
-            logger.log(Level.SEVERE, "Error processing cart update", e);
-            session.setAttribute("tabId", 15);
-            request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            else{
+                System.out.println("Khong bi trung ");
+                jsonResponse.put("status", "success");
+                cartDAO.addProductToCart(acc.getAccountId(), productID, productTypeID, quantity);
+            }
+            
+            // Write the response
+            response.getWriter().write(jsonResponse.toString());
         }
-    }
+        else if(request.getParameter("updateItems") != null){
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
 
-    @Override
-    public String getServletInfo() {
-        return "CartController handles cart operations";
+            // Retrieve form parameters
+            int productID = Integer.parseInt(request.getParameter("productID"));
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int productTypeID = Integer.parseInt(request.getParameter("productTypeID"));
+            
+            CartDAO cartDAO = new CartDAO();
+            
+            cartDAO.updateQuantityCartItems(acc.getAccountId(), productID, productTypeID, quantity);
+
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("status", "success");
+            jsonResponse.put("message", "Product added to cart successfully!");
+
+            // Write the response
+            response.getWriter().write(jsonResponse.toString());
+        }
     }
 
     private boolean isLoggedIn(HttpServletRequest request) {

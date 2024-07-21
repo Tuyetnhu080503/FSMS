@@ -4334,7 +4334,7 @@ table.cart-table tbody tr td:last-child{}
 }
 .cartpage-item-remove{}
 .cartpage-item-remove a{
-	background:url("img/icon/btn_trash.gif") no-repeat scroll 0 0;
+	background:url("../img/icon/btn_trash.gif") no-repeat scroll 0 0;
 	display: inline-block;
 	height: 10px;
 	text-indent: -99999px;

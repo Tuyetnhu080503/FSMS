@@ -13,6 +13,13 @@ public class ProductType {
     private int quantity;
     private int productId;
 
+    public ProductType(int productTypeID, String color, String size, int quantity) {
+        this.productTypeID = productTypeID;
+        this.color = color;
+        this.size = size;
+        this.quantity = quantity;
+    }
+    
     public ProductType(String color, String size, int quantity, int productId) {
         this.color = color;
         this.size = size;

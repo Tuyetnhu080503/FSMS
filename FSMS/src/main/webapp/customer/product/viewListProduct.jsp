@@ -107,7 +107,7 @@
                                     <div class="product-description">
                                         <p><%=product.getDescription()%></p>                                    </div>
                                     <div class="pro-add-to-cart">
-                                        <p><a href="/cart/add" title="Add to Cart">Add to Cart</a></p>
+                                        <p><a href="/products/detail?id=<%=product.getProductId()%>" title="">View More</a></p>
                                     </div>
                                 </div>
                             </div>

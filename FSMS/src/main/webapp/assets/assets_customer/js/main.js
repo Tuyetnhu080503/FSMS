@@ -285,6 +285,9 @@
 			newVal = 0;
 		  }
 		  }
+                if(newVal < 1){
+                    newVal = 1;
+                }
 		$button.parent().find("input").val(newVal);
 	  });
 

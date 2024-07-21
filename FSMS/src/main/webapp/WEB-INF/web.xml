@@ -104,7 +104,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CartController</servlet-name>
-        <url-pattern>/carts</url-pattern>
+        <url-pattern>/cart/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

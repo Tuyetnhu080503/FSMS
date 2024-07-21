@@ -43,7 +43,7 @@
         <%@include file="./customer/voucherList.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 15}">
-        <%@include file="./customer/manaCart.jsp" %>
+        <%@include file="./customer/cart/viewCart.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 16}">
         <%@include file="./customer/order/viewAllOrder.jsp" %>

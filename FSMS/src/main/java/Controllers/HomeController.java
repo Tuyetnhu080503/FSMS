@@ -86,15 +86,15 @@ public class HomeController extends HttpServlet {
 
         if (acc != null) {
             try {
-                CartDAO dao = new CartDAO();
-                int customerId = dao.getCustomerIdByAccountId(acc.getAccountId());
-
-                if (customerId != -1) {
-                    List<Cart> cartlist = dao.getProductAndQuantityByCustomerID(customerId);
-                    request.setAttribute("cartItems", cartlist);
-                } else {
-                    request.setAttribute("error", "Customer ID not found for the given Account ID.");
-                }
+//                CartDAO dao = new CartDAO();
+//                int customerId = dao.getCustomerIdByAccountId(acc.getAccountId());
+//
+//                if (customerId != -1) {
+////                    List<Cart> cartlist = dao.getProductAndQuantityByCustomerID(customerId);
+////                    request.setAttribute("cartItems", cartlist);
+//                } else {
+//                    request.setAttribute("error", "Customer ID not found for the given Account ID.");
+//                }
             } catch (Exception e) {
                 request.setAttribute("error", "Error retrieving cart details.");
             }

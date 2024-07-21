@@ -9,12 +9,20 @@ public class Cart {
     private int customerId;
     private int productId;
     private int quantity;
-       private Product product; 
+    private int productTypeId;
+    
 
     public Cart(int customerId, int productId, int quantity) {
         this.customerId = customerId;
         this.productId = productId;
         this.quantity = quantity;
+    }
+    
+    public Cart(int customerId, int productId, int quantity, int productTypeId) {
+        this.customerId = customerId;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.productTypeId = productTypeId;
     }
 
     public int getCustomerId() {
@@ -40,13 +48,15 @@ public class Cart {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-     public Product getProduct() {
-        return product;
+
+    public int getProductTypeId() {
+        return productTypeId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductTypeId(int productTypeId) {
+        this.productTypeId = productTypeId;
     }
+
     
     
 }

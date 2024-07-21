@@ -1,8 +1,20 @@
+<%@page import="Models.ProductType"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.sql.ResultSet"%>
 <%@page import="Models.Product"%>
 
 <%
-    Product product = (Product)request.getAttribute("product");
+    Product product = (Product) request.getAttribute("product");
+
+    ResultSet colors = (ResultSet) request.getAttribute("colors");
+
+    ResultSet sizes = (ResultSet) request.getAttribute("sizes");
+
+    ArrayList<ProductType> productTypes = (ArrayList<ProductType>) request.getAttribute("productTypes");
 %>
+
+
+
 <section class="main-content-area">
     <div class="container">
         <!-- bradcame start -->
@@ -52,14 +64,243 @@
                         </div>
                         <div class="product-variation">
                             <div class="product-quantity">
-                                <div class="cart-plus-minus">
-                                    <label>Quantity: </label>
-                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="0">
-                                </div>
-                                <div class="pro-add-to-cart">
-                                    <p><a title="Add to Cart" href="#">Add to Cart</a></p>
+                                <div class="">
+                                    <label style="color: #a6a6a6;
+                                           font-size: 14px;
+                                           font-weight: normal;
+                                           margin-right: 5px; margin-left: 10px">Color: </label>
+                                    <select id="product-color" class="form-control" style="display: inline; width: auto; font-size: 13px" >
+
+                                    </select>
                                 </div>
                             </div>
+
+                            <div class="product-quantity">
+                                <div class="">
+                                    <label style="color: #a6a6a6;
+                                           font-size: 14px;
+                                           font-weight: normal;
+                                           margin-right: 5px; margin-left: 10px">Size: </label>
+                                    <select id="product-size" class="form-control" style="display: inline; width: auto; font-size: 13px" >
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="product-quantity">
+                                <div class="cart-plus-minus" id="cart-plus-minus-effect">
+                                    <label>Quantity: </label>
+                                    <input id="product-quantity" class="cart-plus-minus-box" type="text" name="qtybutton" value="1">
+                                </div>
+                                <p id="quantity-available" style="margin-left: 30px; display: none"></p>
+                            </div>
+                            <style>
+                                #add-cart{
+                                    color:#3c3c3c;
+                                }
+                                #add-cart:hover{
+                                    border-color:#00A9E0;
+                                    color:#fff;
+                                    cursor: pointer;
+                                }
+                            </style>
+                            <div class="pro-add-to-cart">
+                                <p id="add-to-cart-btn" style="text-align: left;width: fit-content"><a id="add-cart" title="Add to Cart" >Add to Cart</a></p>
+                                <p id="valid-add-to-cart" style="text-align: left;width: fit-content; color: red; margin-top: 10px; display:none"> Please select product type</p>
+                            </div>
+                            <script>
+                                let maxQuantity = 1000;
+                                let productTypes = [];
+                                let colors = [];
+                                let sizes = [];
+                                <% for (ProductType productType : productTypes) {%>
+                                productTypes.push(["<%=productType.getColor()%>", "<%=productType.getSize()%>",<%=productType.getQuantity()%>,<%=productType.getProductTypeID()%>]);
+                                <% }%>
+
+                                <%while (colors.next()) {%>
+                                colors.push("<%=colors.getString("Color")%>");
+                                <%}%>
+
+                                <%while (sizes.next()) {%>
+                                sizes.push("<%=sizes.getString("Size")%>");
+                                <%}%>
+
+                                renderColor()
+                                renderSize()
+
+                                function renderColor() {
+                                    document.getElementById("product-color").innerHTML = "";
+                                    // Populate color options
+                                    let colorSelect = document.getElementById("product-color");
+                                    let option = document.createElement("option");
+                                    option.value = "";
+                                    option.textContent = "Select Color";
+                                    colorSelect.appendChild(option);
+
+                                    colors.forEach(color => {
+                                        let option = document.createElement("option");
+                                        option.value = color;
+                                        option.textContent = color;
+                                        colorSelect.appendChild(option);
+                                    });
+                                }
+
+
+                                function renderSize() {
+                                    // Populate size options
+                                    document.getElementById("product-size").innerHTML = "";
+                                    let sizeSelect = document.getElementById("product-size");
+
+                                    let optionS = document.createElement("option");
+                                    optionS.value = "";
+                                    optionS.textContent = "Select Size";
+                                    sizeSelect.appendChild(optionS);
+                                    sizes.forEach(size => {
+                                        option = document.createElement("option");
+                                        option.value = size;
+                                        option.textContent = size;
+                                        sizeSelect.appendChild(option);
+                                    });
+                                }
+
+
+                                document.getElementById("add-to-cart-btn").addEventListener("click", function () {
+                                    let color = document.getElementById("product-color").value;
+                                    let size = document.getElementById("product-size").value;
+
+
+                                    if (color === "" || size === "") {
+                                        document.getElementById("valid-add-to-cart").style.display = "block";
+                                    } else {
+                                        document.getElementById("valid-add-to-cart").style.display = "none";
+                                        let productID = '<%=product.getProductId()%>';
+                                        let quantity = document.getElementById("product-quantity").value;
+
+                                        var params = new URLSearchParams();
+                                        params.append("addToCart", "addToCart");
+                                        params.append("productID", productID);
+                                        params.append("quantity", quantity);
+
+                                        for (let i = 0; i < productTypes.length; i++) {
+                                            if (color === productTypes[i][0] && size === productTypes[i][1]) {
+                                                params.append("productTypeID", productTypes[i][3]);
+                                                break;
+                                            }
+                                        }
+
+                                        function checkValidAction(data) {
+                                            if(data.status == "success"){
+                                                Swal.fire({
+                                                position: "center",
+                                                icon: "success",
+                                                title: "Add To Cart Successful!",
+                                                showConfirmButton: false,
+                                                timer: 1000
+                                            })
+                                            }
+                                            else{
+                                                Swal.fire({
+                                                position: "center",
+                                                icon: "error",
+                                                title: "Exceed Product Quantity!",
+                                                showConfirmButton: false,
+                                                timer: 1000
+                                            })
+                                            }
+                                            
+                                        }
+
+                                        fetch("/cart/add", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/x-www-form-urlencoded"
+                                            },
+                                            body: params.toString()
+                                        })
+                                                .then(response => response.json())
+                                                .then(data => checkValidAction(data))
+                                                .catch(error => console.error("Error:", error));
+                                    }
+                                });
+
+
+                                document.getElementById("product-color").addEventListener("change", function () {
+
+                                    if (this.value != "") {
+                                        maxQuantity = 1000
+                                        let sizeSelect = document.getElementById("product-size");
+
+                                        document.getElementById("product-size").innerHTML = "";
+
+                                        let optionS = document.createElement("option");
+                                        optionS.value = "";
+                                        optionS.textContent = "Select Size";
+                                        sizeSelect.appendChild(optionS);
+                                        for (let i = 0; i < productTypes.length; i++) {
+                                            if (document.getElementById("product-color").value === productTypes[i][0]) {
+                                                option = document.createElement("option");
+                                                option.value = productTypes[i][1];
+                                                option.textContent = productTypes[i][1];
+                                                sizeSelect.appendChild(option);
+                                            }
+                                        }
+
+                                        document.getElementById("quantity-available").style.display = "none";
+                                    } else if (document.getElementById("product-size").value != "" && this.value != "") {
+                                        for (let i = 0; i < productTypes.length; i++) {
+                                            if (document.getElementById("product-size").value === productTypes[i][1] && this.value === productTypes[i][0]) {
+                                                document.getElementById("quantity-available").style.display = "inline";
+                                                document.getElementById("quantity-available").textContent = productTypes[i][2] + " products available";
+                                                maxQuantity = productTypes[i][2]
+                                            }
+                                        }
+                                    } else if (this.value == "") {
+                                        maxQuantity = 1000
+                                        document.getElementById("quantity-available").style.display = "none";
+                                        renderSize()
+                                        renderColor()
+                                    } else {
+                                        maxQuantity = 1000
+                                        document.getElementById("quantity-available").style.display = "none";
+                                    }
+                                });
+
+                                document.getElementById("product-size").addEventListener("change", function () {
+                                    if (document.getElementById("product-color").value != "" && this.value != "") {
+                                        for (let i = 0; i < productTypes.length; i++) {
+                                            if (document.getElementById("product-color").value === productTypes[i][0] && this.value === productTypes[i][1]) {
+                                                document.getElementById("quantity-available").style.display = "inline";
+                                                document.getElementById("quantity-available").textContent = productTypes[i][2] + " products available";
+                                                maxQuantity = productTypes[i][2]
+                                            }
+                                        }
+                                    } else {
+                                        document.getElementById("quantity-available").style.display = "none";
+                                    }
+                                });
+
+                                document.getElementById("product-quantity").addEventListener("change", function () {
+                                    var quantity = this.value;
+                                    if (isNaN(Number(quantity))) {
+                                        this.value = 1;
+                                    } else if (quantity < 1) {
+                                        this.value = 1;
+                                    } else if (quantity > maxQuantity) {
+                                        this.value = maxQuantity;
+                                    }
+                                });
+
+                                document.getElementById("cart-plus-minus-effect").addEventListener("click", function () {
+                                    var quantity = document.getElementById("product-quantity").value;
+                                    if (isNaN(Number(quantity))) {
+                                        document.getElementById("product-quantity").value = 1;
+                                    } else if (quantity < 1) {
+                                        document.getElementById("product-quantity").value = 1;
+                                    } else if (quantity > maxQuantity) {
+                                        document.getElementById("product-quantity").value = maxQuantity;
+                                    }
+                                });
+
+                            </script>
                             <div class="product-cart-option">
                                 <ul>
                                     <li><a href="#"><i class="fa fa-heart"></i></a></li>

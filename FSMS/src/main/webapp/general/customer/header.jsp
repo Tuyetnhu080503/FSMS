@@ -81,8 +81,7 @@
                                             %>
                                             <ul>
                                                 <%=acc == null ? "" : "<li><a href=\"/account/profile\">My Account</a></li>"%>
-                                                <li><a href="/carts">My Cart</a></li>
-                                                <li><a href="/checkout">Checkout</a></li>
+                                                <li><a href="/cart">My Cart</a></li>
                                                 <%=acc != null ? "<li><a href=\"/orders\">My Orders</a></li>" : "<li><a href=\"/login\">My Orders</a></li>"%>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
                                             </ul>
@@ -136,50 +135,7 @@
                             <!-- top-shoping-cart start -->
                             <div class="top-shoping-cart">
                                 <!-- Wishlist section commented out -->
-                                <div class="top-mycart">
-                                    <a class="top-mycart-link" href="cart.html">
-                                        my cart <span>(${cartItems.size()}) item: 
-                                            <strong>
-                                                <c:set var="totalPrice" value="0"/>
-                                                <c:forEach var="item" items="${cartItems}">
-                                                    <c:set var="totalPrice" value="${totalPrice + (item.quantity * item.product.price)}"/>
-                                                </c:forEach>
-                                                $${totalPrice}
-                                            </strong>
-                                        </span>
-                                    </a>
-                                    <div class="top-mycart-overlay">
-                                        <c:forEach var="item" items="${cartItems}">
-                                            <div class="single-mycart-item">
-                                                <div class="mycart-item-pro">
-                                                    <div class="mycart-item-img">
-                                                        <a href="cart.html">
-                                                            <img src="${item.product.image}" alt="${item.product.name}" />
-                                                        </a>
-                                                    </div>
-                                                    <div class="mycart-item-text">
-                                                        <p>
-                                                            <a class="mycart-title" href="cart.html">${item.product.name}</a>
-                                                        </p>
-                                                        <a href="#" class="cart-price">
-                                                            <strong>${item.quantity}</strong><sub>x</sub> <span>${item.product.price}</span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="mycart-item-edit">
-                                                    <a href="#" class="item-edit" title="edit">Edit Item</a>
-                                                    <a href="#" class="item-delete" title="delete">Delete Item</a>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
-                                        <div class="total-calculate">
-                                            <p>
-                                                <span>subtotal</span> $${totalPrice}
-                                                <a class="topcart-check-btn" href="checkout.html">checkout</a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                             <!-- top-shoping-cart end -->							
                         </div>
@@ -216,7 +172,7 @@
                             <div class="mainmenu">
                                 <nav>
                                     <ul>
-                                        <li class="active"><a href="home">Home</a>
+                                        <li class="active"><a href="/">Home</a>
                                         </li>
                                         <li><a href="/products">Products</a></li>
                                     </ul>

@@ -113,7 +113,7 @@
                                         <span class="regular-price"><%=product.getPrice()%>vnd</span>
                                     </div>
                                     <div class="pro-add-to-cart">
-                                        <p><a href="#" title="Add to Cart">Add to Cart</a></p>
+                                        <p><a href="/products/detail?id=<%=product.getProductId()%>" title="">View More</a></p>
                                     </div>
                                 </div>
                             </div>
