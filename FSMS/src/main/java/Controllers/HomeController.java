@@ -55,7 +55,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Handle POST requests if necessary
+        
     }
     
     private Account checkLoginFromCookies(HttpServletRequest request, HttpServletResponse response) {

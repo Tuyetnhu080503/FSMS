@@ -1,3 +1,4 @@
+<%@page import="DAOs.CartDAO"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="DAOs.CategoryDAO"%>
 <%@page import="Models.Account"%>
@@ -82,7 +83,7 @@
                                             <ul>
                                                 <%=acc == null ? "" : "<li><a href=\"/account/profile\">My Account</a></li>"%>
                                                 <li><a href="/cart">My Cart</a></li>
-                                                <%=acc != null ? "<li><a href=\"/orders\">My Orders</a></li>" : "<li><a href=\"/login\">My Orders</a></li>"%>
+                                                    <%=acc != null ? "<li><a href=\"/orders\">My Orders</a></li>" : "<li><a href=\"/login\">My Orders</a></li>"%>
                                                     <%=acc == null ? "<li><a href=\"/login\">Log in</a></li>" : "<li><a href=\"/logout\">Log Out</a></li>"%>
                                             </ul>
                                         </li>
@@ -134,8 +135,50 @@
                             <!-- category search end -->
                             <!-- top-shoping-cart start -->
                             <div class="top-shoping-cart">
-                                <!-- Wishlist section commented out -->
-
+                                <div class="top-mycart">
+                                    <%
+                                        if(acc == null){%>
+                                            <a class="top-mycart-link" href="/cart">my cart <span>(0) item</span></a>
+                                            <div class="top-mycart-overlay">
+                                                <div class="total-calculate">
+                                                    <p><span>total</span> 0vnd<a class="topcart-check-btn" href="/cart">View Cart</a></p>
+                                                </div>
+                                            </div>
+                                        <%}
+                                        else{
+                                            CartDAO cartDAO = new CartDAO();
+                                            ResultSet cart = cartDAO.getAllProductsInCart(acc.getAccountId());
+                                            int countItems = 0;
+                                            while(cart.next()){
+                                                countItems++;
+                                            }
+                                            int totalCartInHeader = 0;
+                                            cart.beforeFirst();
+                                        %>
+                                            <a class="top-mycart-link" href="/cart">my cart <span>(<%=countItems%>) item</span></a>
+                                            <div class="top-mycart-overlay"> 
+                                            <%while(cart.next()){
+                                                totalCartInHeader += cart.getInt("Price")*cart.getInt("CartQuantity");
+                                            %>
+                                                <div class="single-mycart-item">
+                                                    <div class="mycart-item-pro">
+                                                        <div class="mycart-item-img">
+                                                            <a href="/cart"><img src="${pageContext.request.contextPath}/assets/images/product/<%=cart.getString("Image")%>" alt="cart" /></a>
+                                                        </div>
+                                                        <div class="mycart-item-text">
+                                                            <p><a class="mycart-title" href="/cart"><%=cart.getString("Name")%></a></p>
+                                                            <a href="/cart" class="cart-price"><strong><%=cart.getInt("CartQuantity")%></strong><sub>x</sub> <span><%=cart.getInt("Price")*cart.getInt("CartQuantity")%>vnd</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <%}%>
+                                                <div class="total-calculate">
+                                                    <p><span>total: </span><%=totalCartInHeader%>vnd<a style="display:block;width: fit-content" class="topcart-check-btn" href="/cart">View Cart</a></p>
+                                                </div>
+                                            </div>
+                                        <%} 
+                                    %>
+                                </div>
                             </div>
                             <!-- top-shoping-cart end -->							
                         </div>
