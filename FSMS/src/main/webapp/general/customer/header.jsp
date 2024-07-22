@@ -136,50 +136,86 @@
                             <!-- top-shoping-cart start -->
                             <div class="top-shoping-cart">
                                 <div class="top-mycart">
-                                    <%
-                                        if(acc == null){%>
-                                            <a class="top-mycart-link" href="/cart">my cart <span>(0) item</span></a>
-                                            <div class="top-mycart-overlay">
-                                                <div class="total-calculate">
-                                                    <p><span>total</span> 0vnd<a class="topcart-check-btn" href="/cart">View Cart</a></p>
-                                                </div>
-                                            </div>
-                                        <%}
-                                        else{
-                                            CartDAO cartDAO = new CartDAO();
-                                            ResultSet cart = cartDAO.getAllProductsInCart(acc.getAccountId());
-                                            int countItems = 0;
-                                            while(cart.next()){
-                                                countItems++;
-                                            }
-                                            int totalCartInHeader = 0;
-                                            cart.beforeFirst();
-                                        %>
-                                            <a class="top-mycart-link" href="/cart">my cart <span>(<%=countItems%>) item</span></a>
-                                            <div class="top-mycart-overlay"> 
-                                            <%while(cart.next()){
-                                                totalCartInHeader += cart.getInt("Price")*cart.getInt("CartQuantity");
-                                            %>
-                                                <div class="single-mycart-item">
-                                                    <div class="mycart-item-pro">
-                                                        <div class="mycart-item-img">
-                                                            <a href="/cart"><img src="${pageContext.request.contextPath}/assets/images/product/<%=cart.getString("Image")%>" alt="cart" /></a>
-                                                        </div>
-                                                        <div class="mycart-item-text">
-                                                            <p><a class="mycart-title" href="/cart"><%=cart.getString("Name")%></a></p>
-                                                            <a href="/cart" class="cart-price"><strong><%=cart.getInt("CartQuantity")%></strong><sub>x</sub> <span><%=cart.getInt("Price")*cart.getInt("CartQuantity")%>vnd</span></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <%}%>
-                                                <div class="total-calculate">
-                                                    <p><span>total: </span><%=totalCartInHeader%>vnd<a style="display:block;width: fit-content" class="topcart-check-btn" href="/cart">View Cart</a></p>
-                                                </div>
-                                            </div>
-                                        <%} 
-                                    %>
+                                    <a class="top-mycart-link" href="/cart">my cart <span id="cart-item-count">(0) item</span></a>
+                                    <div class="top-mycart-overlay" id="cart-overlay">
+                                        <div class="total-calculate">
+                                            <p><span>total</span> 0vnd<a class="topcart-check-btn" href="/cart">View Cart</a></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <script>
+                                function fetchCartItems() {
+                                    var params = new URLSearchParams();
+                                    params.append("getItems", "getItems");
+                                    fetch("/cart/getItems", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/x-www-form-urlencoded"
+                                        },
+                                        body: params.toString()
+                                    })
+                                            .then(response => response.json())
+                                            .then(data => renderCart(data))
+                                            .catch(error => console.error("Error:", error));
+                                }
+                                
+                                function renderCart(cartData) {
+                                    console.log(cartData);
+                                    var cartItems = cartData.items;
+                                    var countItems = cartData.totalItems;
+                                    var totalCartInHeader = cartData.totalPrice;
+                                    var cartOverlay = document.getElementById('cart-overlay');
+                                    cartOverlay.innerHTML = '';
+
+                                    var cartItemHTML = "";
+                                    for (var i = 0; i < cartItems.length; i++) {
+                                        var cartItem = cartItems[i];
+                                        cartItemHTML += '<div class="single-mycart-item">' +
+                                                '<div class="mycart-item-pro">' +
+                                                '<div class="mycart-item-img">' +
+                                                '<a href="/cart"><img src="/assets/images/product/' + cartItem.Image + '" alt="cart" /></a>' +
+                                                '</div>' +
+                                                '<div class="mycart-item-text">' +
+                                                '<p><a class="mycart-title" href="/cart">' + cartItem.Name + '</a></p>' +
+                                                '<a href="/cart" class="cart-price"><strong>' + cartItem.CartQuantity + '</strong><sub>x</sub> <span>' + (cartItem.Price * cartItem.CartQuantity) + 'vnd</span></a>' +
+                                                '</div>' +
+                                                '</div>' +
+                                                '</div>';
+                                    }
+
+                                    var totalCalculateHTML = '<div class="total-calculate">' +
+                                            '<p><span>total: </span>' + totalCartInHeader + 'vnd<a style="display:block;width: fit-content" class="topcart-check-btn" href="/cart">View Cart</a></p>' +
+                                            '</div>';
+
+                                    cartOverlay.innerHTML = cartItemHTML + totalCalculateHTML;
+
+                                    document.getElementById('cart-item-count').textContent = '(' + countItems + ') item';
+                                }
+                                
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    let acc = '<%= acc != null ? acc.getAccountId() : null%>';
+                                    if (acc) {
+                                        fetchCartItems();
+                                    }
+
+                                    function fetchCartItems() {
+                                        var params = new URLSearchParams();
+                                        params.append("getItems", "getItems");
+                                        fetch("/cart/getItems", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/x-www-form-urlencoded"
+                                            },
+                                            body: params.toString()
+                                        })
+                                                .then(response => response.json())
+                                                .then(data => renderCart(data))
+                                                .catch(error => console.error("Error:", error));
+                                    }
+                                });
+                            </script>
                             <!-- top-shoping-cart end -->							
                         </div>
                     </div>

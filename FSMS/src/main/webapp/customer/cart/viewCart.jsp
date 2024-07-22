@@ -135,7 +135,7 @@
                                 if (!isNaN(valueNumber)) {
                                     total += valueNumber;
                                 }
-
+                                
                             });
                             let totalPrice = document.querySelector("#total-price");
                             totalPrice.textContent = "Total: " + total + "vnd"
@@ -159,9 +159,9 @@
                                 body: params.toString()
                             })
                                     .then(response => response.json())
-                                    .then(data => console.log(data))
+                                    .then(data => fetchCartItems())
                                     .catch(error => console.error("Error:", error));
-
+                            
                         });
 
                         plusMinusEffect.addEventListener("click", function () {
@@ -213,10 +213,8 @@
                                 body: params.toString()
                             })
                                     .then(response => response.json())
-                                    .then(data => console.log(data))
+                                    .then(data => fetchCartItems())
                                     .catch(error => console.error("Error:", error));
-
-
                         });
                     })
                 </script>                

@@ -206,7 +206,7 @@
                                                 timer: 1000
                                             })
                                             }
-                                            
+                                            fetchCartItems()
                                         }
 
                                         fetch("/cart/add", {
