@@ -45,16 +45,15 @@ public class CartDAO {
         try {
             int cusID = 0;
             conn = DBConnection.connect();
-            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Cart c \n"
-                    + "inner join CustomerProfile cp on c.CustomerID = cp.CustomerID  \n"
-                    + "where cp.AccountID = ?");
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
             pss.setInt(1, accID);
             ResultSet rss = pss.executeQuery();
-            
-            while(rss.next()){
+
+            while (rss.next()) {
                 cusID = rss.getInt("CustomerID");
             }
-            
+
             PreparedStatement ps = conn.prepareStatement("insert into [Cart] values(?,?,?,?)");
             ps.setInt(1, cusID);
             ps.setInt(2, proID);
@@ -69,32 +68,30 @@ public class CartDAO {
 
     public boolean checkProductExist(int accID, int productID, int productTypeID) {
         boolean isExist = false;
-        try{
+        try {
             int cusID = 0;
             conn = DBConnection.connect();
-            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Cart c \n"
-                    + "inner join CustomerProfile cp on c.CustomerID = cp.CustomerID  \n"
-                    + "where cp.AccountID = ?");
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
             pss.setInt(1, accID);
             ResultSet rss = pss.executeQuery();
-            
-            while(rss.next()){
+
+            while (rss.next()) {
                 cusID = rss.getInt("CustomerID");
             }
-            
+
             PreparedStatement ps = conn.prepareStatement("select * from Cart where CustomerID = ? and ProductID = ? and ProductTypeID = ?");
             ps.setInt(1, cusID);
             ps.setInt(2, productID);
             ps.setInt(3, productTypeID);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 isExist = true;
             }
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return isExist;
     }
 
@@ -102,16 +99,15 @@ public class CartDAO {
         try {
             int cusID = 0;
             conn = DBConnection.connect();
-            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Cart c \n"
-                    + "inner join CustomerProfile cp on c.CustomerID = cp.CustomerID  \n"
-                    + "where cp.AccountID = ?");
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
             pss.setInt(1, accID);
             ResultSet rss = pss.executeQuery();
-            
-            while(rss.next()){
+
+            while (rss.next()) {
                 cusID = rss.getInt("CustomerID");
             }
-            
+
             int currentQuantity = 0;
             //get current quantity
             PreparedStatement psQ = conn.prepareStatement("select * from Cart where CustomerID = ? and ProductID = ? and ProductTypeID = ?");
@@ -119,23 +115,23 @@ public class CartDAO {
             psQ.setInt(2, proID);
             psQ.setInt(3, proTypeID);
             ResultSet rsQ = psQ.executeQuery();
-            while(rsQ.next()){
+            while (rsQ.next()) {
                 currentQuantity = rsQ.getInt("Quantity");
             }
-            
+
             int productTypeQuantity = 0;
             //get productType quantity
             PreparedStatement psPT = conn.prepareStatement("select * from ProductType where ProductTypeID = ?");
             psPT.setInt(1, proTypeID);
             ResultSet rsPT = psPT.executeQuery();
-            while(rsPT.next()){
+            while (rsPT.next()) {
                 productTypeQuantity = rsPT.getInt("Quantity");
             }
-            
-            if(currentQuantity + quantity > productTypeQuantity){
+
+            if (currentQuantity + quantity > productTypeQuantity) {
                 return true;
             }
-            
+
             PreparedStatement ps = conn.prepareStatement("UPDATE Cart SET Quantity = ? Where CustomerID = ? and ProductID = ? and ProductTypeID =?");
             ps.setInt(1, currentQuantity + quantity);
             ps.setInt(2, cusID);
@@ -145,7 +141,7 @@ public class CartDAO {
         } catch (SQLException ex) {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return false;
     }
 
@@ -153,16 +149,15 @@ public class CartDAO {
         try {
             int cusID = 0;
             conn = DBConnection.connect();
-            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Cart c \n"
-                    + "inner join CustomerProfile cp on c.CustomerID = cp.CustomerID  \n"
-                    + "where cp.AccountID = ?");
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
             pss.setInt(1, accID);
             ResultSet rss = pss.executeQuery();
-            
-            while(rss.next()){
+
+            while (rss.next()) {
                 cusID = rss.getInt("CustomerID");
             }
-            
+
             PreparedStatement ps = conn.prepareStatement("UPDATE Cart SET Quantity = ? Where CustomerID = ? and ProductID = ? and ProductTypeID =?");
             ps.setInt(1, quantity);
             ps.setInt(2, cusID);
@@ -173,21 +168,20 @@ public class CartDAO {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void deleteCartItems(int accID, int proID, int proTypeID) {
         try {
             int cusID = 0;
             conn = DBConnection.connect();
-            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Cart c \n"
-                    + "inner join CustomerProfile cp on c.CustomerID = cp.CustomerID  \n"
-                    + "where cp.AccountID = ?");
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
             pss.setInt(1, accID);
             ResultSet rss = pss.executeQuery();
-            
-            while(rss.next()){
+
+            while (rss.next()) {
                 cusID = rss.getInt("CustomerID");
             }
-            
+
             PreparedStatement ps = conn.prepareStatement("Delete Cart Where CustomerID = ? and ProductID = ? and ProductTypeID =?");
             ps.setInt(1, cusID);
             ps.setInt(2, proID);
