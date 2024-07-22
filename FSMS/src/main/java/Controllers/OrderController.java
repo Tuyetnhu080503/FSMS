@@ -87,8 +87,6 @@ public class OrderController extends HttpServlet {
                         orderList.add(new ViewOrder(rsoderIDInformation.getInt("OrderID"), rsoderIDInformation.getString("Image"), rsoderIDInformation.getString("Name"),rsoderIDInformation.getInt("Quantity"), rsoderIDInformation.getInt("UnitPrice"),rsoderIDInformation.getString("Size"), rsoderIDInformation.getString("Color")));
                     }
                     
-                    
-                    
                     request.setAttribute("orderIDList", orderIDList);
                     request.setAttribute("orderList", orderList);
                     
@@ -97,7 +95,11 @@ public class OrderController extends HttpServlet {
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-        }
+            }
+            else if(path.endsWith("/orders/detail")){
+                session.setAttribute("tabId", 17);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            }
         } else {
             logger.log(Level.SEVERE, "Account is null in session.");
             request.setAttribute("error", "Account not found in session.");
