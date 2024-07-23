@@ -9,6 +9,7 @@ import DAOs.OrderDAO;
 import Hash.MD5;
 import Models.Account;
 import Models.Order;
+import Models.OrderStatus;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,6 +52,8 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("account", account);
                     OrderDAO oDao = new OrderDAO();
                     Order order = oDao.getOrderById(orderId);
+                     List<OrderStatus> orderStatus = oDao.getListOrderStatusByOrderId(orderId);
+                    request.setAttribute("orderStatus", orderStatus);
                     request.setAttribute("order", order);
                     session.setAttribute("tabId", 6);
                     request.getRequestDispatcher("/staff.jsp").forward(request, response);

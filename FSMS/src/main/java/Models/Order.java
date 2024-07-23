@@ -19,8 +19,10 @@ public class Order {
     private String lastname;
     private String phonenumber;
     private String deliveryaddress;
-
-    public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress) {
+    private String employeeFirstName;
+    private String employeeLastName;
+    private Timestamp updatedAt;
+    public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress, String employeeFirstName, String employeeLastName, Timestamp updatedAt) {
         this.orderId = orderId;
         this.status = status;
         this.paymentMethod = paymentMethod;
@@ -28,6 +30,9 @@ public class Order {
         this.lastname = lastname;
         this.phonenumber = phonenumber;
         this.deliveryaddress = deliveryaddress;
+        this.employeeFirstName = employeeFirstName;
+        this.employeeLastName = employeeLastName;
+        this.updatedAt = updatedAt;
     }
 
     public Order() {
@@ -43,6 +48,30 @@ public class Order {
         this.voucherId = voucherId;
         this.paymentMethod = paymentMethod;
         this.paymentId = paymentId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getEmployeeFirstName() {
+        return employeeFirstName;
+    }
+
+    public void setEmployeeFirstName(String employeeFirstName) {
+        this.employeeFirstName = employeeFirstName;
+    }
+
+    public String getEmployeeLastName() {
+        return employeeLastName;
+    }
+
+    public void setEmployeeLastName(String employeeLastName) {
+        this.employeeLastName = employeeLastName;
     }
 
     public String getLastname() {
@@ -131,6 +160,14 @@ public class Order {
 
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
     
     

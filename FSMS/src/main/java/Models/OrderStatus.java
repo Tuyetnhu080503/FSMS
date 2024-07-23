@@ -14,6 +14,10 @@ public class OrderStatus {
     private int employeeID;
     private int orderID;
 
+    public OrderStatus() {
+    }
+
+    
     public OrderStatus(int OrderStatusID, Timestamp time, String status, int employeeID, int orderID) {
         this.OrderStatusID = OrderStatusID;
         this.time = time;
