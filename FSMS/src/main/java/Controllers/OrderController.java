@@ -72,31 +72,93 @@ public class OrderController extends HttpServlet {
                         Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     ResultSet rsoderIDs = orDAO.getAllsOrderID(cuurentAcc.getAccountId());
-                    
+
                     ResultSet rsoderIDInformation = orDAO.getAllOrdersInformation(cuurentAcc.getAccountId());
-                    
                     ArrayList<ViewOrderIDs> orderIDList = new ArrayList<>();
-                    
+
                     ArrayList<ViewOrder> orderList = new ArrayList<>();
-                    
-                    while(rsoderIDs.next()){
-                        orderIDList.add(new ViewOrderIDs(rsoderIDs.getInt("OrderID"), rsoderIDs.getString("Status"), rsoderIDs.getInt("TotalPrice")));
+
+                    while (rsoderIDs.next()) {
+                        ResultSet rsVoucher = orDAO.getVoucherByOrderID(acc.getAccountId(), rsoderIDs.getInt("OrderID"));
+                        if (rsVoucher != null && rsVoucher.isBeforeFirst()) {
+                            rsVoucher.next();
+                            int amount = rsVoucher.getInt("DiscountAmount");
+                            int persent = rsVoucher.getInt("DiscountPercentage");
+                            if (!rsVoucher.wasNull()) {
+                                if (persent * rsoderIDs.getInt("TotalPrice") < amount) {
+                                    orderIDList.add(new ViewOrderIDs(rsoderIDs.getInt("OrderID"), rsoderIDs.getString("Status"), rsoderIDs.getInt("TotalPrice") - persent * rsoderIDs.getInt("TotalPrice")));
+                                } else {
+                                    orderIDList.add(new ViewOrderIDs(rsoderIDs.getInt("OrderID"), rsoderIDs.getString("Status"), rsoderIDs.getInt("TotalPrice") - amount));
+                                }
+                            } else {
+                                orderIDList.add(new ViewOrderIDs(rsoderIDs.getInt("OrderID"), rsoderIDs.getString("Status"), rsoderIDs.getInt("TotalPrice") - amount));
+                            }
+                        } else {
+                            orderIDList.add(new ViewOrderIDs(rsoderIDs.getInt("OrderID"), rsoderIDs.getString("Status"), rsoderIDs.getInt("TotalPrice")));
+                        }
                     }
-                    
-                    while(rsoderIDInformation.next()){
-                        orderList.add(new ViewOrder(rsoderIDInformation.getInt("OrderID"), rsoderIDInformation.getString("Image"), rsoderIDInformation.getString("Name"),rsoderIDInformation.getInt("Quantity"), rsoderIDInformation.getInt("UnitPrice"),rsoderIDInformation.getString("Size"), rsoderIDInformation.getString("Color")));
+
+                    while (rsoderIDInformation.next()) {
+                        orderList.add(new ViewOrder(rsoderIDInformation.getInt("OrderID"), rsoderIDInformation.getString("Image"), rsoderIDInformation.getString("Name"), rsoderIDInformation.getInt("Quantity"), rsoderIDInformation.getInt("UnitPrice"), rsoderIDInformation.getString("Size"), rsoderIDInformation.getString("Color")));
                     }
-                    
+
                     request.setAttribute("orderIDList", orderIDList);
                     request.setAttribute("orderList", orderList);
-                    
+
                     session.setAttribute("tabId", 16);
                     request.getRequestDispatcher("/customer.jsp").forward(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-            else if(path.endsWith("/orders/detail")){
+            } else if (path.endsWith("/orders/detail")) {
+
+                int id = Integer.parseInt(request.getParameter("id"));
+
+                OrderDAO orDAO = null;
+                try {
+                    orDAO = new OrderDAO();
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                ResultSet rsoderIDInformation = orDAO.getOrderByID(acc.getAccountId(), id);
+                
+                String address = orDAO.getAddress(acc.getAccountId(), id);
+                
+                int voucher = 0;
+
+                try {
+                    ResultSet rsVoucher = orDAO.getVoucherByOrderID(acc.getAccountId(), id);
+                    if (rsVoucher != null && rsVoucher.isBeforeFirst()) {
+                        rsVoucher.next();
+                        int amount = rsVoucher.getInt("DiscountAmount");
+                        int persent = rsVoucher.getInt("DiscountPercentage");
+                        if (!rsVoucher.wasNull()) {
+                            if (persent * rsVoucher.getInt("TotalPrice") < amount) {
+                                voucher = persent * rsVoucher.getInt("TotalPrice");
+                            } else {
+                                voucher = amount;
+                            }
+                        } else {
+                            voucher = amount;
+                        }
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                
+                ResultSet order = orDAO.getOrderInfo(acc.getAccountId(), id);
+                ResultSet orderStatus = orDAO.getAllStatus(acc.getAccountId(), id);
+                
+
+                request.setAttribute("rsoderIDInformation", rsoderIDInformation);
+                request.setAttribute("voucher", voucher);
+                request.setAttribute("address", address);
+                
+                request.setAttribute("order", order);
+                request.setAttribute("orderStatus", orderStatus);
+                
                 session.setAttribute("tabId", 17);
                 request.getRequestDispatcher("/customer.jsp").forward(request, response);
             }

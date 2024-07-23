@@ -270,4 +270,135 @@ public class OrderDAO {
         return rs;
 
     }
+
+    public ResultSet getOrderByID(int accID, int orderId) {
+        ResultSet rs = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select o.OrderID, o.CustomerID, o.[Status], o.TotalPrice,oi.UnitPrice, p.[Name], p.[Image], oi.Quantity, pt.Size, pt.Color,o.PaymentMethod from [Order] o \n"
+                    + "                    inner join CustomerProfile c on o.CustomerID = c.CustomerID\n"
+                    + "                    inner join OrderItems oi on o.OrderID = oi.OrderID\n"
+                    + "                    inner join Product p on oi.ProductID = p.ProductID\n"
+                    + "                    inner join ProductType pt on oi.ProductTypeID = pt.ProductTypeID\n"
+                    + "                    where c.AccountID = ? and o.OrderID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1, accID);
+            ps.setInt(2, orderId);
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+
+    }
+
+    public ResultSet getVoucherByOrderID(int accID, int orderId) {
+        ResultSet rs = null;
+        try {
+            int cusID = 0;
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
+            pss.setInt(1, accID);
+            ResultSet rss = pss.executeQuery();
+
+            while (rss.next()) {
+                cusID = rss.getInt("CustomerID");
+            }
+
+            PreparedStatement ps = conn.prepareStatement("select * from [Order] o inner join Voucher v on o.VoucherID = v.VoucherID\n"
+                    + "  where o.OrderID = ? and o.CustomerID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1, orderId);
+            ps.setInt(2, cusID);
+            rs = ps.executeQuery();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
+    public String getAddress(int accID, int orderId) {
+        String address = "";
+        try {
+            int cusID = 0;
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
+            pss.setInt(1, accID);
+            ResultSet rss = pss.executeQuery();
+
+            while (rss.next()) {
+                cusID = rss.getInt("CustomerID");
+            }
+
+            PreparedStatement ps = conn.prepareStatement("select * from [Order]\n"
+                    + "  where OrderID = ? and CustomerID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1, orderId);
+            ps.setInt(2, cusID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                address = rs.getString("Address");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return address;
+    }
+
+    public ResultSet getAllStatus(int accID, int orderId) {
+        ResultSet rs = null;
+        try {
+            int cusID = 0;
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
+            pss.setInt(1, accID);
+            ResultSet rss = pss.executeQuery();
+
+            while (rss.next()) {
+                cusID = rss.getInt("CustomerID");
+            }
+
+            PreparedStatement ps = conn.prepareStatement("select os.[Time], os.[Status] from [Order] o inner join OrderStatus os on o.OrderID = os.OrderID\n"
+                    + "\n"
+                    + "  where o.OrderID = ?  and o.CustomerID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1, orderId);
+            ps.setInt(2, cusID);
+            rs = ps.executeQuery();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+    
+    
+    public ResultSet getOrderInfo(int accID, int orderId) {
+        ResultSet rs = null;
+        try {
+            int cusID = 0;
+            PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
+                    + "where a.AccountID = ?");
+            pss.setInt(1, accID);
+            ResultSet rss = pss.executeQuery();
+
+            while (rss.next()) {
+                cusID = rss.getInt("CustomerID");
+            }
+
+            PreparedStatement ps = conn.prepareStatement("select * from [Order]\n"
+                    + "  where OrderID = ? and CustomerID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1, orderId);
+            ps.setInt(2, cusID);
+            rs = ps.executeQuery();
+            
+
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
 }
