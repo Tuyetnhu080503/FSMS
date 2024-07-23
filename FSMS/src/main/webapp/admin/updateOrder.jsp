@@ -1,3 +1,4 @@
+<%@page import="Models.Account"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
@@ -10,6 +11,7 @@
 <%
     Order order = (Order) request.getAttribute("order");
     List<OrderStatus> orderStatus = (List<OrderStatus>) request.getAttribute("orderStatus");
+    OrderDAO odao = new OrderDAO();
 %>
 <div class="content-wrapper">
     <div class="container-full">
@@ -80,12 +82,21 @@
                                                         <tbody>
                                                             <tr>
                                                                 <%
-                                                                    SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+                                                                    SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");
                                                                     for (OrderStatus status : orderStatus) {
                                                                         Timestamp timestamp = status.getTime();
                                                                         String formattedTime = newFormat.format(timestamp);
                                                                 %>
-                                                                <td><%= formattedTime%></td>
+                                                                <td><%= formattedTime%> <br>
+                                                                    <% Account account = odao.getAccountByEmployeeId(status.getEmployeeID());
+                                                                        if (account.getRoleId() == 1) {%>
+                                                                    <a href="/admin/profile">
+                                                                        <%= status.getFirstName()%> <%= status.getLastName()%>
+                                                                    </a>
+                                                                    <% } else {%>
+                                                                    <%= status.getFirstName()%> <%= status.getLastName()%>
+                                                                    <% } %>                                                               
+                                                                </td>
                                                                 <% } %>
                                                             </tr>
                                                         </tbody>

@@ -5,6 +5,7 @@
 package DAOs;
 
 import DBConnection.DBConnection;
+import Models.Account;
 import Models.Order;
 import Models.OrderStatus;
 import java.sql.Connection;
@@ -72,19 +73,26 @@ public class OrderDAO {
 
     public List<OrderStatus> getListOrderStatusByOrderId(int orderId) throws SQLException {
         List<OrderStatus> orderStatuses = new ArrayList<>();
-        String query = "SELECT OrderStatusID\n"
-                + "      ,Time\n"
-                + "      ,Status\n"
-                + "  FROM OrderStatus where [OrderID] = ? order by Time asc";
+        String query = "SELECT os.OrderStatusID, os.Time , os.Status, a.Firstname , a.Lastname, ep.EmployeeID	   \n"
+                + "FROM OrderStatus os \n"
+                + "join EmployeeProfile as ep on ep.EmployeeID = os.EmployeeID\n"
+                + "join Account as a on a.AccountID = ep.AccountID\n"
+                + "where os.[OrderID] = ? order by Time asc";
         try ( PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, orderId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Timestamp time = rs.getTimestamp("Time");
                 String status = rs.getString("Status");
+                String firstName = rs.getString("Firstname");
+                String lastname = rs.getString("Lastname");
+                int employeeId = rs.getInt("EmployeeID");
                 OrderStatus orderStatus = new OrderStatus();
                 orderStatus.setStatus(status);
                 orderStatus.setTime(time);
+                orderStatus.setFirstName(firstName);
+                orderStatus.setLastName(lastname);
+                orderStatus.setEmployeeID(employeeId);
                 orderStatuses.add(orderStatus);
             }
         }
@@ -264,13 +272,11 @@ public class OrderDAO {
         OrderDAO orderDAO = new OrderDAO();
 
         // Thông tin cần cập nhật
-       
-       
-        List<OrderStatus> result = orderDAO.getListOrderStatusByOrderId(1);
-        for (OrderStatus orderStatus : result) {
-            System.out.println(orderStatus.getTime());
-        }
+        Account result = orderDAO.getAccountByEmployeeId(14);
         
+            System.out.println(result.getRoleId());
+        
+
     }
 
     public int deleteOrder(int orderId) {
@@ -354,5 +360,22 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return employeeId;
+    }
+
+     public Account getAccountByEmployeeId(int id) {
+        Account account = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Account a\n"
+                + "join EmployeeProfile as ep on ep.AccountID = a.AccountID\n"
+                + "where ep.EmployeeID = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                account = new Account(rs.getInt("AccountID"),rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return account;
     }
 }
