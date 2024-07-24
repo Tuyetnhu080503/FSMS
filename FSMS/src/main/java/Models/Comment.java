@@ -9,15 +9,15 @@ import java.sql.Timestamp;
 
 public class Comment {
     private int commentId;
-    private int orderId;
+    private int orderItemId;
     private String comment;
     private int rating;
     private String image;
     private Timestamp createAt;
 
-    public Comment(int commentId, int orderId, String comment, int rating, String image, Timestamp createAt) {
+    public Comment(int commentId, int orderItemId, String comment, int rating, String image, Timestamp createAt) {
         this.commentId = commentId;
-        this.orderId = orderId;
+        this.orderItemId = orderItemId;
         this.comment = comment;
         this.rating = rating;
         this.image = image;
@@ -33,11 +33,11 @@ public class Comment {
     }
 
     public int getOrderId() {
-        return orderId;
+        return orderItemId;
     }
 
     public void setOrderId(int orderId) {
-        this.orderId = orderId;
+        this.orderItemId = orderId;
     }
 
     public String getComment() {
