@@ -236,8 +236,7 @@
                                             while (rn.next()) {
                                         %>
                                         <li>
-                                            <a href="shop-grid.html"><%= rn.getString("Name")%></a>
-
+                                            <a href="/products?id=<%=rn.getInt("CategoryID") %>"><%= rn.getString("Name")%></a>
                                         </li>
                                         <%}%>
                                     </ul>									

@@ -74,7 +74,6 @@
                                     <td>
                                         <div class="cart-pro-price">
                                             <p id="subprice-<%=cartItemss.getInt("ProductID") + "-" + cartItemss.getInt("ProductTypeID")%>" class="subprice"><%=cartItemss.getInt("CartQuantity") * cartItemss.getInt("Price")%>vnd</p>
-
                                         </div>
                                     </td>
                                 </tr>
@@ -87,12 +86,11 @@
                             <a href="/products/list2" class="add-tag-btn cartpage-btn-1">Continue Shopping</a>
                         </div>
                         <div class="button-right">
-
                             <div class="cartpage-total-price">
                                 <div class="cart-pro-price">
                                     <p id="total-price" style="margin-bottom: 10px">Total: <%=totalPrice%>vnd</p>
                                 </div>
-                                <a href="#" class="add-tag-btn">Proceed to Checkout</a>								
+                                <a href="/orders/create" class="add-tag-btn">Proceed to Checkout</a>								
                             </div>
                         </div>	
                     </div>							

@@ -4,6 +4,7 @@
  */
 package Controllers;
 
+import DAOs.CategoryDAO;
 import DAOs.ProductDAO;
 import DAOs.ProductTypeDAO;
 import Models.Product;
@@ -16,7 +17,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,10 +46,131 @@ public class ProductController extends HttpServlet {
         String path = request.getRequestURI();
         HttpSession session = request.getSession();
         if (path.endsWith("/products")) {
-            session.setAttribute("tabId", 10);
-            request.getRequestDispatcher("/customer.jsp").forward(request, response);
-        } else if (path.endsWith("/list2")) {
+            if (request.getParameter("id") != null) {
+
+                int categoryID = Integer.parseInt(request.getParameter("id"));
+                CategoryDAO catDAO = new CategoryDAO();
+
+                ResultSet rss = catDAO.getAllProductsByCatID(categoryID);
+
+                List<Product> products = new ArrayList<>();
+
+                try {
+                    while (rss.next()) {
+                        Product product = new Product();
+                        product.setProductId(rss.getInt("ProductID"));
+                        product.setName(rss.getString("Name"));
+                        product.setPrice(rss.getLong("Price"));
+                        product.setImage(rss.getString("Image"));
+                        product.setDescription(rss.getString("Description"));
+                        products.add(product);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                session.setAttribute("products", products);
+            } else if (request.getParameter("sort-by") != null) {
+                if (request.getParameter("sort-by").equals("name")) {
+                    List<Product> products = (List<Product>) session.getAttribute("products");
+
+                    //sort by name
+                    products = sortProducts(products, "name");
+                    session.setAttribute("products", products);
+                } else {
+                    List<Product> products = (List<Product>) session.getAttribute("products");
+
+                    // sort by products
+                    products = sortProducts(products, "price");
+
+                    session.setAttribute("products", products);
+                }
+            } else {
+                ProductDAO proDAO = new ProductDAO();
+                ResultSet rss = proDAO.getAlls();
+                List<Product> products = new ArrayList<>();
+
+                try {
+                    while (rss.next()) {
+                        Product product = new Product();
+                        product.setProductId(rss.getInt("ProductID"));
+                        product.setName(rss.getString("Name"));
+                        product.setPrice(rss.getLong("Price"));
+                        product.setImage(rss.getString("Image"));
+                        product.setDescription(rss.getString("Description"));
+                        products.add(product);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                session.setAttribute("products", products);
+            }
+
             session.setAttribute("tabId", 11);
+            request.getRequestDispatcher("/customer.jsp").forward(request, response);
+        } else if (path.endsWith("products/list2")) {
+           if (request.getParameter("id") != null) {
+
+                int categoryID = Integer.parseInt(request.getParameter("id"));
+                CategoryDAO catDAO = new CategoryDAO();
+
+                ResultSet rss = catDAO.getAllProductsByCatID(categoryID);
+
+                List<Product> products = new ArrayList<>();
+
+                try {
+                    while (rss.next()) {
+                        Product product = new Product();
+                        product.setProductId(rss.getInt("ProductID"));
+                        product.setName(rss.getString("Name"));
+                        product.setPrice(rss.getLong("Price"));
+                        product.setImage(rss.getString("Image"));
+                        product.setDescription(rss.getString("Description"));
+                        products.add(product);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                session.setAttribute("products", products);
+            } else if (request.getParameter("sort-by") != null) {
+                if (request.getParameter("sort-by").equals("name")) {
+                    List<Product> products = (List<Product>) session.getAttribute("products");
+
+                    //sort by name
+                    products = sortProducts(products, "name");
+                    session.setAttribute("products", products);
+                } else {
+                    List<Product> products = (List<Product>) session.getAttribute("products");
+
+                    // sort by products
+                    products = sortProducts(products, "price");
+
+                    session.setAttribute("products", products);
+                }
+            } else {
+                ProductDAO proDAO = new ProductDAO();
+                ResultSet rss = proDAO.getAlls();
+                List<Product> products = new ArrayList<>();
+
+                try {
+                    while (rss.next()) {
+                        Product product = new Product();
+                        product.setProductId(rss.getInt("ProductID"));
+                        product.setName(rss.getString("Name"));
+                        product.setPrice(rss.getLong("Price"));
+                        product.setImage(rss.getString("Image"));
+                        product.setDescription(rss.getString("Description"));
+                        products.add(product);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ProductController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                session.setAttribute("products", products);
+            }
+            session.setAttribute("tabId", 10);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);
         } else if (path.startsWith("/products/detail")) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -81,14 +209,29 @@ public class ProductController extends HttpServlet {
 
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+    private List<Product> sortProducts(List<Product> products, String sortBy) {
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "name":
+                    Collections.sort(products, new Comparator<Product>() {
+                        @Override
+                        public int compare(Product p1, Product p2) {
+                            return p1.getName().compareTo(p2.getName());
+                        }
+                    });
+                    break;
+                case "price":
+                    Collections.sort(products, new Comparator<Product>() {
+                        @Override
+                        public int compare(Product p1, Product p2) {
+                            return Long.compare(p1.getPrice(), p2.getPrice());
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+        return products;
+    }
 }

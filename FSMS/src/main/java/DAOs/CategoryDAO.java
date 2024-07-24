@@ -18,7 +18,7 @@ public class CategoryDAO {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-    public CategoryDAO()  {
+    public CategoryDAO() {
         try {
             conn = DBConnection.DBConnection.connect();
         } catch (SQLException ex) {
@@ -59,26 +59,25 @@ public class CategoryDAO {
         }
         return list;
     }
+
     public ResultSet getQuantityProductInCategory() {
         ResultSet rs = null;
         try {
             Statement st = conn.createStatement();
-            rs = st.executeQuery("SELECT\n"
-                    + "  c.CategoryID,\n"
-                    + "  c.name AS category_name,\n"
-                    + "  COUNT(p.productID) AS quantity\n"
+            rs = st.executeQuery("SELECT c.CategoryID,c.name AS category_name,\n"
+                    + "COUNT(p.productID) AS quantity\n"
                     + "FROM Category c\n"
                     + "JOIN Product p ON c.CategoryID = p.categoryID\n"
-                    + "JOIN ProductType pt ON p.productID = pt.productID\n"
                     + "GROUP BY c.CategoryID, c.name;");
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
-public static void main(String[] args) {
+
+    public static void main(String[] args) {
         CategoryDAO categoryDAO = new CategoryDAO();
-        
+
         ResultSet rs = categoryDAO.getAllCategory();
         try {
             while (rs.next()) {
@@ -91,5 +90,18 @@ public static void main(String[] args) {
         }
     }
 
- 
+    public ResultSet getAllProductsByCatID(int catID) {
+        ResultSet rs = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Product p inner join Category c on p.CategoryID = c.CategoryID \n"
+                    + "where p.CategoryID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            ps.setInt(1, catID);
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+
 }

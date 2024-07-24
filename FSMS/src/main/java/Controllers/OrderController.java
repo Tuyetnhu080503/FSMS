@@ -1,5 +1,6 @@
 package Controllers;
 
+import DAOs.CartDAO;
 import Models.Account;
 import DAOs.OrderDAO;
 import DTO.ViewOrder;
@@ -161,7 +162,16 @@ public class OrderController extends HttpServlet {
                 
                 session.setAttribute("tabId", 17);
                 request.getRequestDispatcher("/customer.jsp").forward(request, response);
+            }else if(path.endsWith("/orders/create")){
+                CartDAO cartDAO = new CartDAO();
+                ResultSet cartItems = cartDAO.getAllProductsInCart(acc.getAccountId());
+
+                request.setAttribute("cartItems", cartItems);
+
+                session.setAttribute("tabId", 18);
+                request.getRequestDispatcher("/customer.jsp").forward(request, response);
             }
+            
         } else {
             logger.log(Level.SEVERE, "Account is null in session.");
             request.setAttribute("error", "Account not found in session.");

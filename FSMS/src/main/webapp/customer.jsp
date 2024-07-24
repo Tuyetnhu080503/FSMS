@@ -6,6 +6,7 @@
     <c:when test="${sessionScope.tabId == 2}">
         <%@include file="./customer/login.jsp" %>
     </c:when>
+   
     <c:when test="${sessionScope.tabId == 3}">
         <%@include file="./customer/forgotPassword.jsp" %>
     </c:when>
@@ -50,6 +51,9 @@
     </c:when>
     <c:when test="${sessionScope.tabId == 17}">
         <%@include file="./customer/order/detailOrder.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 18}">
+        <%@include file="./customer/order/createOrder.jsp" %>
     </c:when>
 </c:choose>
 <%@include file="./general/customer/brand.jsp" %>	

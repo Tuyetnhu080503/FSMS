@@ -7,18 +7,7 @@
 
 
 <%
-    ProductDAO proDAO = new ProductDAO();
-    ResultSet rss = proDAO.getAlls();
-    List<Product> products = new ArrayList<>();
-
-    while (rss.next()) {
-        Product product = new Product();
-        product.setProductId(rss.getInt("ProductID"));
-        product.setName(rss.getString("Name"));
-        product.setPrice(rss.getLong("Price"));
-        product.setImage(rss.getString("Image"));
-        products.add(product);
-    }
+    List<Product> products = (List<Product>) session.getAttribute("products");
 
     int pageNumber = 1;
     int productsPerPage = 8;
@@ -59,7 +48,7 @@
                         <div class="view-systeam">
                             <ul>
                                 <li class="active"><i class="fa fa-th-large"></i></li>
-                                <li><a href="/products"><i class="fa fa-th-list"></i></a></li>
+                                <li><a href="/products/list2"><i class="fa fa-th-list"></i></a></li>
                             </ul>										
                         </div>
                         <!-- show-page end -->
@@ -67,10 +56,10 @@
                         <div class="shoort-by">
                             <label>Sort by</label>
                             <div class="short-select-option">
-                                <select>
-                                    <option value="">Position</option>
-                                    <option value="">Name</option>
-                                    <option value="">Price</option>
+                                <select id="sort-by" onchange="sortProducts()">
+                                    <option value="">Select Type</option>
+                                    <option value="Name">Name</option>
+                                    <option value="Price">Price</option>
                                 </select>												
                             </div>
                             <a title="Set Descending Direction" href="#"><i class="fa fa-long-arrow-up"></i></a>
@@ -79,12 +68,12 @@
                     </div>
                     <!-- product-sgorting end -->
                     <!-- all-product start -->
-                    <div class="row all-grid-product">
+                    <div id="all-products" class="row all-grid-product">
                         <!-- single-product-item start -->
-                        <% for (int idx = start; idx < end; idx++) { 
-                            Product product = products.get(idx);
+                        <% for (int idx = start; idx < end; idx++) {
+                                Product product = products.get(idx);
                         %>
-                       <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 product-item-e">
                             <div class="single-product-item">
                                 <div class="product-image">
                                     <a href="/products/detail?id=<%=product.getProductId()%>" title="">
@@ -128,7 +117,7 @@
                         <div class="view-systeam">
                             <ul>
                                 <li class="active"><i class="fa fa-th-large"></i></li>
-                                <li><a href="/products/list1"><i class="fa fa-th-list"></i></a></li>
+                                <li><a href="/products/list2"><i class="fa fa-th-list"></i></a></li>
                             </ul>										
                         </div>
                         <!-- view-systeam end -->	
@@ -136,26 +125,15 @@
                         <div class="pagination-bar">
                             <label>Page:</label>
                             <ul>
-                                <% for (int index = 1; index <= totalPages; index++) { %>
-                                    <li class="<%= (index == pageNumber) ? "active" : "" %>">
-                                        <a href="?page=<%=index%>"><%=index%></a>
-                                    </li>
+                                <% for (int index = 1; index <= totalPages; index++) {%>
+                                <li class="<%= (index == pageNumber) ? "active" : ""%>">
+                                    <a href="?page=<%=index%>"><%=index%></a>
+                                </li>
                                 <% } %>
                             </ul>										
                         </div>
                         <!-- show-page end -->
                         <!-- shoort-by start -->
-                        <div class="shoort-by">
-                            <label>Sort by</label>
-                            <div class="short-select-option">
-                                <select>
-                                    <option value="">Position</option>
-                                    <option value="">Name</option>
-                                    <option value="">Price</option>
-                                </select>												
-                            </div>
-                            <a title="Set Descending Direction" href="#"><i class="fa fa-long-arrow-up"></i></a>
-                        </div>
                         <!-- shoort-by end -->	
                     </div>
                     <!-- product-sgorting end -->							
@@ -167,19 +145,9 @@
                     <div class="single-sidebar shop-by-area">
                         <h2>Shop By</h2>
                         <!-- price-filter start -->
-                        <div class="price-filter">
-                            <ul>
-                                <li>
-                                    <span class="price-label">Price: <a href="#" class="remove-icon-btn">remove</a></span>
-                                    <span class="form-to-price">$88.00 - $666.99</span>
-                                </li>
-                            </ul>
-                            <div class="remove-all-price">
-                                <a href="#">Clear All</a>
-                            </div>
-                        </div>
+
                         <!-- price-filter end -->
-                        <!-- category-list-pro start -->
+                        <!-- category-list-pro start --> 
                         <div class="category-list-pro sidebar-list" >
                             <h3>Category</h3>
                             <ul>
@@ -187,23 +155,45 @@
                                     ResultSet r = catDAO.getQuantityProductInCategory();
                                     while (r.next()) {
                                 %>
-                                <li><a href="#"><%= r.getString("category_name")%></a>
+                                <li><a href="/products?id=<%=r.getString("CategoryID")%>"><%= r.getString("category_name")%></a>
                                     <span><%=r.getInt("quantity")%></span></li>
                                     <%}%>
                             </ul>
                         </div>
                         <!-- category-list-pro end -->
                         <!-- price-rang-filter start -->
-                        <div class="price-rang-filter sidebar-list">
-                            <h3>Price</h3>
-                            <div class="range-area">
-                                <div id="price-range" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false"><div class="ui-slider-range ui-widget-header ui-corner-all" style="left: 12.1212%; width: 39.3939%;"></div><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 12.1212%;"></a><a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 51.5152%;"></a></div>
-                                <p><input class="range_value_1" type="text" id="slidevalue"></p>
-                            </div>									
-                        </div>
+
 
                     </div>
                 </div>
             </div>	
         </div>	
 </section>
+
+<script>
+    <%
+        String sortBy = request.getParameter("sort-by");
+        if(sortBy!=null){
+            if(sortBy.equals("name")){
+            %>
+                document.getElementById("sort-by").value = "Name";
+            <%}
+            else{%>
+                document.getElementById("sort-by").value = "Price";
+            <%}
+        }
+    %>
+    function sortProducts() {
+        var sortBy = document.getElementById("sort-by").value;
+        var url = "/products";
+
+        if (sortBy === "Name") {
+            url += "?sort-by=name";
+        } else if (sortBy === "Price") {
+            url += "?sort-by=price";
+        }
+
+        window.location.href = url;
+    }
+</script>
+
