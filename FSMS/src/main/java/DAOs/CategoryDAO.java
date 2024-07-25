@@ -94,7 +94,7 @@ public class CategoryDAO {
         ResultSet rs = null;
         try {
             PreparedStatement ps = conn.prepareStatement("select * from Product p inner join Category c on p.CategoryID = c.CategoryID \n"
-                    + "where p.CategoryID = ?", ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    + "where p.CategoryID = ? and IsActive = 1", ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, catID);
             rs = ps.executeQuery();

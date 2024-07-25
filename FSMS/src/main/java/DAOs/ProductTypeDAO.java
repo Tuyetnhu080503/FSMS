@@ -68,4 +68,15 @@ public class ProductTypeDAO {
         }
         return rs;
     }
+    
+    public void updateQuantityProductType(int protypeID, int quantity) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE ProductType SET Quantity = ? Where ProductTypeID = ?");
+            ps.setInt(1, quantity);
+            ps.setInt(2, protypeID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductTypeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

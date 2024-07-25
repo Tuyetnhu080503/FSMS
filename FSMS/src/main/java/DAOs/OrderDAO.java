@@ -6,11 +6,13 @@ package DAOs;
 
 import DBConnection.DBConnection;
 import Models.Order;
+import Models.OrderItems;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -248,7 +250,7 @@ public class OrderDAO {
             ps.setInt(1, accID);
             rs = ps.executeQuery();
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
@@ -265,7 +267,7 @@ public class OrderDAO {
             ps.setInt(1, accID);
             rs = ps.executeQuery();
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
 
@@ -285,7 +287,7 @@ public class OrderDAO {
             ps.setInt(2, orderId);
             rs = ps.executeQuery();
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
 
@@ -312,7 +314,7 @@ public class OrderDAO {
             rs = ps.executeQuery();
 
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
@@ -341,7 +343,7 @@ public class OrderDAO {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return address;
     }
@@ -368,7 +370,7 @@ public class OrderDAO {
             rs = ps.executeQuery();
 
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
@@ -396,9 +398,65 @@ public class OrderDAO {
             
 
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
+    
+    public void addOrderCOD(Order order) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("insert into [Order] values(?,?,?,?,?,?,?,?)");
+            ps.setInt(1, order.getCustomerId());
+            ps.setString(2, order.getStatus());
+            ps.setLong(3, order.getTotalPrice());
+            ps.setTimestamp(4,order.getCreateAt() );
+            if(order.getVoucherId()!=0){
+               ps.setInt(5,order.getVoucherId());
+            }
+            else{
+               ps.setNull(5,java.sql.Types.INTEGER);
+            }
+            ps.setString(6, order.getPaymentMethod());
+            ps.setString(7, order.getPaymentId());
+            ps.setString(8, order.getDeliveryaddress());
+            ps.executeUpdate();
+ 
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public int getOrderIDByCustomerIDAndCreateAt(int cusID) {
+        int orderID = 0;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from [Order] where CustomerID = ?");
+            ps.setInt(1, cusID);
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next()){
+                orderID = rs.getInt("OrderID");
+            }
 
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return orderID;
+    }
+    
+    public void addOrderItems(OrderItems orderItem) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("insert into [OrderItems] values(?,?,?,?,?,?)");
+            ps.setInt(1, orderItem.getOrderId());
+            ps.setInt(2, orderItem.getProductId());
+            ps.setInt(3, orderItem.getProductTypeId());
+            ps.setInt(4,orderItem.getQuantity());
+            ps.setLong(5,orderItem.getUnitPrice());
+            ps.setLong(6, orderItem.getTotalPrice());
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

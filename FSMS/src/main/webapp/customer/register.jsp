@@ -19,7 +19,7 @@
 <section class="main-content-area">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-xl-3"></div>
+            <div class="col-lg-3  col-xl-3"></div>
             <div class="col-12 col-md-12 col-lg-9 col-xl-9">
                 <div class="myaccount-dashboard-area cart-page-main-area">
                     <div class="sec-heading-area">

@@ -44,6 +44,17 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.paymentId = paymentId;
     }
+    
+    public Order(int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId,String deliveryaddress) {
+        this.customerId = customerId;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.createAt = createAt;
+        this.voucherId = voucherId;
+        this.paymentMethod = paymentMethod;
+        this.paymentId = paymentId;
+        this.deliveryaddress = deliveryaddress;
+    }
 
     public String getLastname() {
         return lastname;

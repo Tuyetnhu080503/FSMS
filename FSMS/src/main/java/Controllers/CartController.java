@@ -57,13 +57,15 @@ public class CartController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("acc");
-        
+
         
         if (request.getParameter("addToCart") != null) {
+            
             // Set the response content type
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-
+            
+            
             // Retrieve form parameters
             int productID = Integer.parseInt(request.getParameter("productID"));
             int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -76,7 +78,11 @@ public class CartController extends HttpServlet {
             System.out.println("productTypeID: " + productTypeID);
 
             JSONObject jsonResponse = new JSONObject();
-
+            if (acc == null) {
+                jsonResponse.put("login", "fail");
+                response.getWriter().write(jsonResponse.toString());
+                return;
+            }
             CartDAO cartDAO = new CartDAO();
             boolean isExceed = false;
 
@@ -85,11 +91,14 @@ public class CartController extends HttpServlet {
 
                 if (isExceed) {
                     jsonResponse.put("status", "fail");
+                    jsonResponse.put("login", "success");
                 } else {
                     jsonResponse.put("status", "success");
+                    jsonResponse.put("login", "success");
                 }
             } else {
                 jsonResponse.put("status", "success");
+                jsonResponse.put("login", "success");
                 cartDAO.addProductToCart(acc.getAccountId(), productID, productTypeID, quantity);
             }
 
@@ -124,9 +133,7 @@ public class CartController extends HttpServlet {
             JSONArray cartItems = new JSONArray();
             int totalItems = 0;
             int totalPrice = 0;
-            
-            
-            
+
             try {
                 while (cart.next()) {
                     JSONObject item = new JSONObject();
@@ -139,24 +146,22 @@ public class CartController extends HttpServlet {
                     item.put("Price", cart.getInt("Price"));
                     item.put("CartQuantity", cart.getInt("CartQuantity"));
                     item.put("ProductTypeQuantity", cart.getInt("ProductTypeQuantity"));
-                    
+
                     totalItems++;
                     totalPrice += cart.getInt("Price") * cart.getInt("CartQuantity");
-                    
+
                     cartItems.put(item);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(CartController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-        
 
-        JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("items", cartItems);
-        jsonResponse.put("totalItems", totalItems);
-        jsonResponse.put("totalPrice", totalPrice);
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("items", cartItems);
+            jsonResponse.put("totalItems", totalItems);
+            jsonResponse.put("totalPrice", totalPrice);
 
-        response.getWriter().write(jsonResponse.toString());
+            response.getWriter().write(jsonResponse.toString());
         }
     }
 

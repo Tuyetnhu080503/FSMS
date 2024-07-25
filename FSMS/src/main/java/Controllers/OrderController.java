@@ -1,11 +1,16 @@
 package Controllers;
 
 import DAOs.CartDAO;
+import DAOs.EmployeeDAO;
 import Models.Account;
 import DAOs.OrderDAO;
+import DAOs.ProductTypeDAO;
+import DAOs.VoucherDAO;
 import DTO.ViewOrder;
 import DTO.ViewOrderIDs;
 import Models.Order;
+import Models.OrderItems;
+import Models.Voucher;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
@@ -17,6 +22,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
@@ -163,13 +172,21 @@ public class OrderController extends HttpServlet {
                 session.setAttribute("tabId", 17);
                 request.getRequestDispatcher("/customer.jsp").forward(request, response);
             }else if(path.endsWith("/orders/create")){
-                CartDAO cartDAO = new CartDAO();
-                ResultSet cartItems = cartDAO.getAllProductsInCart(acc.getAccountId());
-
-                request.setAttribute("cartItems", cartItems);
-
-                session.setAttribute("tabId", 18);
-                request.getRequestDispatcher("/customer.jsp").forward(request, response);
+                try {
+                    CartDAO cartDAO = new CartDAO();
+                    ResultSet cartItems = cartDAO.getAllProductsInCart(acc.getAccountId());
+                    
+                    VoucherDAO voDAO = new VoucherDAO();
+                    ResultSet voucherRs = voDAO.getAllVouchersActive();
+                    
+                    request.setAttribute("cartItems", cartItems);
+                    request.setAttribute("voucherRs", voucherRs);
+                    
+                    session.setAttribute("tabId", 18);
+                    request.getRequestDispatcher("/customer.jsp").forward(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             
         } else {
@@ -189,7 +206,64 @@ public class OrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+       
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("acc");
+        String path = request.getRequestURI();
+        
+        if(request.getParameter("totalFinal")!=null){
+            try {
+                int totalFinal = Integer.parseInt(request.getParameter("totalFinal"));
+                String address = request.getParameter("address");
+                String paymentMethod = request.getParameter("paymentMethod");
+                int voucherID = Integer.parseInt(request.getParameter("voucherID"));
+                int voucherQuantity = Integer.parseInt(request.getParameter("voucherQuantity"));
+                
+                EmployeeDAO emDAO = new EmployeeDAO();
+                
+            
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String formattedNow = now.format(formatter);
+                Timestamp currentTimestamp = Timestamp.valueOf(formattedNow);
+                System.out.println(currentTimestamp);
+                System.out.println(currentTimestamp);
+                
+                
+                int cusID = emDAO.getCustomerIDByAccountID(acc.getAccountId());
+                Order order = new Order(cusID,"Pending", totalFinal, currentTimestamp, voucherID, paymentMethod.equals("cod")?"A":"B", "", address );
+                
+                OrderDAO orDAO = new OrderDAO();
+                
+                orDAO.addOrderCOD(order);
+                
+                OrderDAO orrDAO = new OrderDAO();
+                int orderID = orrDAO.getOrderIDByCustomerIDAndCreateAt(cusID);
+                
+                CartDAO cartDAO = new CartDAO();
+                ResultSet cartItems = cartDAO.getAllProductsInCart(acc.getAccountId());
+                
+                
+                ProductTypeDAO proTypeDao = new ProductTypeDAO();
+                while(cartItems.next()){
+                    orDAO.addOrderItems(new OrderItems(orderID, cartItems.getInt("ProductID"),cartItems.getInt("ProductTypeID"),cartItems.getInt("CartQuantity"),cartItems.getInt("Price"),cartItems.getInt("CartQuantity") * cartItems.getInt("Price")));
+                    proTypeDao.updateQuantityProductType(cartItems.getInt("ProductTypeID"), cartItems.getInt("ProductTypeQuantity") - cartItems.getInt("CartQuantity"));
+                }
+                
+                cartDAO.deleteCart(cusID);
+                
+                VoucherDAO voDAO = new VoucherDAO();
+                if(voucherID!=0){
+                    voDAO.updateQuantity(voucherQuantity-1, voucherID);
+                }
+                
+                session.setAttribute("addOrder", "success");
+                
+                response.sendRedirect("/orders");
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**

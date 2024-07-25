@@ -24,15 +24,16 @@ public class OrderItems {
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
     }
-
-    public OrderItems(int orderItemsId, int orderId, int productId, int quantity, long unitPrice, long totalPrice) {
-        this.orderItemsId = orderItemsId;
+    
+    public OrderItems(int orderId, int productId, int productTypeId, int quantity, long unitPrice, long totalPrice) {
         this.orderId = orderId;
         this.productId = productId;
+        this.productTypeId = productTypeId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.totalPrice = totalPrice;
     }
+
 
     public int getProductTypeId() {
         return productTypeId;

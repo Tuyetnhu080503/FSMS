@@ -13,7 +13,84 @@
     ArrayList<ProductType> productTypes = (ArrayList<ProductType>) request.getAttribute("productTypes");
 %>
 
+<style>
 
+
+    .card {
+        border: none;
+        box-shadow: 5px 6px 6px 2px #e9ecef;
+        border-radius: 4px;
+    }
+
+    .dots{
+
+        height: 4px;
+        width: 4px;
+        margin-bottom: 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .badge{
+
+        padding: 7px;
+        padding-right: 9px;
+        padding-left: 16px;
+        box-shadow: 5px 6px 6px 2px #e9ecef;
+    }
+
+    .user-img{
+
+        margin-top: 4px;
+    }
+
+    .check-icon{
+
+        font-size: 17px;
+        color: #c3bfbf;
+        top: 1px;
+        position: relative;
+        margin-left: 3px;
+    }
+
+    .form-check-input{
+        margin-top: 6px;
+        margin-left: -24px !important;
+        cursor: pointer;
+    }
+
+
+    .form-check-input:focus{
+        box-shadow: none;
+    }
+
+
+    .icons i{
+
+        margin-left: 8px;
+    }
+    .reply{
+
+        margin-left: 12px;
+    }
+
+    .reply small{
+
+        color: #b7b4b4;
+
+    }
+
+    .small, small{
+        font-size: 16px;
+    }
+    .reply small:hover{
+
+        color: green;
+        cursor: pointer;
+
+    }
+</style>
 
 <section class="main-content-area">
     <div class="container">
@@ -109,6 +186,7 @@
                             </div>
                             <script>
                                 let maxQuantity = 1000;
+                                let minQuantity = 1;
                                 let productTypes = [];
                                 let colors = [];
                                 let sizes = [];
@@ -167,7 +245,16 @@
                                     let color = document.getElementById("product-color").value;
                                     let size = document.getElementById("product-size").value;
 
-
+                                    if (document.getElementById("product-quantity").value == 0) {
+                                        Swal.fire({
+                                            position: "center",
+                                            icon: "error",
+                                            title: "Product is out of stock!",
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        })
+                                        return;
+                                    }
                                     if (color === "" || size === "") {
                                         document.getElementById("valid-add-to-cart").style.display = "block";
                                     } else {
@@ -188,23 +275,32 @@
                                         }
 
                                         function checkValidAction(data) {
-                                            if(data.status == "success"){
+                                            if (data.login == "fail") {
                                                 Swal.fire({
-                                                position: "center",
-                                                icon: "success",
-                                                title: "Add To Cart Successful!",
-                                                showConfirmButton: false,
-                                                timer: 1000
-                                            })
+                                                    position: "center",
+                                                    icon: "error",
+                                                    title: "You must be login before add to cart!",
+                                                    showConfirmButton: false,
+                                                    timer: 2000
+                                                })
+                                                return;
                                             }
-                                            else{
+                                            if (data.status == "success") {
                                                 Swal.fire({
-                                                position: "center",
-                                                icon: "error",
-                                                title: "Exceed Product Quantity!",
-                                                showConfirmButton: false,
-                                                timer: 1000
-                                            })
+                                                    position: "center",
+                                                    icon: "success",
+                                                    title: "Add To Cart Successful!",
+                                                    showConfirmButton: false,
+                                                    timer: 1000
+                                                })
+                                            } else {
+                                                Swal.fire({
+                                                    position: "center",
+                                                    icon: "error",
+                                                    title: "Exceed Product Quantity!",
+                                                    showConfirmButton: false,
+                                                    timer: 1000
+                                                })
                                             }
                                             fetchCartItems()
                                         }
@@ -252,6 +348,7 @@
                                                 document.getElementById("quantity-available").textContent = productTypes[i][2] + " products available";
                                                 maxQuantity = productTypes[i][2]
                                             }
+
                                         }
                                     } else if (this.value == "") {
                                         maxQuantity = 1000
@@ -263,7 +360,7 @@
                                         document.getElementById("quantity-available").style.display = "none";
                                     }
                                 });
-
+                                
                                 document.getElementById("product-size").addEventListener("change", function () {
                                     if (document.getElementById("product-color").value != "" && this.value != "") {
                                         for (let i = 0; i < productTypes.length; i++) {
@@ -271,6 +368,15 @@
                                                 document.getElementById("quantity-available").style.display = "inline";
                                                 document.getElementById("quantity-available").textContent = productTypes[i][2] + " products available";
                                                 maxQuantity = productTypes[i][2]
+                                                if (productTypes[i][2] == 0) {
+                                                    document.getElementById("product-quantity").value = 0;
+                                                    minQuantity = 0;
+                                                }
+                                                else{
+                                                    document.getElementById("product-quantity").value = 1;
+                                                    minQuantity = 1;
+                                                }
+                                                console.log(productTypes[i][2])
                                             }
                                         }
                                     } else {
@@ -281,9 +387,9 @@
                                 document.getElementById("product-quantity").addEventListener("change", function () {
                                     var quantity = this.value;
                                     if (isNaN(Number(quantity))) {
-                                        this.value = 1;
+                                        this.value = minQuantity;
                                     } else if (quantity < 1) {
-                                        this.value = 1;
+                                        this.value = minQuantity;
                                     } else if (quantity > maxQuantity) {
                                         this.value = maxQuantity;
                                     }
@@ -321,124 +427,68 @@
                     <div class="product-more-info-tab">
                         <!-- Nav tabs -->
                         <ul class="more-info-tab nav nav-tabs">
-                            <li><a href="#proDescription" data-bs-toggle="tab" class="active">Product description</a></li>
-                            <li><a href="#proReview" data-bs-toggle="tab">reviews</a></li>
-                            <li><a href="#proTag" data-bs-toggle="tab">product tags</a></li>
+                            <li><a href="#proReview" data-bs-toggle="tab" class="active" >reviews</a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="product-tab-content tab-content jump">
-                            <div class="tab-pane active" id="proDescription">
-                                <div class="tab-description">
-                                    <h2>Details</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla. Donec a neque libero. Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget. Pellent  habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam erat mi, rutrum at sollicitudin rhoncus, ultricies posuere erat. Duis convallis, arcu nec Aliquam equat, purus felis vehicula felis, a dapibus enim lorem nec augue. Nunc facilisis sagittis ullamcorper. Proin lectus ipsum, gravida et mattis vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean eleifend laoreet congue. Vivamus adipiscing nisl ut dolor dignissim semper. Nulla luctus Males tincidunt. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Integer enim purus, posuere at ultricies eu, placerat a felis. Suspendisse aliquet urna pretium eros convallis interdum. Quisque in arcu id dui vulputate Mollis eget non. Aenean et nulla purus. Mauris vel tellus non nunc mattis lobortis. </p>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="proReview">
-                                <div class="tab-review-info">
-                                    <div class="review-author">
-                                        <p><a href="https://example.com/">Admin </a><label> Review by </label> <span> Shaddam</span></p>
-                                    </div>
-                                    <div class="review-rating">
-                                        <p>Quality </p>
-                                        <p>price</p>
-                                        <p>Value</p>
-                                    </div>
-                                    <div class="rev-post-time">
-                                        <p>Plazathemes <i>(Posted on 9/12/2014)</i></p>
-                                    </div>
-                                </div>
-                                <div class="tab-right-form-table">
-                                    <div class="tab-table">
-                                        <p>You're reviewing: Pellent  habitant </p>
-                                        <label>How do you rate this product? *</label>
-                                        <div class="table-responsive">
-                                            <table class="table-data-sheet">
-                                                <thead>
-                                                    <tr>
-                                                        <th> </th>
-                                                        <th>1 star</th>
-                                                        <th>2 star</th>
-                                                        <th>3 star</th>
-                                                        <th>4 star</th>
-                                                        <th>5 star</th>	
-                                                    </tr>														
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="first">
-                                                        <td class="left-align">Quality</td>
-                                                        <td>
-                                                            <input type="radio" value="Quality" name="qty_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Quality" name="qty_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Quality" name="qty_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Quality" name="qty_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Quality" name="qty_rate">
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="meddle">
-                                                        <td class="left-align">Price</td>
-                                                        <td>
-                                                            <input type="radio" value="Price" name="price_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Price" name="price_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Price" name="price_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Price" name="price_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Price" name="price_rate">
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="last">
-                                                        <td class="left-align">Value</td>
-                                                        <td>
-                                                            <input type="radio" value="Value" name="value_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Value" name="value_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Value" name="value_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Value" name="value_rate">
-                                                        </td>
-                                                        <td>
-                                                            <input type="radio" value="Value" name="value_rate">
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>															
+                            <div class="tab-pane active" id="proReview">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 mt-2">
+                                            <div class="card p-3">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="user d-flex flex-row align-items-center">
+                                                        <img src="https://i.imgur.com/hczKIze.jpg" width="50" class="user-img rounded-circle mr-2">
+                                                        <span><small style="margin-left: 20px" class="font-weight-bold text-primary">james_olesenn</small> 
+                                                        </span>
+                                                    </div>
+                                                    <small>2 days ago</small>
+                                                </div>
+                                                <div class="action d-flex  align-items-center">
+                                                    <div style="margin-left: 70px" class="rating-box">
+                                                        <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                        <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                    </div>
+                                                    <div style="margin-left: 10px " class="rating-box">
+                                                        | mau xanh, size X
+                                                    </div>
+
+                                                </div>
+                                                <small style="margin-left: 70px" class="font-weight-bold mt-2">Hmm, This poster looks cool</small>
+                                                <img style="margin-left: 70px" src="https://i.imgur.com/hczKIze.jpg" width="100">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <div class="card p-3">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="user d-flex flex-row align-items-center">
+                                                        <img src="https://i.imgur.com/hczKIze.jpg" width="50" class="user-img rounded-circle mr-2">
+                                                        <span><small style="margin-left: 20px" class="font-weight-bold text-primary">james_olesenn</small> 
+                                                        </span>
+                                                    </div>
+                                                    <small>2 days ago</small>
+                                                </div>
+                                                <div class="action d-flex  align-items-center">
+                                                    <div style="margin-left: 70px" class="rating-box">
+                                                        <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                        <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                    </div>
+                                                    <div style="margin-left: 10px " class="rating-box">
+                                                        | mau xanh, size X
+                                                    </div>
+
+                                                </div>
+                                                <small style="margin-left: 70px" class="font-weight-bold mt-2">Hmm, This poster looks cool</small>
+                                                <img style="margin-left: 70px" src="https://i.imgur.com/hczKIze.jpg" width="100">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="tab-form">
-                                        <div class="form-group">
-                                            <label>Nickname <sup>*</sup></label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Summary of Your Review <sup>*</sup></label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Review <sup>*</sup></label>
-                                            <textarea></textarea>
-                                        </div>
-                                        <div class="submit-review">
-                                            <a href="#" class="add-tag-btn">Submit Review</a>
-                                        </div>
-                                    </div>											
                                 </div>
                             </div>
                             <div class="tab-pane" id="proTag">
@@ -456,501 +506,6 @@
             </div>
             <!-- product description tab end -->
         </div>
-        <!-- single page product information end -->
-        <!-- related product start -->
-        <div class="related-product">
-            <div class="section-heading">
-                <h2><span>Related</span> Products</h2>
-            </div>	
-            <div class="product-carousel-5 owl-carousel">
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="sale-stiker product-sticker">
-                            <img src="img/product/sale1.png" alt="product sticker" />
-                        </div>											
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/1.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Pleasure</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$999.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/2.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Voluptas nulla</a></h2>
-                        <div class="product-price">
-                            <span class="old-price">$260.00</span>
-                            <span class="regular-price">$299.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/3.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Consequences</a></h2>
-                        <div class="product-price">
-                            <span class="old-price">$697.00</span>
-                            <span class="regular-price">$784.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="sale-stiker product-sticker">
-                            <img src="img/product/sale1.png" alt="product sticker" />
-                        </div>											
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/4.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Primis in faucibus</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$879.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/5.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Pleasure onally</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$698.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="sale-stiker product-sticker">
-                            <img src="img/product/sale1.png" alt="product sticker" />
-                        </div>											
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/6.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Occaecati ditate</a></h2>
-                        <div class="product-price">
-                            <span class="old-price">$400.00</span>
-                            <span class="regular-price">$350.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/7.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Nunc facilisis</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$687.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="sale-stiker product-sticker">
-                            <img src="img/product/sale1.png" alt="product sticker" />
-                        </div>											
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/8.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Cras neque metus</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$850.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-            </div>					
-        </div>
-        <!-- related product end -->
-        <!-- upsell product start -->
-        <div class="upsell-product">
-            <div class="p-0-15 section-heading">
-                <h2><span>upsell</span> Products</h2>
-            </div>				
-            <div class="product-carousel-6 owl-carousel">
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/9.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Proin lectus ipsum</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$850.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="sale-stiker product-sticker">
-                            <img src="img/product/sale1.png" alt="product sticker" />
-                        </div>											
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/10.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Proin lectus ipsum</a></h2>
-                        <div class="product-price">
-                            <span class="old-price">$900.00</span>
-                            <span class="regular-price">$850.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/11.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Accumsan elit</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$850.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/12.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Etiam gravida</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$500.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-                <!-- single-product-item start -->
-                <div class="single-product-item">
-                    <div class="product-image">
-                        <div class="sale-stiker product-sticker">
-                            <img src="img/product/sale1.png" alt="product sticker" />
-                        </div>											
-                        <div class="product-sticker">
-                            <img src="img/product/new1.png" alt="product sticker" />
-                        </div>			
-                        <a href="single-product.html" title=""><img src="img/product/home1/1.jpg" alt="product image" /></a>
-                        <div class="single-product-overlay">
-                            <div class="rating-box">
-                                <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="4 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                            </div>
-                            <div class="product-quick-view">
-                                <ul>
-                                    <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-copy"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-search"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-product-text">
-                        <h2><a class="product-title" href="single-product.html" title="">Quisque in arcu</a></h2>
-                        <div class="product-price">
-                            <span class="regular-price">$799.00</span>
-                        </div>
-                        <div class="pro-add-to-cart">
-                            <p><a href="#" title="Add to Cart">Add to Cart</a></p>
-                        </div>
-                    </div>
-                </div>
-                <!-- single-product-item end -->
-            </div>					
-        </div>
-        <!-- upsell product end -->
+
     </div>	
 </section>
