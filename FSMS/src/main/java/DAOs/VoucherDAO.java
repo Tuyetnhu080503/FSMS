@@ -185,5 +185,22 @@ public class VoucherDAO {
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }    
+    }
+    
+    public ResultSet getVoucherByIDs(int voucherID) {
+        ResultSet rs = null;
+        try {
+            String query = "SELECT * FROM [Voucher] WHERE VoucherID = ?";
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, voucherID);
+            rs = ps.executeQuery();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+    
+
+    
 }

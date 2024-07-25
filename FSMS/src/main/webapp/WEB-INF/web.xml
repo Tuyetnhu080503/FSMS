@@ -9,14 +9,14 @@
         </init-param>
         <init-param>
             <param-name>xpoweredBy</param-name>
-            <param-value>false</param-value> 
+            <param-value>false</param-value>
         </init-param>
-        <init-param> 
+        <init-param>
             <param-name>mappedfile</param-name>
             <param-value>false</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
-    </servlet> 
+    </servlet>
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>Controllers.LoginController</servlet-class>
@@ -54,12 +54,12 @@
         <servlet-class>Controllers.ProductController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>VoucherController</servlet-name>
-        <servlet-class>Controllers.VoucherController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>CartController</servlet-name>
         <servlet-class>Controllers.CartController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VoucherController</servlet-name>
+        <servlet-class>Controllers.VoucherController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -99,12 +99,12 @@
         <url-pattern>/products/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>VoucherController</servlet-name>
-        <url-pattern>/vouchers</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>CartController</servlet-name>
         <url-pattern>/cart/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VoucherController</servlet-name>
+        <url-pattern>/voucher/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

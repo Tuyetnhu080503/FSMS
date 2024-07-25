@@ -41,7 +41,7 @@
         <%@include file="./customer/customerOrderHistory.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 14}">
-        <%@include file="./customer/voucherList.jsp" %>
+        <%@include file="./customer/voucher/detailVoucher.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 15}">
         <%@include file="./customer/cart/viewCart.jsp" %>
