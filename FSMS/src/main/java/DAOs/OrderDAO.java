@@ -405,7 +405,7 @@ public class OrderDAO {
     
     public void addOrderCOD(Order order) {
         try {
-            PreparedStatement ps = conn.prepareStatement("insert into [Order] values(?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = conn.prepareStatement("insert into [Order] values(?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, order.getCustomerId());
             ps.setString(2, order.getStatus());
             ps.setLong(3, order.getTotalPrice());
@@ -419,6 +419,8 @@ public class OrderDAO {
             ps.setString(6, order.getPaymentMethod());
             ps.setString(7, order.getPaymentId());
             ps.setString(8, order.getDeliveryaddress());
+            ps.setString(9, order.getFullName());
+            ps.setString(10, order.getPhonenumber());
             ps.executeUpdate();
  
         } catch (SQLException ex) {

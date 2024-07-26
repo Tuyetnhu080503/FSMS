@@ -1,3 +1,4 @@
+<%@page import="Models.Account"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
@@ -248,9 +249,11 @@
         border: 3px solid blue !important;
     }
 
-
+    .login-danger{
+        color: red;
+    }
 </style>
-
+<%Account accs = (Account)session.getAttribute("acc"); %>
 <section style="background-color: #eee;">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -259,12 +262,26 @@
                     <h1 style="font-size: 25px">Checkout</h1>
 
                     <div class="order-item">
-                        <span class="lead fw-normal">Address</span>
+
                         <div class="form-group local-forms">
-                            <textarea style="margin-top: 10px" id="address" name="address" class="form-control"
-                                      rows="2" placeholder="Enter Address"></textarea>
+                            <label>Full Name <span class="login-danger">*</span></label>
+                            <input id="fullname" name="fullname" class="form-control" type="text"
+                                   placeholder="Enter Full Name" value="<%=accs.getFirstName() + " " + accs.getLastName() %>">
                             <div class="message"></div>
                         </div>
+                        <div class="form-group local-forms">
+                            <label>Phone <span class="login-danger">*</span></label>
+                            <input id="phone" name="phone" class="form-control" type="text"
+                                   placeholder="Enter Phone" value="<%=accs.getPhoneNumber()%>">
+                            <div class="message"></div>
+                        </div>
+                        <div class="form-group local-forms">
+                            <label>Address<span class="login-danger">*</span></label>
+                            <textarea style="margin-top: 10px" id="address" name="address" class="form-control"
+                                      rows="2" placeholder="Enter Address"><%=accs.getAddress()%></textarea>
+                            <div class="message"></div>
+                        </div>
+
                     </div>
 
                     <div class="order-item">
@@ -289,7 +306,7 @@
                                         totalPrice += cartItemss.getInt("CartQuantity") * cartItemss.getInt("Price");
                                 %>
                                 <tr class="carttr_1">
-                                  
+
                                     <td>
                                         <div class="cartpage-image">
                                             <a href="/products/detail?id=<%=cartItemss.getString("ProductID")%>"><img src="${pageContext.request.contextPath}/assets/images/product/<%=cartItemss.getString("Image")%>" alt="" /></a>
@@ -429,7 +446,10 @@
         message: ".message", // Selector class
         invalid: "invalid", // Class name for invalid input
         rules: [
+            Validator.isRequire("#fullname", "Full Name is required"),
             Validator.isRequire("#address", "Address is required"),
+            Validator.isRequire("#phone", "Phone is required"),
+            Validator.isPhone("#phone", "Phone is not valid format"),
         ]
     });
 </script>

@@ -215,6 +215,8 @@ public class OrderController extends HttpServlet {
             try {
                 int totalFinal = Integer.parseInt(request.getParameter("totalFinal"));
                 String address = request.getParameter("address");
+                String fullname = request.getParameter("fullname");
+                String phone = request.getParameter("phone");
                 String paymentMethod = request.getParameter("paymentMethod");
                 int voucherID = Integer.parseInt(request.getParameter("voucherID"));
                 int voucherQuantity = Integer.parseInt(request.getParameter("voucherQuantity"));
@@ -231,7 +233,7 @@ public class OrderController extends HttpServlet {
                 
                 
                 int cusID = emDAO.getCustomerIDByAccountID(acc.getAccountId());
-                Order order = new Order(cusID,"Pending", totalFinal, currentTimestamp, voucherID, paymentMethod.equals("cod")?"A":"B", "", address );
+                Order order = new Order(cusID,"Pending", totalFinal, currentTimestamp, voucherID, paymentMethod.equals("cod")?"A":"B", "", phone,address,fullname );
                 
                 OrderDAO orDAO = new OrderDAO();
                 

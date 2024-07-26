@@ -19,6 +19,20 @@ public class Order {
     private String lastname;
     private String phonenumber;
     private String deliveryaddress;
+    private String fullName;
+
+    public Order(int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId, String phonenumber, String deliveryaddress, String fullName) {
+        this.customerId = customerId;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.createAt = createAt;
+        this.voucherId = voucherId;
+        this.paymentMethod = paymentMethod;
+        this.paymentId = paymentId;
+        this.phonenumber = phonenumber;
+        this.deliveryaddress = deliveryaddress;
+        this.fullName = fullName;
+    }
 
     public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress) {
         this.orderId = orderId;
@@ -31,6 +45,22 @@ public class Order {
     }
 
     public Order() {
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
     
     
