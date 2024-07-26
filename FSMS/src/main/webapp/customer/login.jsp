@@ -17,8 +17,7 @@
                                                 </div>
                                                 <div class="method-right col-12 col-md-6">
                                                     <h2>Login</h2>
-                                                    <a style="display: block;margin-bottom: 10px" id="loginGoogle" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login&response_type=code&client_id=457078457719-toc7bkb07iv1f0agnf4otfeusnegdhev.apps.googleusercontent.com&approval_prompt=force" class="btn btn-primary btn-block"><i style="margin-right:15px;font-size: 18px;" class="fab fa-google-plus-g"></i>Login With Google</a>
-                                                    <label>Already registered?</label> <a href="/account/register" style="color: #00A0DC; text-decoration: underline">Register now!</a>
+
                                                     <form id="login" action="/login" method="post">
                                                         <div class="form-group">
                                                             <label>Username <sup>*</sup></label>
@@ -31,13 +30,21 @@
                                                             <div class="message"></div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <p style="color:red"><%=request.getAttribute("failLogin")!=null?request.getAttribute("failLogin"):""%></p>
+                                                            <p style="color:red"><%=request.getAttribute("failLogin") != null ? request.getAttribute("failLogin") : ""%></p>
                                                         </div>
-                                                        <div class="block-button-right">
-                                                            <a href="/account/forgot">Forgot your pasword?</a>
-                                                            <input type="hidden" name="login" value="login"> 
-                                                            <button class="btn btn-primary" type="submit">Login</button>
+                                                        <div class="block-button-right" style="display: flex;justify-content: space-between">
+                                                            <div style="">
+                                                                <label>Already registered?</label>
+                                                                <a href="/account/register" style="color: #00A0DC; text-decoration: underline;">Register now!</a>
+                                                            </div>
+                                                            <div style="display: flex; flex-direction: column">
+                                                                <button class="btn btn-primary" type="submit">Login</button>
+                                                                <a href="/account/forgot">Forgot your pasword?</a>
+                                                                <input type="hidden" name="login" value="login"> 
+                                                            </div>
+
                                                         </div>
+                                                        <a style="display: block;margin-bottom: 10px;margin-top: 20px" id="loginGoogle" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login&response_type=code&client_id=457078457719-toc7bkb07iv1f0agnf4otfeusnegdhev.apps.googleusercontent.com&approval_prompt=force" class="btn btn-primary btn-block"><i style="margin-right:15px;font-size: 18px;" class="fab fa-google-plus-g"></i>Login With Google</a>
                                                     </form>
                                                 </div>
                                             </div>
@@ -70,33 +77,33 @@
     <%
         String resetOTP = (String) session.getAttribute("resetOTP");
         if (resetOTP != null) {
-            
+
     %>
     Swal.fire({
         icon: "error",
         title: "Your account has been locked due to entering the wrong OTP code too many times!",
         showConfirmButton: true,
     });
-     
+
     <% }
         session.removeAttribute("resetOTP");
     %>
 </script>
 
-    <script>
-        <%
-            String successUpdateNewPassword = (String) session.getAttribute("successUpdateNewPassword");
-            if (successUpdateNewPassword != null) {
+<script>
+    <%
+        String successUpdateNewPassword = (String) session.getAttribute("successUpdateNewPassword");
+        if (successUpdateNewPassword != null) {
 
-        %>
-        Swal.fire({
-            icon: "success",
-            title: "Reset Password Sucessfully!",
-            showConfirmButton: false,
-            timer: 2000
-        });
+    %>
+    Swal.fire({
+        icon: "success",
+        title: "Reset Password Sucessfully!",
+        showConfirmButton: false,
+        timer: 2000
+    });
 
-        <% }
-            session.removeAttribute("successUpdateNewPassword");
-        %>
-    </script>
+    <% }
+        session.removeAttribute("successUpdateNewPassword");
+    %>
+</script>

@@ -75,4 +75,19 @@ public class CommentDAO {
         }
         return star;
     }
+    
+    public boolean isComment(int orderID) {
+        boolean isComment = false;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from OrderItems ot inner join Comment c on ot.OrderItemsID = c.OrderItemID where OrderID = ?");
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                isComment = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return isComment;
+    }
 }
