@@ -112,6 +112,9 @@
         <li class="nav-item">
             <a class="nav-link" id="return-tab" data-toggle="tab" href="#return" role="tab" aria-controls="return" aria-selected="false">Returns</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="cancel-tab" data-toggle="tab" href="#cancel" role="tab" aria-controls="cancel" aria-selected="false">Cancel</a>
+        </li>
     </ul>
     <div class="tab-content" id="orderStatusTabContent">
         <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
@@ -139,7 +142,6 @@
                             </div>
                         </div>
                         <%}%>
-
                         <%
                     }%>
                     </div>
@@ -149,6 +151,7 @@
                         </div>
                     </div>
                     <div style="display: flex;justify-content: end">
+                        <a class="cancel-order" href="/orders/cancel?id=<%=orderID.getId()%>"><button  style="margin-right: 20px" class="mb-2 mr-2 btn-icon btn btn-danger"><i class="feather-edit-3"></i>Cancel</button></a>
                         <a href="/orders/detail?id=<%=orderID.getId()%>"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
                     </div>
                 </div>
@@ -389,6 +392,60 @@
                 %>
             </div>
         </div>
+        <div class="tab-pane fade" id="cancel" role="tabpanel" aria-labelledby="cancel-tab">
+            <div class="order-list">
+                <!-- Render return orders here -->
+                <%
+                    boolean isHaveOrderCancel = false;
+                    for (ViewOrderIDs orderID : orderIDList) {
+                        if (orderID.getStatus().trim().equals("Cancel")) {
+                            isHaveOrderCancel = true ;
+                %>
+                <div class="order-item">
+                    <div class="product-list">
+                        <%  
+                            for (ViewOrder order : orderList) {
+                                if (orderID.getId()== order.getId()) {
+                        %>
+                        <div class="product-item">
+                            <img src="${pageContext.request.contextPath}/assets/images/product/<%=order.getImage() %>" alt="Product Image">
+                            <div class="product-details">
+                                <p><%=order.getName()%></p>
+                                <p>Size: <%=order.getSize()%></p>
+                                <p>Color: <%=order.getColor()%></p>
+                                <p>Quantity: <%=order.getQuantity() %></p>
+                                <p>Price: <%=order.getUnitPrice() %></p>
+                            </div>
+                        </div>
+                        <%}%>
+
+                        <%
+                    }%>
+                    </div>
+                    <div class="order-footer">
+                        <div class="total-price">
+                            <strong>Total Price: <span style="color:#ee4d2d"><%=orderID.getTotalPrice()%>vnd</span></strong>
+                        </div>
+                    </div>
+                    <div style="display: flex;justify-content: end">
+                        <a href="/orders/detail?id=<%=orderID.getId()%>"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
+                    </div>
+                </div>
+                <%
+                        }
+                    }
+                %> 
+                <%
+                    if(isHaveOrderCancel==false){
+                    %>
+                    <h2>
+                        No orders yet
+                    </h2>
+                    <%
+                    }
+                %>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -412,4 +469,25 @@
     <% }
         session.removeAttribute("addOrder");
     %>
+        
+        
+    document.querySelectorAll("a.cancel-order").forEach(function(element) {
+        element.addEventListener("click", function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Are you sure to cancel the order?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, cancel it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = element.href;
+                }
+            });
+        });
+});
+
 </script>

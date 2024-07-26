@@ -152,12 +152,12 @@
                                 currentStatus = order.getString("Status");
                                 pendingTime = order.getTimestamp("Createat").toLocalDateTime().format(formatter);
                             }
-                            
+
                         %>
                         <%if (currentStatus.equals("Pending")) {%>
 
                         <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
-                            
+
                             <span class="d-flex justify-content-center align-items-center big-dot dot"><i class="fa fa-check text-white"></i></span>
                             <hr class="flex-fill"><span class="dot"></span>
                             <hr class="flex-fill"><span class="dot"></span>
@@ -176,9 +176,9 @@
                         <%} else if (currentStatus.equals("Processing")) {
                             orderStatus.next();
                             String processingTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
-                            
+
                         %>
-                            
+
 
                         <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                             <span class="dot"></span>
@@ -186,7 +186,7 @@
                             <hr class="flex-fill"><span class="dot"></span>
                             <hr class="flex-fill"><span
                                 class="dot">
-                                </span>
+                            </span>
                         </div>
 
                         <div class="d-flex flex-row justify-content-between align-items-center">
@@ -203,12 +203,11 @@
                             String status = orderStatus.getString("Status");
                             String processingTime = "";
                             String deliveringTime = "";
-                            if(status.equals("Processing")){
+                            if (status.equals("Processing")) {
                                 processingTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
                                 orderStatus.next();
                                 deliveringTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
-                            }
-                            else{
+                            } else {
                                 deliveringTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
                                 orderStatus.next();
                                 processingTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
@@ -220,7 +219,7 @@
                             <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot"><i class="fa fa-check text-white"></i></span>
                             <hr class="flex-fill"><span
                                 class=" dot">
-                                </span>
+                            </span>
                         </div>
 
                         <div class="d-flex flex-row justify-content-between align-items-center">
@@ -236,14 +235,12 @@
                             String processingTime = "";
                             String deliveringTime = "";
                             String deliveredTime = "";
-                            while(orderStatus.next()){
-                                if(orderStatus.getString("Status").equals("Processing")){
+                            while (orderStatus.next()) {
+                                if (orderStatus.getString("Status").equals("Processing")) {
                                     processingTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
-                                }
-                                else if(orderStatus.getString("Status").equals("Delivering")){
+                                } else if (orderStatus.getString("Status").equals("Delivering")) {
                                     deliveringTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
-                                }
-                                else{
+                                } else {
                                     deliveredTime = orderStatus.getTimestamp("Time").toLocalDateTime().format(formatter);
                                 }
                             }
@@ -260,14 +257,16 @@
                         <div class="d-flex flex-row justify-content-between align-items-center">
                             <div class="d-flex flex-column align-items-start"><span><%=pendingTime%></span><span>Pending</span>
                             </div>
-                            <div class="d-flex flex-column justify-content-center"><span><%=processingTime %></span><span>Processing
+                            <div class="d-flex flex-column justify-content-center"><span><%=processingTime%></span><span>Processing
                                 </span></div>
-                            <div class="d-flex flex-column justify-content-center align-items-center"><span><%=deliveringTime %></span><span>Delivering</span></div>
-                            <div class="d-flex flex-column align-items-center"><span><%=deliveredTime %></span><span>Delivered</span></div>
+                            <div class="d-flex flex-column justify-content-center align-items-center"><span><%=deliveringTime%></span><span>Delivering</span></div>
+                            <div class="d-flex flex-column align-items-center"><span><%=deliveredTime%></span><span>Delivered</span></div>
                         </div>
 
                         <%} else if (currentStatus.equals("Returns")) {%>
-                            <span style="color: red !important;font-size: 20px" class="text-muted small">The order has been returned</span>
+                        <span style="color: red !important;font-size: 20px" class="text-muted small">The order has been returned</span>
+                        <%} else{%>
+                        <span style="color: red !important;font-size: 20px" class="text-muted small">The order has been canceled</span>
                         <%}%>
 
                     </div>
@@ -276,10 +275,14 @@
                 <div class="order-item">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex flex-column">
-                            <span class="lead fw-normal">Address</span>
-                            <%                                String address = (String) request.getAttribute("address");
-                            %>
-                            <span class="text-muted small"><%=address%></span>
+                            <% ResultSet rsInfoCus = (ResultSet)request.getAttribute("rsInfoCus"); rsInfoCus.next(); %>
+                            <span class="lead fw-normal">Full Name</span>
+                            <span class="text-muted small"><%=rsInfoCus.getString("FullName") %></span>
+                            <span style="margin-top: 20px" class="lead fw-normal">Phone</span>
+                            <span class="text-muted small"><%=rsInfoCus.getString("Phone") %></span>
+                            <span style="margin-top: 20px" class="lead fw-normal">Address</span>
+                            <span class="text-muted small"><%=rsInfoCus.getString("Address") %></span>
+
                         </div>
                     </div>
                 </div>

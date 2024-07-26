@@ -133,7 +133,7 @@ public class OrderController extends HttpServlet {
 
                 ResultSet rsoderIDInformation = orDAO.getOrderByID(acc.getAccountId(), id);
                 
-                String address = orDAO.getAddress(acc.getAccountId(), id);
+                ResultSet rsInfoCus = orDAO.getInforCus(acc.getAccountId(), id);
                 
                 int voucher = 0;
 
@@ -164,7 +164,7 @@ public class OrderController extends HttpServlet {
 
                 request.setAttribute("rsoderIDInformation", rsoderIDInformation);
                 request.setAttribute("voucher", voucher);
-                request.setAttribute("address", address);
+                request.setAttribute("rsInfoCus", rsInfoCus);
                 
                 request.setAttribute("order", order);
                 request.setAttribute("orderStatus", orderStatus);
@@ -187,6 +187,21 @@ public class OrderController extends HttpServlet {
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+            else if(path.endsWith("/orders/cancel")){
+                int id = Integer.parseInt(request.getParameter("id"));
+                
+                
+                OrderDAO orDAO = null;
+                try {
+                    orDAO = new OrderDAO();
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                orDAO.cancelOrder(id);
+                
+                response.sendRedirect("/orders");
             }
             
         } else {
@@ -228,9 +243,6 @@ public class OrderController extends HttpServlet {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String formattedNow = now.format(formatter);
                 Timestamp currentTimestamp = Timestamp.valueOf(formattedNow);
-                System.out.println(currentTimestamp);
-                System.out.println(currentTimestamp);
-                
                 
                 int cusID = emDAO.getCustomerIDByAccountID(acc.getAccountId());
                 Order order = new Order(cusID,"Pending", totalFinal, currentTimestamp, voucherID, paymentMethod.equals("cod")?"A":"B", "", phone,address,fullname );

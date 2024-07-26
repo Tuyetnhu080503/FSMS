@@ -319,8 +319,8 @@ public class OrderDAO {
         return rs;
     }
 
-    public String getAddress(int accID, int orderId) {
-        String address = "";
+    public ResultSet getInforCus(int accID, int orderId) {
+        ResultSet rs = null;
         try {
             int cusID = 0;
             PreparedStatement pss = conn.prepareStatement("select c.CustomerID from Account a inner join CustomerProfile c on a.AccountID = c.AccountID\n"
@@ -337,15 +337,12 @@ public class OrderDAO {
                     ResultSet.CONCUR_READ_ONLY);
             ps.setInt(1, orderId);
             ps.setInt(2, cusID);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                address = rs.getString("Address");
-            }
+            rs = ps.executeQuery();
 
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return address;
+        return rs;
     }
 
     public ResultSet getAllStatus(int accID, int orderId) {
@@ -461,4 +458,17 @@ public class OrderDAO {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void cancelOrder(int id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE [Order] SET [Status] = 'Cancel' Where OrderID = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
 }
