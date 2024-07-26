@@ -244,6 +244,10 @@
         border: 2px solid red;
     }
 
+    .clicking {
+        border: 3px solid blue !important;
+    }
+
 
 </style>
 
@@ -264,27 +268,67 @@
                     </div>
 
                     <div class="order-item">
-                        <div class="product-list">
-                            <%
-                                ResultSet cartItemss = (ResultSet) request.getAttribute("cartItems");
-                                ResultSet voucherRs = (ResultSet) request.getAttribute("voucherRs");
-                                int totalPrice = 0;
-                                while (cartItemss.next()) {
-                                    totalPrice += cartItemss.getInt("CartQuantity") * cartItemss.getInt("Price");
-                            %>
-                            <div class="product-item">
-                                <img src="${pageContext.request.contextPath}/assets/images/product/<%=cartItemss.getString("Image")%>" alt="Product Image">
-                                <div class="product-details">
-                                    <p><%=cartItemss.getString("Name")%></p>
-                                    <p>Size: <%=cartItemss.getString("Size")%></p>
-                                    <p>Color: <%=cartItemss.getString("Color")%></p>
-                                    <p>Quantity: <%=cartItemss.getString("CartQuantity")%></p>
-                                    <p>Price:<%=cartItemss.getString("Price")%></p>
-                                    <p>SubPrice:<%=cartItemss.getInt("Price") * cartItemss.getInt("CartQuantity")%></p>
-                                </div>
-                            </div>
-                            <%}%>
-                        </div>
+                        <table class="table cart-table">
+                            <thead>
+                                <tr>
+                                    <th class="width-2">Images</th>
+                                    <th class="width-3">Product Name</th>
+                                    <th class="width-2">Color</th>
+                                    <th class="width-2">Size</th>
+                                    <th class="width-6">Unit Price</th>	
+                                    <th class="width-7">Quantity</th>	
+                                    <th class="width-8">Subtotal</th>	
+                                </tr>														
+                            </thead>
+                            <tbody>
+                                <%
+                                    ResultSet cartItemss = (ResultSet) request.getAttribute("cartItems");
+                                    ResultSet voucherRs = (ResultSet) request.getAttribute("voucherRs");
+                                    int totalPrice = 0;
+                                    while (cartItemss.next()) {
+                                        totalPrice += cartItemss.getInt("CartQuantity") * cartItemss.getInt("Price");
+                                %>
+                                <tr class="carttr_1">
+                                  
+                                    <td>
+                                        <div class="cartpage-image">
+                                            <a href="/products/detail?id=<%=cartItemss.getString("ProductID")%>"><img src="${pageContext.request.contextPath}/assets/images/product/<%=cartItemss.getString("Image")%>" alt="" /></a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cartpage-pro-dec">
+                                            <p><a href="/products/detail?id=<%=cartItemss.getString("ProductID")%>"><%=cartItemss.getString("Name")%></a></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cartpage-pro-dec">
+                                            <p><%=cartItemss.getString("Color")%></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cartpage-pro-dec">
+                                            <p><%=cartItemss.getString("Size")%></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="cart-pro-price">
+                                            <p><%=cartItemss.getInt("Price")%>vnd</p>
+                                            <p style="display: none" id="price-<%=cartItemss.getInt("ProductID") + "-" + cartItemss.getInt("ProductTypeID")%>"><%=cartItemss.getInt("Price")%></p>
+                                        </div>											
+                                    </td>
+                                    <td>
+                                        <p><%=cartItemss.getInt("CartQuantity")%></p>
+                                    </td>
+                                    <td>
+                                        <div class="cart-pro-price">
+                                            <p id="subprice-<%=cartItemss.getInt("ProductID") + "-" + cartItemss.getInt("ProductTypeID")%>" class="subprice"><%=cartItemss.getInt("CartQuantity") * cartItemss.getInt("Price")%>vnd</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <%}%>
+                            </tbody>									
+                        </table>
+
 
                         <div class="order-footer">
                             <div class="total-price">
@@ -296,7 +340,8 @@
                     <div class="order-item">
                         <div style="display: flex;justify-content: space-between">
                             <span class="lead fw-normal">Voucher</span>
-                            <span style="font-size: 16px;color: #05a!important" class="lead fw-normal btn voucher-button">Choose Voucher</span>
+
+                            <span style="font-size: 16px;color: #05a!important" class="lead fw-normal btn voucher-button"><span id="voucher-click" style="color:red;margin-right: 20px;font-size: 20px;font-weight: bold"></span>Choose Voucher</span>
                         </div>
                         <!-- Modal -->
                         <div class="modal fade" id="voucherModal" tabindex="-1" role="dialog" aria-labelledby="voucherModalLabel" aria-hidden="true">
@@ -311,8 +356,8 @@
                                     <div class="modal-body">
                                         <div class="voucher-list" style="display: flex;align-items: center;flex-direction: column">
                                             <!-- Voucher items will be added here dynamically -->
-                                            <%while(voucherRs.next()){%>
-                                            <div class="card <%=voucherRs.getInt("MinimumPrice") <= totalPrice ? "valid-voucher":"invalid-voucher" %> " data-voucher-id="<%=voucherRs.getInt("VoucherID")%>" data-voucher-amount="<%=voucherRs.getInt("DiscountAmount")%>" data-voucher-percent="<%=voucherRs.getInt("DiscountPercentage") == 0? 0:voucherRs.getInt("DiscountPercentage")%>" data-total-price="<%=totalPrice %>" data-quantity="<%=voucherRs.getInt("Quantity")%>">
+                                            <%while (voucherRs.next()) {%>
+                                            <div class="card <%=voucherRs.getInt("MinimumPrice") <= totalPrice ? "valid-voucher" : "invalid-voucher"%> " data-voucher-id="<%=voucherRs.getInt("VoucherID")%>" data-voucher-amount="<%=voucherRs.getInt("DiscountAmount")%>" data-voucher-percent="<%=voucherRs.getInt("DiscountPercentage") == 0 ? 0 : voucherRs.getInt("DiscountPercentage")%>" data-total-price="<%=totalPrice%>" data-quantity="<%=voucherRs.getInt("Quantity")%>">
                                                 <div class="main">
                                                     <div class="co-img">
                                                         <a href="/voucher?id=<%=voucherRs.getInt("VoucherID")%>"><img src="${pageContext.request.contextPath}/assets/images/voucher/voucher.png" alt=""/></a>
@@ -321,8 +366,8 @@
                                                     <div class="content">
                                                         <h2 style="font-size: 15px">Maximum discount <%=voucherRs.getInt("DiscountAmount")%></h2>
                                                         <p style="font-size: 15px">Minimum order <%=voucherRs.getInt("MinimumPrice")%></p>
-                                                        
-                                                        <h1 style="font-size: 20px"><%=voucherRs.getInt("DiscountPercentage") == 0? "":voucherRs.getInt("DiscountPercentage")+ "%" %> <span style="font-size: 15px"><%=voucherRs.getInt("DiscountPercentage") == 0? "":"Coupon"%></span></h1>
+
+                                                        <h1 style="font-size: 20px"><%=voucherRs.getInt("DiscountPercentage") == 0 ? "" : voucherRs.getInt("DiscountPercentage") + "%"%> <span style="font-size: 15px"><%=voucherRs.getInt("DiscountPercentage") == 0 ? "" : "Coupon"%></span></h1>
                                                         <p style="font-size: 15px">Valid till <%=voucherRs.getDate("ExpiryDate")%></p>
                                                     </div>
                                                 </div>
@@ -361,7 +406,7 @@
                             <div class="total-price"><strong>Voucher: <span id="voucher-dec" style="color:#ee4d2d">0vnd</span></strong></div>
                             <div class="total-price"><strong>Total: <span id="total-f" style="color:#ee4d2d"><%=totalPrice%>vnd</span></strong></div>
                             <div class="total-price"><strong>Shipping Method: <span style="color:#ee4d2d">Cash on Delivery</span></strong></div>
-                            
+
                             <div>
                                 <button style="background: #ea7127;border-color:#ea7127;margin-top: 20px" type="submit" class="btn btn-primary">Checkout</button>
                             </div>
@@ -401,46 +446,57 @@
 
         // Handle voucher selection
         $('.voucher-list').on('click', '.card.valid-voucher', function () {
+
+
+            const cards = document.querySelectorAll('.card.valid-voucher');
+            cards.forEach(card => {
+                card.classList.remove('clicking');
+            });
+
+            this.classList.add('clicking');
+
+
             var voucherId = $(this).data('voucher-id');
             var voucherAmount = $(this).data('voucher-amount');
             var voucherPercent = $(this).data('voucher-percent');
             var totalOrder = $(this).data('total-price');
             var quantity = $(this).data('quantity');
             // Implement the logic to apply the voucher here, e.g., update the total price
-            
+
             console.log(voucherId)
             console.log(voucherAmount)
             console.log(voucherPercent)
             console.log(totalOrder)
             console.log(quantity)
-            
-            if(voucherPercent !=0){
-                if(((voucherAmount/100)*totalOrder) > voucherAmount ){
+
+            if (voucherPercent != 0) {
+                if (((voucherAmount / 100) * totalOrder) > voucherAmount) {
                     // voucherAmount
-                    document.getElementById("voucher-dec").textContent = "-" +voucherAmount + "vnd";
-                    document.getElementById("total-f").textContent =  (totalOrder - voucherAmount)  + "vnd";
+                    document.getElementById("voucher-dec").textContent = "-" + voucherAmount + "vnd";
+                    document.getElementById("total-f").textContent = (totalOrder - voucherAmount) + "vnd";
                     document.getElementById("voucherID").value = voucherId;
-                    document.getElementById("total-final").value =(totalOrder - voucherAmount) ;
+                    document.getElementById("total-final").value = (totalOrder - voucherAmount);
                     document.getElementById("voucherQuantity").value = quantity;
-                }
-                else{
+                    document.getElementById("voucher-click").textContent = "-" + voucherAmount + "vnd";
+                } else {
                     //(voucherAmount/100)*totalOrder
-                    document.getElementById("voucher-dec").textContent = "-" +(voucherAmount/100)*totalOrder + "vnd";
-                    document.getElementById("total-f").textContent =  (totalOrder - (voucherAmount/100)*totalOrder)  + "vnd";
+                    document.getElementById("voucher-dec").textContent = "-" + (voucherAmount / 100) * totalOrder + "vnd";
+                    document.getElementById("total-f").textContent = (totalOrder - (voucherAmount / 100) * totalOrder) + "vnd";
                     document.getElementById("voucherID").value = voucherId;
-                    document.getElementById("total-final").value =(totalOrder - (voucherAmount/100)*totalOrder) ;
+                    document.getElementById("total-final").value = (totalOrder - (voucherAmount / 100) * totalOrder);
                     document.getElementById("voucherQuantity").value = quantity;
+                    document.getElementById("voucher-click").textContent = "-" + (voucherAmount / 100) * totalOrder + "vnd";
                 }
-            }
-            else{
+            } else {
                 //voucherAmount
                 document.getElementById("voucher-dec").textContent = "-" + voucherAmount + "vnd";
-                document.getElementById("total-f").textContent =  (totalOrder - voucherAmount)  + "vnd";
+                document.getElementById("total-f").textContent = (totalOrder - voucherAmount) + "vnd";
                 document.getElementById("voucherID").value = voucherId;
-                document.getElementById("total-final").value =(totalOrder - voucherAmount);
+                document.getElementById("total-final").value = (totalOrder - voucherAmount);
                 document.getElementById("voucherQuantity").value = quantity;
+                document.getElementById("voucher-click").textContent = "-" + voucherAmount + "vnd";
             }
-            
+
             // Hide the modal
             $('#voucherModal').modal('hide');
         });
