@@ -315,6 +315,7 @@
                         </div>
                     </div>
                     <div style="display: flex;justify-content: end">
+                        <a href="/orders/detail?id=<%=orderID.getId()%>"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;margin-right: 20px" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Review Shop</button></a>
                         <a href="/orders/detail?id=<%=orderID.getId()%>"><button  style="background:#ee4d2d ;border-color: #ee4d2d;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail Order</button></a>
                     </div>
                 </div>

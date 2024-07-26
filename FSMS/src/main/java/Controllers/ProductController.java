@@ -5,6 +5,7 @@
 package Controllers;
 
 import DAOs.CategoryDAO;
+import DAOs.CommentDAO;
 import DAOs.ProductDAO;
 import DAOs.ProductTypeDAO;
 import Models.Product;
@@ -184,7 +185,19 @@ public class ProductController extends HttpServlet {
             ResultSet sizes = proTypeDao.getSizes(id);
 
             ArrayList<ProductType> productTypes = proTypeDao.getProductTypesByProductID(id);
-
+            
+            
+            CommentDAO cDAO = new CommentDAO();
+            
+            ResultSet allComment = cDAO.getAllCommentByProductID(id);
+            
+            int starAVG = cDAO.getStar(id);
+            
+            int commentNumber = cDAO.getQuantityComment(id);
+            
+            request.setAttribute("starAVG", starAVG);
+            request.setAttribute("allComment", allComment);
+            request.setAttribute("commentNumber", commentNumber);
             request.setAttribute("product", pro);
             request.setAttribute("colors", colors);
             request.setAttribute("sizes", sizes);

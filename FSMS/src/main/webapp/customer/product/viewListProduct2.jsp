@@ -80,13 +80,6 @@
                                         <img src="${pageContext.request.contextPath}/assets/images/product/<%=product.getImage()%>" alt="product image" />
                                     </a>
                                     <div class="single-product-overlay">
-                                        <div class="rating-box">
-                                            <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                                        </div>
                                         <div class="product-quick-view">
                                             <ul>
                                                 <li><a href="#"><i class="fa fa-heart-o"></i></a></li>

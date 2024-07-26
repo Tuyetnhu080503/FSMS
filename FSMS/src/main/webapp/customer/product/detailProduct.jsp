@@ -11,6 +11,13 @@
     ResultSet sizes = (ResultSet) request.getAttribute("sizes");
 
     ArrayList<ProductType> productTypes = (ArrayList<ProductType>) request.getAttribute("productTypes");
+    
+    ResultSet allComment = (ResultSet) request.getAttribute("allComment");
+    
+    int starAVG = (int) request.getAttribute("starAVG");
+            
+    int commentNumber = (int) request.getAttribute("commentNumber");
+
 %>
 
 <style>
@@ -90,6 +97,11 @@
         cursor: pointer;
 
     }
+    
+    .comment-list {
+        max-height: 1200px; 
+        overflow-y: auto; 
+    }
 </style>
 
 <section class="main-content-area">
@@ -122,14 +134,60 @@
                         <div class="pro-desc">
                             <h2><%=product.getName()%></h2>
                             <div class="review_forum">
+                                <%if(starAVG == 1){%>
+                                    <div class="rating-box">
+                                    <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="2 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                    <a title="3 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                    <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                    <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                </div>	
+                                <%}else if(starAVG == 2){%>
+                                    <div class="rating-box">
+                                    <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="3 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                    <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                    <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                </div>	
+                                
+                                <%}else if(starAVG == 3){%>
                                 <div class="rating-box">
                                     <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
                                     <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
                                     <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
                                     <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
                                     <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                                </div>	
-                                <p><span><a href="#">0 Reviews (s)</a> | </span> <a href="#"> Add your review</a></p>
+                                </div>
+                                
+                                <%}else if(starAVG == 4){%>
+                                <div class="rating-box">
+                                    <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="4 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                </div>
+                                
+                                <%}else if(starAVG == 5){%>
+                                <div class="rating-box">
+                                    <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="4 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="5 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                </div>
+                                <%}else{%>
+                                 <div class="rating-box">
+                                    <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="4 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                    <a title="5 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                </div>
+                                <%}%>
+                                
+                                <p><span><a href="#"><%=commentNumber %> Reviews (s)</a> </span>
                             </div>
                             <div class="pro-availability">
                                 <p class="availability">Availability :<span> In stock</span></p>					
@@ -427,67 +485,93 @@
                     <div class="product-more-info-tab">
                         <!-- Nav tabs -->
                         <ul class="more-info-tab nav nav-tabs">
-                            <li><a href="#proReview" data-bs-toggle="tab" class="active" >reviews</a></li>
+                            <li><a href="#proReview" data-bs-toggle="tab" class="active" >reviews (<%=commentNumber %>)</a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="product-tab-content tab-content jump">
                             <div class="tab-pane active" id="proReview">
                                 <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12 mt-2">
-                                            <div class="card p-3">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="user d-flex flex-row align-items-center">
-                                                        <img src="https://i.imgur.com/hczKIze.jpg" width="50" class="user-img rounded-circle mr-2">
-                                                        <span><small style="margin-left: 20px" class="font-weight-bold text-primary">james_olesenn</small> 
-                                                        </span>
+                                    <div class="row comment-list">
+                                        <%while(allComment.next()){
+                                            int star = allComment.getInt("Rating");
+                                            String image = allComment.getString("Image");
+                                            System.out.println("Image value:" + image);
+                                            %>
+                                            <div class="col-md-12 mt-2">
+                                                <div class="card p-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="user d-flex flex-row align-items-center">
+                                                            <img src="${pageContext.request.contextPath}/assets/images/avatar/<%=allComment.getString("Avatar") %>" width="50" class="user-img rounded-circle mr-2">
+                                                            <span><small style="margin-left: 20px" class="font-weight-bold text-primary"><%=allComment.getString("Firstname") + " "+  allComment.getString("Lastname")%></small> 
+                                                            </span>
+                                                        </div>
+                                                        <small><%=allComment.getDate("CreateAt")%></small>
                                                     </div>
-                                                    <small>2 days ago</small>
-                                                </div>
-                                                <div class="action d-flex  align-items-center">
-                                                    <div style="margin-left: 70px" class="rating-box">
-                                                        <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
-                                                        <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
-                                                        <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
-                                                        <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                                        <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                                                    </div>
-                                                    <div style="margin-left: 10px " class="rating-box">
-                                                        | mau xanh, size X
-                                                    </div>
+                                                    <div class="action d-flex  align-items-center">
+                                                    <%if(star == 1){%>
+                                                            <div style="margin-left: 70px" class="rating-box">
+                                                            <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="2 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="3 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                            <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                        </div>	
+                                                        <%}else if(star == 2){%>
+                                                            <div style="margin-left: 70px" class="rating-box">
+                                                            <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="3 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                            <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                        </div>	
 
-                                                </div>
-                                                <small style="margin-left: 70px" class="font-weight-bold mt-2">Hmm, This poster looks cool</small>
-                                                <img style="margin-left: 70px" src="https://i.imgur.com/hczKIze.jpg" width="100">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12 mt-2">
-                                            <div class="card p-3">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="user d-flex flex-row align-items-center">
-                                                        <img src="https://i.imgur.com/hczKIze.jpg" width="50" class="user-img rounded-circle mr-2">
-                                                        <span><small style="margin-left: 20px" class="font-weight-bold text-primary">james_olesenn</small> 
-                                                        </span>
-                                                    </div>
-                                                    <small>2 days ago</small>
-                                                </div>
-                                                <div class="action d-flex  align-items-center">
-                                                    <div style="margin-left: 70px" class="rating-box">
-                                                        <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
-                                                        <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
-                                                        <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
-                                                        <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                                        <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                                                    </div>
-                                                    <div style="margin-left: 10px " class="rating-box">
-                                                        | mau xanh, size X
-                                                    </div>
+                                                        <%}else if(star == 3){%>
+                                                        <div style="margin-left: 70px" class="rating-box">
+                                                            <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                            <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                        </div>
 
+                                                        <%}else if(star == 4){%>
+                                                        <div style="margin-left: 70px" class="rating-box">
+                                                            <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="4 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
+                                                        </div>
+
+                                                        <%}else if(star == 5){%>
+                                                        <div style="margin-left: 70px" class="rating-box">
+                                                            <a title="1 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="2 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="3 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="4 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                            <a title="5 star" href="#" class="rated"><i class="fa fa-star-o"></i></a>
+                                                        </div>
+                                                        <%}else{%>
+                                                         <div style="margin-left: 70px" class="rating-box">
+                                                            <a title="1 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="2 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="3 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="4 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                            <a title="5 star" href="#" class=""><i class="fa fa-star-o"></i></a>
+                                                        </div>
+                                                        <%}%>
+                                                        <div style="margin-left: 10px " class="rating-box">
+                                                            | <%=allComment.getString("Color")%>, Size <%=allComment.getString("Size")%>
+                                                        </div>
+
+                                                    </div>
+                                                    <small style="margin-left: 70px" class="font-weight-bold mt-2"><%=allComment.getString("Comment")%></small>
+                                                    <%if(!image.equals("")){%>
+                                                        <img style="margin-left: 70px" src="${pageContext.request.contextPath}/assets/images/comment/<%=image%>" width="100">
+                                                    <%}%>
                                                 </div>
-                                                <small style="margin-left: 70px" class="font-weight-bold mt-2">Hmm, This poster looks cool</small>
-                                                <img style="margin-left: 70px" src="https://i.imgur.com/hczKIze.jpg" width="100">
                                             </div>
-                                        </div>
+                                        <%}%>
                                     </div>
                                 </div>
                             </div>

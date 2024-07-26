@@ -6,7 +6,6 @@
     <c:when test="${sessionScope.tabId == 2}">
         <%@include file="./customer/login.jsp" %>
     </c:when>
-   
     <c:when test="${sessionScope.tabId == 3}">
         <%@include file="./customer/forgotPassword.jsp" %>
     </c:when>

@@ -96,13 +96,6 @@
                                         <div class="product-price">
                                             <span class="regular-price"><%=product.getPrice()%>vnd</span>
                                         </div>											
-                                        <div class="rating-box">
-                                            <a title="1 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="2 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="3 star" class="rated" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="4 star" href="#"><i class="fa fa-star-o"></i></a>
-                                            <a title="5 star" href="#"><i class="fa fa-star-o"></i></a>
-                                        </div>
                                     </div>
                                     <div class="product-description">
                                         <p><%=product.getDescription()%></p>                                    </div>
