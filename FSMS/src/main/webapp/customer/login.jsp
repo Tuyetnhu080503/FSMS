@@ -32,19 +32,17 @@
                                                         <div class="form-group">
                                                             <p style="color:red"><%=request.getAttribute("failLogin") != null ? request.getAttribute("failLogin") : ""%></p>
                                                         </div>
-                                                        <div class="block-button-right" style="display: flex;justify-content: space-between">
-                                                            <div style="">
-                                                                <label>Already registered?</label>
-                                                                <a href="/account/register" style="color: #00A0DC; text-decoration: underline;">Register now!</a>
-                                                            </div>
+                                                        <div class="block-button-right" style="display: flex;justify-content: space-between; flex-direction: column;align-items: center">
                                                             <div style="display: flex; flex-direction: column">
                                                                 <button class="btn btn-primary" type="submit">Login</button>
                                                                 <a href="/account/forgot">Forgot your pasword?</a>
                                                                 <input type="hidden" name="login" value="login"> 
                                                             </div>
-
-                                                        </div>
-                                                        <a style="display: block;margin-bottom: 10px;margin-top: 20px" id="loginGoogle" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login&response_type=code&client_id=457078457719-toc7bkb07iv1f0agnf4otfeusnegdhev.apps.googleusercontent.com&approval_prompt=force" class="btn btn-primary btn-block"><i style="margin-right:15px;font-size: 18px;" class="fab fa-google-plus-g"></i>Login With Google</a>
+                                                            <div style="margin-top: 30px">
+                                                                <label>Already registered?</label>
+                                                                <a href="/account/register" style="color: #00A0DC; text-decoration: underline;">Register now!</a>
+                                                            </div>
+                                                            <a style="display: block;margin-bottom: 10px;" id="loginGoogle" href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login&response_type=code&client_id=457078457719-toc7bkb07iv1f0agnf4otfeusnegdhev.apps.googleusercontent.com&approval_prompt=force" class="btn btn-primary btn-block"><i style="margin-right:15px;font-size: 18px;" class="fab fa-google-plus-g"></i>Login With Google</a>
                                                     </form>
                                                 </div>
                                             </div>
