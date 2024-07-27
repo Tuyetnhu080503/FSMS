@@ -101,13 +101,6 @@ public class Order {
         this.deliveryaddress = deliveryaddress;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
 
     public String getEmployeeFirstName() {
         return employeeFirstName;
