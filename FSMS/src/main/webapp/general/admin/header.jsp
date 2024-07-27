@@ -52,12 +52,10 @@
                     <a href="/admin" class="logo">
                         <!-- logo-->
                         <div class="logo-mini w-30">
-                            <span class="light-logo"><img src="${pageContext.request.contextPath}/assets/assets_admin/images/logo-letter.png" alt="logo"></span>
-                            <span class="dark-logo"><img src="${pageContext.request.contextPath}/assets/assets_admin/images/logo-letter.png" alt="logo"></span>
+                            <span class="dark-logo"><img src="${pageContext.request.contextPath}/assets/images/logo/logo1.jpg" alt="logo" style="width: 200px"></span>
                         </div>
                         <div class="logo-lg">
-                            <span class="light-logo"><img src="${pageContext.request.contextPath}/assets/assets_admin/images/logo-dark-text.png" alt="logo"></span>
-                            <span class="dark-logo"><img src="${pageContext.request.contextPath}/assets/assets_admin/images/logo-light-text.png" alt="logo"></span>
+                            <span class="light-logo"><img src="${pageContext.request.contextPath}/assets/images/logo/logo1.jpg"  alt="logo"  style="width: 200px"></span>
                         </div>
                     </a>	
                 </div>  

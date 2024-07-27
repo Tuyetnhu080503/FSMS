@@ -103,7 +103,7 @@
                         <div class="col-12 col-lg-3">
                             <!-- logo start -->
                             <div class="logo">
-                                <a href="index.html"><img src="${pageContext.request.contextPath}/assets/assets_customer/img/logo.png" alt="GreenTech" /></a>
+                                <a href="index.html"><img src="${pageContext.request.contextPath}/assets/images/logo/logo1.jpg" alt="GreenTech" /></a>
                             </div>
                             <!-- logo end -->
                         </div>
