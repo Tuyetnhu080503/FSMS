@@ -15,6 +15,7 @@ import Models.Account;
 import Models.Banner;
 import Models.EmployeeProfile;
 import Models.Order;
+import Models.OrderStatus;
 import Models.Product;
 import Models.ProductType;
 import Models.Voucher;
@@ -24,6 +25,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -114,7 +116,9 @@ public class AdminController extends HttpServlet {
                     int orderId = Integer.parseInt(idArray[idArray.length - 1]);
                     OrderDAO oDao = new OrderDAO();
                     Order order = oDao.getOrderById(orderId);
+                    List<OrderStatus> orderStatus = oDao.getListOrderStatusByOrderId(orderId);
                     request.setAttribute("order", order);
+                    request.setAttribute("orderStatus", orderStatus);
                     session.setAttribute("tabId", 12);
                     request.getRequestDispatcher("/admin.jsp").forward(request, response);
                 } catch (SQLException ex) {

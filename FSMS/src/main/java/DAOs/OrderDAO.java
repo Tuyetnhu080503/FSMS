@@ -5,7 +5,9 @@
 package DAOs;
 
 import DBConnection.DBConnection;
+import Models.Account;
 import Models.Order;
+import Models.OrderStatus;
 import Models.OrderItems;
 import java.sql.Connection;
 import java.sql.Date;
@@ -37,15 +39,66 @@ public class OrderDAO {
 
         try {
             Statement st = conn.createStatement();
-            rs = st.executeQuery("SELECT o.OrderID, a. [Firstname], a.Lastname, a.Phonenumber, o.Status, o.PaymentMethod, c.Deliveryaddress FROM [Order] o \n"
-                    + "join CustomerProfile as c on o.CustomerID = c.CustomerID\n"
-                    + "join Voucher as v on o.VoucherID = v.VoucherID\n"
-                    + "join Account as a on c.AccountID = a.AccountID");
+            rs = st.executeQuery("WITH LatestOrderStatus AS (\n"
+                    + "    SELECT \n"
+                    + "        os.OrderID,\n"
+                    + "        os.Status,\n"
+                    + "        os.Time,\n"
+                    + "        ROW_NUMBER() OVER (PARTITION BY os.OrderID ORDER BY os.Time DESC) as rn\n"
+                    + "    FROM \n"
+                    + "        OrderStatus os\n"
+                    + ")\n"
+                    + "SELECT \n"
+                    + "    o.OrderID, \n"
+                    + "    a.Firstname, \n"
+                    + "    a.Lastname, \n"
+                    + "    a.Phonenumber, \n"
+                    + "    los.Status, \n"
+                    + "    o.PaymentMethod, \n"
+                    + "    c.Deliveryaddress\n"
+                    + "FROM \n"
+                    + "    [Order] o\n"
+                    + "JOIN \n"
+                    + "    CustomerProfile c ON o.CustomerID = c.CustomerID \n"
+                    + "LEFT JOIN \n"
+                    + "    Voucher v ON o.VoucherID = v.VoucherID \n"
+                    + "JOIN \n"
+                    + "    Account a ON c.AccountID = a.AccountID \n"
+                    + "JOIN \n"
+                    + "    LatestOrderStatus los ON o.OrderID = los.OrderID AND los.rn = 1;");
 
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
+    }
+
+    public List<OrderStatus> getListOrderStatusByOrderId(int orderId) throws SQLException {
+        List<OrderStatus> orderStatuses = new ArrayList<>();
+        String query = "SELECT os.OrderStatusID, os.Time , os.Status, a.Firstname , a.Lastname, ep.EmployeeID	   \n"
+                + "FROM OrderStatus os \n"
+                + "join EmployeeProfile as ep on ep.EmployeeID = os.EmployeeID\n"
+                + "join Account as a on a.AccountID = ep.AccountID\n"
+                + "where os.[OrderID] = ? order by Time asc";
+        try ( PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Timestamp time = rs.getTimestamp("Time");
+                String status = rs.getString("Status");
+                String firstName = rs.getString("Firstname");
+                String lastname = rs.getString("Lastname");
+                int employeeId = rs.getInt("EmployeeID");
+                OrderStatus orderStatus = new OrderStatus();
+                orderStatus.setStatus(status);
+                orderStatus.setTime(time);
+                orderStatus.setFirstName(firstName);
+                orderStatus.setLastName(lastname);
+                orderStatus.setEmployeeID(employeeId);
+                orderStatuses.add(orderStatus);
+            }
+        }
+        return orderStatuses;
     }
 
     public List<Order> getAllOrders() {
@@ -80,10 +133,27 @@ public class OrderDAO {
 
     public Order getOrderById(int orderId) {
         Order order = null;
-        String sql = "SELECT o.OrderID,a.[Firstname], a.Lastname, a.Phonenumber, o.Status, o.PaymentMethod, c.Deliveryaddress FROM [Order] o \n"
-                + "join CustomerProfile as c on o.CustomerID = c.CustomerID\n"
-                + "join Voucher as v on o.VoucherID = v.VoucherID\n"
-                + "join Account as a on c.AccountID = a.AccountID where o.OrderID = ?";
+        String sql = "SELECT top 1  o.OrderID,  \n"
+                + "              a1.Firstname ,  \n"
+                + "              a1.Lastname,   \n"
+                + "              a1.Phonenumber,   \n"
+                + "              os.Status,   \n"
+                + "              o.PaymentMethod,   \n"
+                + "              c.Deliveryaddress,   \n"
+                + "              eAccount.Firstname AS EmpFirstname,  \n"
+                + "              eAccount.Lastname AS EmpLastname, \n"
+                + "              os.Time as UpdatedAt \n"
+                + "          FROM   \n"
+                + "              [Order] o   \n"
+                + "              JOIN CustomerProfile AS c ON o.CustomerID = c.CustomerID  \n"
+                + "              LEFT JOIN Voucher AS v ON o.VoucherID = v.VoucherID  \n"
+                + "              JOIN Account AS a1 ON c.AccountID = a1.AccountID   \n"
+                + "              JOIN OrderStatus AS os ON o.OrderID = os.OrderID   \n"
+                + "              JOIN EmployeeProfile AS ep ON os.EmployeeID = ep.EmployeeID  \n"
+                + "              JOIN Account AS eAccount ON ep.AccountID = eAccount.AccountID  \n"
+                + "          WHERE   \n"
+                + "              o.OrderID = ?\n"
+                + "			  order by os.Time desc;";
         try {
             ps = conn.prepareStatement(sql);
             ps.setInt(1, orderId);
@@ -96,7 +166,10 @@ public class OrderDAO {
                         rs.getString("Phonenumber"),
                         rs.getString("Status"),
                         rs.getString("PaymentMethod"),
-                        rs.getString("Deliveryaddress")
+                        rs.getString("Deliveryaddress"),
+                        rs.getString("EmpFirstname"),
+                        rs.getString("EmpLastname"),
+                        rs.getTimestamp("UpdatedAt")
                 );
             }
         } catch (SQLException ex) {
@@ -119,17 +192,18 @@ public class OrderDAO {
         return result;
     }
 
-    public boolean updateOrderStatus(String orderId, String status) {
-        String query = "UPDATE [Order] SET [Status] = ? WHERE OrderID = ?";
+    public int updateOrderStatus(String orderId, String status, int employeeId) {
+        int rowsUpdated = 0;
+        String query = "INSERT INTO OrderStatus(Time, Status, EmployeeID, OrderID) VALUES (GETDATE(), ?, ?, ?)";
         try ( PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, status);
-            ps.setString(2, orderId);
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;
+            ps.setInt(2, employeeId);
+            ps.setString(3, orderId);
+            rowsUpdated = ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
         }
+        return rowsUpdated;
     }
 
     public int getCustomerIdByAccountId(int accountId) {
@@ -188,25 +262,23 @@ public class OrderDAO {
 //        } catch (SQLException ex) {
 //            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-//        boolean result = orderDAO.updateOrderStatus("1", "Success");
-//        if (result) {
-//            System.out.println("succes");
+//        int result = orderDAO.getEmployeeIdByAccountId(5);
+//        if (result>0) {
+//            System.out.println(result);
 //        } else {
 //            System.out.println("failed");
 //        }
 //    }
-    public static void main(String[] args) {
-        try {
-            OrderDAO dao = new OrderDAO();
-            int result = dao.deleteOrder(7);
-            if (result > 0) {
-                System.out.println("success");
-            } else {
-                System.out.println("Order not found.");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public static void main(String[] args) throws SQLException {
+        // Tạo kết nối đến cơ sở dữ liệu
+        OrderDAO orderDAO = new OrderDAO();
+
+        // Thông tin cần cập nhật
+        Account result = orderDAO.getAccountByEmployeeId(14);
+        
+            System.out.println(result.getRoleId());
+        
+
     }
 
     public int deleteOrder(int orderId) {
@@ -491,6 +563,40 @@ public class OrderDAO {
         }
         return total;
     }
-    
-    
+
+
+    public int getEmployeeIdByAccountId(int accountId) {
+        int employeeId = -1;
+        String query = "select ep.EmployeeID from EmployeeProfile ep\n"
+                + "where ep.AccountID = ?";
+        try {
+            conn = DBConnection.connect();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                employeeId = rs.getInt("EmployeeID");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return employeeId;
+    }
+
+     public Account getAccountByEmployeeId(int id) {
+        Account account = null;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select * from Account a\n"
+                + "join EmployeeProfile as ep on ep.AccountID = a.AccountID\n"
+                + "where ep.EmployeeID = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                account = new Account(rs.getInt("AccountID"),rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return account;
+    }
 }

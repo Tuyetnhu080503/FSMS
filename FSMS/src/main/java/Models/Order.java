@@ -19,7 +19,22 @@ public class Order {
     private String lastname;
     private String phonenumber;
     private String deliveryaddress;
+    private String employeeFirstName;
+    private String employeeLastName;
+    private Timestamp updatedAt;
     private String fullName;
+      public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress, String employeeFirstName, String employeeLastName, Timestamp updatedAt) {
+        this.orderId = orderId;
+        this.status = status;
+        this.paymentMethod = paymentMethod;
+        this.firstName = firstName;
+        this.lastname = lastname;
+        this.phonenumber = phonenumber;
+        this.deliveryaddress = deliveryaddress;
+        this.employeeFirstName = employeeFirstName;
+        this.employeeLastName = employeeLastName;
+        this.updatedAt = updatedAt;
+    }
 
     public Order(int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId, String phonenumber, String deliveryaddress, String fullName) {
         this.customerId = customerId;
@@ -84,6 +99,30 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.paymentId = paymentId;
         this.deliveryaddress = deliveryaddress;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getEmployeeFirstName() {
+        return employeeFirstName;
+    }
+
+    public void setEmployeeFirstName(String employeeFirstName) {
+        this.employeeFirstName = employeeFirstName;
+    }
+
+    public String getEmployeeLastName() {
+        return employeeLastName;
+    }
+
+    public void setEmployeeLastName(String employeeLastName) {
+        this.employeeLastName = employeeLastName;
     }
 
     public String getLastname() {
@@ -172,6 +211,14 @@ public class Order {
 
     public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
     
     
