@@ -117,6 +117,9 @@ public class AdminController extends HttpServlet {
                     OrderDAO oDao = new OrderDAO();
                     Order order = oDao.getOrderById(orderId);
                     List<OrderStatus> orderStatus = oDao.getListOrderStatusByOrderId(orderId);
+                    AccountDAO accDAO = new AccountDAO();
+                    Account account = accDAO.getAccountByAccountID(acc.getAccountId());
+                    request.setAttribute("account", account);
                     request.setAttribute("order", order);
                     request.setAttribute("orderStatus", orderStatus);
                     session.setAttribute("tabId", 12);
@@ -143,7 +146,7 @@ public class AdminController extends HttpServlet {
             } else if (path.endsWith("/voucher/create")) {
                 session.setAttribute("tabId", 15);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            }else if (path.endsWith("/banners")) {
+            } else if (path.endsWith("/banners")) {
                 try {
                     BannerDAO bannerDAO = new BannerDAO();
                     List<Banner> banners = bannerDAO.getAllBanners();
@@ -157,17 +160,17 @@ public class AdminController extends HttpServlet {
                     response.sendRedirect("/admin.jsp?error=fetching_banners");
                 }
 
-            }else if (path.endsWith("/crbanner")) {
+            } else if (path.endsWith("/crbanner")) {
                 session.setAttribute("tabId", 17);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            }  else if (path.endsWith("/admin/banners/upbanner")) {
+            } else if (path.endsWith("/admin/banners/upbanner")) {
                 String sid = request.getParameter("sid");
                 BannerDAO dao = new BannerDAO();
                 Banner p = dao.getBannerById(sid);
                 request.setAttribute("detail", p);
                 session.setAttribute("tabId", 18);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
-            }else if (path.startsWith("/admin/banners/delete/")) {
+            } else if (path.startsWith("/admin/banners/delete/")) {
                 try {
                     String[] idArray = path.split("/");
                     String bannerIdStr = idArray[idArray.length - 1];
@@ -189,7 +192,7 @@ public class AdminController extends HttpServlet {
                     session.setAttribute("deleteBannerError", "Failed to delete banner. Please try again.");
                     response.sendRedirect("/admin/banners");
                 }
-            }   else if (path.endsWith("/hisOrder")) {
+            } else if (path.endsWith("/hisOrder")) {
                 try {
                     OrderDAO dao = new OrderDAO();
                     List<Order> list = dao.getAllOrders();
@@ -202,7 +205,7 @@ public class AdminController extends HttpServlet {
                     // Redirect or display error message
                     response.sendRedirect("/admin.jsp?error=fetching_orders");
                 }
-          
+
             } else if (path.startsWith("/admin/products/block/")) {
                 String[] idArray = path.split("/");
                 int id = Integer.parseInt(idArray[idArray.length - 1]);
@@ -232,7 +235,7 @@ public class AdminController extends HttpServlet {
                 try {
                     String[] idArray = path.split("/");
                     int id = Integer.parseInt(idArray[idArray.length - 1]);
-                    
+
                     VoucherDAO vDAO = new VoucherDAO();
                     vDAO.unbanVoucherById(id);
                     response.sendRedirect("/admin/vouchers/update/" + id);
@@ -275,8 +278,7 @@ public class AdminController extends HttpServlet {
                 mySession.setAttribute("tabId", 4);
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
             }
-        }
-        else if (request.getParameter("setMonth") != null) {
+        } else if (request.getParameter("setMonth") != null) {
             String month = request.getParameter("month");
             System.out.println(month);
             mySession.setAttribute("month", month);
