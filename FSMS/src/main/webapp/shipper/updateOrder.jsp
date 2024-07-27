@@ -1,9 +1,8 @@
+<%@page import="Models.Account"%>
+<%@page import="java.sql.Timestamp"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
 <%@page import="Models.OrderStatus"%>
-<%@page import="Models.Account"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.sql.Timestamp"%>
 <%@ page import="DAOs.OrderDAO" %>
 <%@ page import="Models.Order" %>
 <%@ page import="java.sql.SQLException" %>
@@ -11,8 +10,9 @@
 
 <%
     Order order = (Order) request.getAttribute("order");
-    Account account = (Account) request.getAttribute("account");
     List<OrderStatus> orderStatus = (List<OrderStatus>) request.getAttribute("orderStatus");
+    OrderDAO odao = new OrderDAO();
+    Account account = (Account) request.getAttribute("account");
     int roleID = account.getRoleId();
     String currentStatus = order.getStatus();
 %>
@@ -60,6 +60,7 @@
                                                         <% if ((roleID == 1 || roleID == 2) && "Pending".equals(currentStatus)) {%>
                                                         <option value="Pending" <%= "Pending".equals(order.getStatus()) ? "selected" : ""%>>Pending</option>
                                                         <option value="Processing" <%= "Processing".equals(order.getStatus()) ? "selected" : ""%>>Processing</option>
+                                                        <option value="Canceled" <%= "Cancel".equals(order.getStatus()) ? "selected" : ""%>>Canceled</option>
                                                         <% } else if (roleID == 2 && "Processing".equals(currentStatus)) {%>
                                                         <option value="Processing" <%= "Processing".equals(order.getStatus()) ? "selected" : ""%>>Processing</option>
                                                         <option value="Delivering" <%= "Delivering".equals(order.getStatus()) ? "selected" : ""%>>Delivering</option>
@@ -93,12 +94,21 @@
                                                         <tbody>
                                                             <tr>
                                                                 <%
-                                                                    SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy");
+                                                                    SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");
                                                                     for (OrderStatus status : orderStatus) {
                                                                         Timestamp timestamp = status.getTime();
                                                                         String formattedTime = newFormat.format(timestamp);
                                                                 %>
-                                                                <td><%= formattedTime%></td>
+                                                                <td><%= formattedTime%> <br>
+                                                                    <% Account employee = odao.getAccountByEmployeeId(status.getEmployeeID());
+                                                                        if (employee.getRoleId() == 1) {%>
+                                                                    <a href="/admin/profile">
+                                                                        <%= status.getFirstName()%> <%= status.getLastName()%>
+                                                                    </a>
+                                                                    <% } else {%>
+                                                                    <%= status.getFirstName()%> <%= status.getLastName()%>
+                                                                    <% } %>                                                               
+                                                                </td>
                                                                 <% } %>
                                                             </tr>
                                                         </tbody>
@@ -133,4 +143,3 @@
         </section>
     </div>
 </div>
-                                        

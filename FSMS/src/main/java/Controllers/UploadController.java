@@ -372,7 +372,9 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/admin/order");
             } else if (acc.getRoleId() == 2) {
                 response.sendRedirect("/staff/orders");
-            }
+            } else if (acc.getRoleId() == 3) {
+                response.sendRedirect("/shipper/orders");
+            } 
         } else if (request.getParameter(
                 "deleteOrder") != null) {
             try {

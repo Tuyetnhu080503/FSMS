@@ -80,6 +80,9 @@
                                                                                 case "Returns":
                                                                                     labelClass = "badge badge-danger";
                                                                                     break;
+                                                                                case "Canceled":
+                                                                                    labelClass = "badge badge-danger";
+                                                                                    break;
                                                                                 default:
                                                                                     labelClass = "badge badge-secondary";
                                                                                     break;
@@ -155,7 +158,7 @@
             <% session.removeAttribute("deleteOrder");
                 }%>
         </script>
-      
+
 
     </body>
 </html>
