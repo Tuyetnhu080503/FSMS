@@ -21,12 +21,10 @@
 <!-- Master Admin App -->
 <script src="${pageContext.request.contextPath}/assets/assets_admin/js/template.js"></script>
 <script src="${pageContext.request.contextPath}/assets/assets_admin/js/pages/dashboard.js"></script>
-
-</body>
 <script>
     $(document).ready(function () {
         $("#viewOrders").DataTable();
     });
 </script>
-
+</body>
 </html>

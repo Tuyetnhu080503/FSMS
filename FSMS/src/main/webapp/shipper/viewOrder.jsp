@@ -30,9 +30,6 @@
                                                             <div class="col">
                                                                 <h3 class="page-title">View Orders</h3>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <input type="text" id="searchInput" class="form-control" placeholder="Search...">
-                                                            </div>
 
                                                         </div>
                                                     </div>
@@ -83,6 +80,9 @@
                                                                                 case "Returns":
                                                                                     labelClass = "badge badge-danger";
                                                                                     break;
+                                                                                case "Canceled":
+                                                                                    labelClass = "badge badge-danger";
+                                                                                    break;
                                                                                 default:
                                                                                     labelClass = "badge badge-secondary";
                                                                                     break;
@@ -95,8 +95,6 @@
                                                                         <a href="/shipper/orders/update/<%=rs.getInt("OrderID")%>">
                                                                             <button style="background:#ea7127 ;border-color: #ea7127;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-primary"><i class="feather-edit-3"></i>Detail</button>
                                                                         </a>
-                                                                    </td>
-                                                                    <td>
                                                                         <form id="formDeleteOrder" action="/upload/deleteOrder" method="post">
                                                                             <input type="hidden" name="orderId" value="<%=rs.getInt("OrderID")%>">
                                                                             <button type="submit" name="deleteOrder" style="background:red;border-color: red;color:white;" class="mb-2 mr-2 btn-icon btn-pill btn btn-outline-danger"><i class="feather-trash-2"></i>Delete</button>
@@ -160,27 +158,7 @@
             <% session.removeAttribute("deleteOrder");
                 }%>
         </script>
-        <script>
-            document.getElementById('searchInput').addEventListener('input', function () {
-                var filter = this.value.toUpperCase();
-                var rows = document.querySelector('#viewOrders tbody').rows;
 
-                for (var i = 0; i < rows.length; i++) {
-                    var visible = false;
-                    var cells = rows[i].cells;
-
-                    for (var j = 1; j < cells.length - 1; j++) {
-                        var cell = cells[j].textContent.toUpperCase();
-                        if (cell.indexOf(filter) > -1) {
-                            visible = true;
-                            break;
-                        }
-                    }
-
-                    rows[i].style.display = visible ? '' : 'none';
-                }
-            });
-        </script>
 
     </body>
 </html>

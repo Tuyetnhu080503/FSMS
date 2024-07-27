@@ -13,15 +13,40 @@ public class OrderStatus {
     private String status;
     private int employeeID;
     private int orderID;
+    private String firstName;
+    private String lastName;
 
-    public OrderStatus(int OrderStatusID, Timestamp time, String status, int employeeID, int orderID) {
+    public OrderStatus() {
+    }
+
+    
+    public OrderStatus(int OrderStatusID, Timestamp time, String status, int employeeID, int orderID, String firstName, String lastName) {
         this.OrderStatusID = OrderStatusID;
         this.time = time;
         this.status = status;
         this.employeeID = employeeID;
         this.orderID = orderID;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    
     public int getOrderStatusID() {
         return OrderStatusID;
     }

@@ -1,4 +1,4 @@
-<%@include file="./general/shipper/header.jsp" %>
+<%@include file="./general/admin/header.jsp" %>
 <%@include file="./general/shipper/sidebar.jsp" %>
 <c:choose>
     <c:when test="${sessionScope.tabId == 1}">
@@ -20,4 +20,4 @@
         <%@include file="./shipper/updateOrder.jsp" %>
     </c:when>
 </c:choose>
-<%@include file="./general/shipper/footer.jsp" %>
+<%@include file="./general/admin/footer.jsp" %>

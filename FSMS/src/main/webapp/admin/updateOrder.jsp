@@ -1,3 +1,8 @@
+<%@page import="Models.Account"%>
+<%@page import="java.sql.Timestamp"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.List"%>
+<%@page import="Models.OrderStatus"%>
 <%@ page import="DAOs.OrderDAO" %>
 <%@ page import="Models.Order" %>
 <%@ page import="java.sql.SQLException" %>
@@ -5,6 +10,11 @@
 
 <%
     Order order = (Order) request.getAttribute("order");
+    List<OrderStatus> orderStatus = (List<OrderStatus>) request.getAttribute("orderStatus");
+    OrderDAO odao = new OrderDAO();
+    Account account = (Account) request.getAttribute("account");
+    int roleID = account.getRoleId();
+    String currentStatus = order.getStatus();
 %>
 <div class="content-wrapper">
     <div class="container-full">
@@ -47,12 +57,62 @@
                                                 <div class="form-group">
                                                     <label for="status">Status:</label>
                                                     <select name="status" id="status" class="form-control">
+                                                        <% if ((roleID == 1 || roleID == 2) && "Pending".equals(currentStatus)) {%>
                                                         <option value="Pending" <%= "Pending".equals(order.getStatus()) ? "selected" : ""%>>Pending</option>
                                                         <option value="Processing" <%= "Processing".equals(order.getStatus()) ? "selected" : ""%>>Processing</option>
+                                                        <option value="Canceled" <%= "Cancel".equals(order.getStatus()) ? "selected" : ""%>>Canceled</option>
+                                                        <% } else if (roleID == 2 && "Processing".equals(currentStatus)) {%>
+                                                        <option value="Processing" <%= "Processing".equals(order.getStatus()) ? "selected" : ""%>>Processing</option>
+                                                        <option value="Delivering" <%= "Delivering".equals(order.getStatus()) ? "selected" : ""%>>Delivering</option>
+                                                        <% } else if (roleID == 3 && "Delivering".equals(currentStatus)) {%>
                                                         <option value="Delivering" <%= "Delivering".equals(order.getStatus()) ? "selected" : ""%>>Delivering</option>
                                                         <option value="Delivered" <%= "Delivered".equals(order.getStatus()) ? "selected" : ""%>>Delivered</option>
                                                         <option value="Returns" <%= "Returns".equals(order.getStatus()) ? "selected" : ""%>>Returns</option>
+                                                        <% } else {%>
+                                                        <option value="<%=order.getStatus()%>" selected><%=order.getStatus()%></option>
+                                                        <% }%>
                                                     </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="deliveryAddress">Last Updated By:</label>
+                                                    <input type="text" id="updatedBy" class="form-control" value="<%=order.getEmployeeFirstName()%> <%=order.getEmployeeLastName()%>" readonly>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="statusHistory">Status History:</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <%
+                                                                    for (OrderStatus status : orderStatus) {
+                                                                %>
+                                                                <th><%= status.getStatus()%></th>
+                                                                    <% } %>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <%
+                                                                    SimpleDateFormat newFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+                                                                    for (OrderStatus status : orderStatus) {
+                                                                        Timestamp timestamp = status.getTime();
+                                                                        String formattedTime = newFormat.format(timestamp);
+                                                                %>
+                                                                <td><%= formattedTime%> <br>
+                                                                    <% Account employee = odao.getAccountByEmployeeId(status.getEmployeeID());
+                                                                        if (employee.getRoleId() == 1) {%>
+                                                                    <a href="/admin/profile">
+                                                                        <%= status.getFirstName()%> <%= status.getLastName()%>
+                                                                    </a>
+                                                                    <% } else {%>
+                                                                    <%= status.getFirstName()%> <%= status.getLastName()%>
+                                                                    <% } %>                                                               
+                                                                </td>
+                                                                <% } %>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                                 <input type="hidden" name="updateOrder" value="updateOrder">
 

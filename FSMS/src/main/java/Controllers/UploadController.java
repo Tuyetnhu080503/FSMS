@@ -358,8 +358,9 @@ public class UploadController extends HttpServlet {
 
             try {
                 OrderDAO orderDAO = new OrderDAO();
-                boolean result = orderDAO.updateOrderStatus(orderId, status);
-                if (result) {
+                int employeeId = orderDAO.getEmployeeIdByAccountId(acc.getAccountId());
+                int result = orderDAO.updateOrderStatus(orderId, status, employeeId);
+                if (result > 0) {
                     session.setAttribute("updateOrder", "success");
                 } else {
                     session.setAttribute("updateOrder", "fail");
@@ -374,7 +375,9 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/admin/order");
             } else if (acc.getRoleId() == 2) {
                 response.sendRedirect("/staff/orders");
-            }
+            } else if (acc.getRoleId() == 3) {
+                response.sendRedirect("/shipper/orders");
+            } 
         } else if (request.getParameter(
                 "deleteOrder") != null) {
             try {
