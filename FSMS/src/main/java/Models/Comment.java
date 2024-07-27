@@ -15,6 +15,23 @@ public class Comment {
     private String image;
     private Timestamp createAt;
 
+    public int getOrderItemId() {
+        return orderItemId;
+    }
+
+    public void setOrderItemId(int orderItemId) {
+        this.orderItemId = orderItemId;
+    }
+
+    public Comment(int orderItemId, String comment, int rating, String image, Timestamp createAt) {
+        this.orderItemId = orderItemId;
+        this.comment = comment;
+        this.rating = rating;
+        this.image = image;
+        this.createAt = createAt;
+    }
+    
+
     public Comment(int commentId, int orderItemId, String comment, int rating, String image, Timestamp createAt) {
         this.commentId = commentId;
         this.orderItemId = orderItemId;
