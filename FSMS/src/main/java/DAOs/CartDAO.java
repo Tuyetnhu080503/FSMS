@@ -191,5 +191,14 @@ public class CartDAO {
             Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    public void deleteCart(int cusID) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("Delete Cart Where CustomerID = ?");
+            ps.setInt(1, cusID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CartDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

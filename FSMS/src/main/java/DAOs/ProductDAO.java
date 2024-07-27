@@ -325,7 +325,8 @@ public class ProductDAO {
             Statement st = conn.createStatement();
             rs = st.executeQuery("SELECT * "
                     + "FROM Product p "
-                    + "JOIN Category c ON c.CategoryID = p.CategoryID");
+                    + "JOIN Category c ON c.CategoryID = p.CategoryID where IsActive = 1");
+            
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

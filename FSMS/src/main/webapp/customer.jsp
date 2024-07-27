@@ -40,7 +40,7 @@
         <%@include file="./customer/customerOrderHistory.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 14}">
-        <%@include file="./customer/voucherList.jsp" %>
+        <%@include file="./customer/voucher/detailVoucher.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 15}">
         <%@include file="./customer/cart/viewCart.jsp" %>
@@ -50,6 +50,9 @@
     </c:when>
     <c:when test="${sessionScope.tabId == 17}">
         <%@include file="./customer/order/detailOrder.jsp" %>
+    </c:when>
+    <c:when test="${sessionScope.tabId == 18}">
+        <%@include file="./customer/order/createOrder.jsp" %>
     </c:when>
 </c:choose>
 <%@include file="./general/customer/brand.jsp" %>	

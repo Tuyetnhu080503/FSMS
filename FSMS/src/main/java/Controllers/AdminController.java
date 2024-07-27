@@ -276,5 +276,11 @@ public class AdminController extends HttpServlet {
                 request.getRequestDispatcher("/admin.jsp").forward(request, response);
             }
         }
+        else if (request.getParameter("setMonth") != null) {
+            String month = request.getParameter("month");
+            System.out.println(month);
+            mySession.setAttribute("month", month);
+            response.sendRedirect("/admin");
+        }
     }
 }

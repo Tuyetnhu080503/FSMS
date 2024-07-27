@@ -164,5 +164,43 @@ public class VoucherDAO {
             System.out.println("Failed to add voucher.");
         }
     }
+    
+    public ResultSet getAllVouchersActive() {
+        ResultSet rs = null;
+        try {
+            Statement st = conn.createStatement();
+            rs = st.executeQuery("  select * from Voucher where IsActive = 1 and ExpiryDate > GETDATE() and Quantity > 0");
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+    
+    public void updateQuantity(int quantity, int voucherID) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("UPDATE Voucher SET Quantity = ? Where VoucherID = ?");
+            ps.setInt(1, quantity);
+            ps.setInt(2, voucherID);
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ResultSet getVoucherByIDs(int voucherID) {
+        ResultSet rs = null;
+        try {
+            String query = "SELECT * FROM [Voucher] WHERE VoucherID = ?";
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, voucherID);
+            rs = ps.executeQuery();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(VoucherDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return rs;
+    }
+    
 
+    
 }

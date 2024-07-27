@@ -89,4 +89,19 @@ public class EmployeeDAO {
         }
         return accId;
     }
+    
+    public int getCustomerIDByAccountID(int accID){
+        int cusID = 0;
+        try {
+            PreparedStatement ps = conn.prepareStatement("  select * from CustomerProfile where AccountID = ?");
+            ps.setInt(1, accID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                cusID = rs.getInt("CustomerID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return cusID;
+    }
 }
