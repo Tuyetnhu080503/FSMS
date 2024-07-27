@@ -30,6 +30,7 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
+        <script src="${pageContext.request.contextPath}/assets/assets_admin/js/apexchart.js"></script>
         <style>
             .invalid div {
                 color: red;

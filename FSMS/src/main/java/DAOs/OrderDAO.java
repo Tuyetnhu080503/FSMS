@@ -8,6 +8,7 @@ import DBConnection.DBConnection;
 import Models.Order;
 import Models.OrderItems;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -469,6 +470,27 @@ public class OrderDAO {
         }
     }
     
+    
+    public int getTotalOfDate(Date date) {
+        int total = -1;
+        try {
+            PreparedStatement ps = conn.prepareStatement("select sum(ToTalPrice) as total from [Order] o inner join [OrderStatus] ot on o.OrderID = ot.OrderID\n" +
+                "  where ot.Status = 'Delivered' and CONVERT(date, [Time]) = ? ");
+            ps.setDate(1, date);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                while (rs.next()) {
+                    total = rs.getInt("total");
+                }
+            } else {
+                total = 0;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
+    }
     
     
 }
