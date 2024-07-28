@@ -48,7 +48,7 @@
             <header class="main-header" >
                 <div class="d-flex align-items-center logo-box justify-content-start">	
                     <!-- Logo -->
-                    <a href="/admin" class="logo">
+                    <a href="/staff" class="logo">
                         <!-- logo-->
                         <div class="logo-mini w-30">
                             <span class="dark-logo"><img src="${pageContext.request.contextPath}/assets/images/logo/logo1.jpg" alt="logo" style="width: 200px"></span>

@@ -90,20 +90,6 @@
                     <li class="treeview">
                         <a href="#">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
-                            <span>Manage Notifications</span>
-                            <span class="pull-right-container">
-                                <i class="fa fa-angle-right pull-right"></i>
-                            </span>
-                        </a>
-                        <ul class="treeview-menu">
-                            <li><a href="/notification/create"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>Create Notifications</a></li>
-                            <li><a href="/notification"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Notifications</a></li>	
-                        </ul>
-                    </li>
-
-                    <li class="treeview">
-                        <a href="#">
-                            <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
                             <span>Manage Banners</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-right pull-right"></i>

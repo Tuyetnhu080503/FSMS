@@ -22,12 +22,6 @@
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">Menu </li>
                     <li>
-                        <a href="/shipper">
-                            <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/dashboard.svg" class="svg-icon" alt="">
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="/shipper/orders">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/email.svg" class="svg-icon" alt="">
                             <span>View Orders</span>

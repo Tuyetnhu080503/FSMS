@@ -2,7 +2,7 @@
 <%@include file="./general/staff/sidebar.jsp" %>
 <c:choose>
     <c:when test="${sessionScope.tabId == 1}">
-        <%@include file="./staff/home.jsp" %>
+        <%@include file="./staff/viewOrder.jsp" %>
     </c:when>
     <c:when test="${sessionScope.tabId == 2}">
         <%@include file="./staff/viewProfile.jsp" %>

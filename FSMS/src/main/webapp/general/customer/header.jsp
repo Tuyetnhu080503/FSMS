@@ -69,7 +69,7 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="welcome-mes">
-                                <p>Welcome Greentech store!</p>
+                                <p>Welcome Fashion store!</p>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
@@ -103,7 +103,7 @@
                         <div class="col-12 col-lg-3">
                             <!-- logo start -->
                             <div class="logo">
-                                <a href="index.html"><img src="${pageContext.request.contextPath}/assets/images/logo/logo1.jpg" alt="GreenTech" /></a>
+                                <a href="/"><img src="${pageContext.request.contextPath}/assets/images/logo/logo1.jpg" alt="GreenTech" /></a>
                             </div>
                             <!-- logo end -->
                         </div>
