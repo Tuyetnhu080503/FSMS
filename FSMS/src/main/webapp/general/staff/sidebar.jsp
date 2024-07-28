@@ -31,7 +31,7 @@
                         </a>
                 
                     </li>
-                    <li class="treeview">
+                    <li class="treeview <%=(session.getAttribute("tabId").equals(6)||session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(1)) ? "menu-open active" : ""%>">
                         <a href="#">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
                             <span>Manage Orders</span>
@@ -40,7 +40,7 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="/staff/orders"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Orders</a></li>	
+                            <li class="<%=(session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(6)||session.getAttribute("tabId").equals(1)) ? "active" : ""%>"><a href="/staff/orders"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Orders</a></li>	
                         </ul>
                     </li>
 
