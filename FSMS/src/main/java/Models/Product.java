@@ -13,8 +13,7 @@ public class Product {
     private String image;
     private int categoryId;
     private boolean isActive;
-    
-    public Product() {
+        public Product() {
     }
 
     public boolean isIsActive() {
@@ -40,6 +39,11 @@ public class Product {
         this.price = price;
         this.image = image;
         this.categoryId = categoryId;
+    }
+    public Product( String name, String description, String image) {
+        this.name = name;
+        this.description = description;
+        this.image = image;
     }
 
     public Product(int productId, String name, String description, long price, String image, int categoryId, boolean isActive) {

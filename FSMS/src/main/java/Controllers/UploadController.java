@@ -238,6 +238,8 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/admin/accounts");
             }
         } else if (request.getParameter("createProduct") != null) {
+
+            int accRole = acc.getRoleId();
             String productName = request.getParameter("productName");
             String description = request.getParameter("description");
             long price = Long.parseLong(request.getParameter("price"));
@@ -256,13 +258,21 @@ public class UploadController extends HttpServlet {
                 } catch (Exception ex) {
                     session.setAttribute("createProduct", "fail");
                     session.setAttribute("errorMessage", "Failed to upload product image: " + ex.getMessage());
-                    response.sendRedirect("/admin/product/create");
+                    if (accRole == 1) {
+                        response.sendRedirect("/admin/product/create");
+                    } else {
+                        response.sendRedirect("/staff/product/create");
+                    }
                     return;
                 }
             } else {
                 session.setAttribute("createProduct", "fail");
                 session.setAttribute("errorMessage", "Product image is required.");
-                response.sendRedirect("/admin/product/create");
+                if (accRole == 1) {
+                    response.sendRedirect("/admin/product/create");
+                } else {
+                    response.sendRedirect("/staff/product/create");
+                }
                 return;
             }
 
@@ -275,7 +285,11 @@ public class UploadController extends HttpServlet {
                 if (isExist) {
                     session.setAttribute("createProduct", "fail");
                     session.setAttribute("errorMessage", "Product already exists.");
-                    response.sendRedirect("/admin/product/create");
+                    if (accRole == 1) {
+                        response.sendRedirect("/admin/product/create");
+                    } else {
+                        response.sendRedirect("/staff/product/create");
+                    }
                     return;
                 }
                 int result = productDAO.createProduct(product, productType);
@@ -283,16 +297,28 @@ public class UploadController extends HttpServlet {
                     session.setAttribute("createProduct", "success");
                     session.setAttribute("errorMessage", "product added success.");
 
-                    response.sendRedirect("/admin/product");
+                    if (accRole == 1) {
+                        response.sendRedirect("/admin/product");
+                    } else {
+                        response.sendRedirect("/staff/product");
+                    }
                 } else {
                     session.setAttribute("createProduct", "fail");
                     session.setAttribute("errorMessage", "Failed to create product in the database.");
-                    response.sendRedirect("/admin/product/create");
+                    if (accRole == 1) {
+                        response.sendRedirect("/admin/product/create");
+                    } else {
+                        response.sendRedirect("/staff/product/create");
+                    }
                 }
             } catch (Exception e) {
                 session.setAttribute("createProduct", "fail");
                 session.setAttribute("errorMessage", "Database error: " + e.getMessage());
-                response.sendRedirect("/admin/product/create");
+                if (accRole == 1) {
+                    response.sendRedirect("/admin/product/create");
+                } else {
+                    response.sendRedirect("/staff/product/create");
+                }
             }
 
         } else if (request.getParameter("updateProduct") != null) {
@@ -350,7 +376,11 @@ public class UploadController extends HttpServlet {
             } else {
                 session.setAttribute("deleteProduct", "fail");
             }
-            response.sendRedirect("/admin/product");
+            if (acc.getRoleId() == 1) {
+                response.sendRedirect("/admin/product");
+            } else {
+                response.sendRedirect("/staff/product");
+            }
         } else if (request.getParameter(
                 "updateOrder") != null) {
             String orderId = request.getParameter("orderId");
@@ -377,7 +407,7 @@ public class UploadController extends HttpServlet {
                 response.sendRedirect("/staff/orders");
             } else if (acc.getRoleId() == 3) {
                 response.sendRedirect("/shipper/orders");
-            } 
+            }
         } else if (request.getParameter(
                 "deleteOrder") != null) {
             try {
@@ -542,14 +572,13 @@ public class UploadController extends HttpServlet {
             addBanner(request, response);
         } else if (request.getParameter("updateComment") != null) {
             String[] ids = request.getParameter("ids").split("-");
-            
-            
+
             CommentDAO cDAO = new CommentDAO();
             for (String part : ids) {
                 int star = Integer.parseInt(request.getParameter("vote-" + part));
                 String comment = request.getParameter("comment-" + part);
                 Timestamp currentTimestamp = Timestamp.from(Instant.now());
-                
+
                 String avatar = "";
                 Part avatarPart = request.getPart("avatar-" + part);
                 if (Paths.get(avatarPart.getSubmittedFileName()).toString().isEmpty()) {
@@ -565,22 +594,21 @@ public class UploadController extends HttpServlet {
                         return;
                     }
                 }
-                
-                cDAO.updateComment(new Comment(Integer.parseInt(part),comment,star,avatar,currentTimestamp));
+
+                cDAO.updateComment(new Comment(Integer.parseInt(part), comment, star, avatar, currentTimestamp));
             }
-            
+
             session.setAttribute("updateComment", "success");
             response.sendRedirect("/orders");
         } else if (request.getParameter("createComment") != null) {
             String[] ids = request.getParameter("ids").split("-");
-            
-            
+
             CommentDAO cDAO = new CommentDAO();
             for (String part : ids) {
                 int star = Integer.parseInt(request.getParameter("vote-" + part));
                 String comment = request.getParameter("comment-" + part);
                 Timestamp currentTimestamp = Timestamp.from(Instant.now());
-                
+
                 String avatar = "";
                 Part avatarPart = request.getPart("avatar-" + part);
                 if (Paths.get(avatarPart.getSubmittedFileName()).toString().isEmpty()) {
@@ -596,10 +624,10 @@ public class UploadController extends HttpServlet {
                         return;
                     }
                 }
-                
-                cDAO.addComment(new Comment(Integer.parseInt(part),comment,star,avatar,currentTimestamp));
+
+                cDAO.addComment(new Comment(Integer.parseInt(part), comment, star, avatar, currentTimestamp));
             }
-            
+
             session.setAttribute("createComment", "success");
             response.sendRedirect("/orders");
         }

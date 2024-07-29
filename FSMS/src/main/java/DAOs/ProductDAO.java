@@ -43,6 +43,68 @@ public class ProductDAO {
         return rs;
     }
 
+    public static void main(String[] args) {
+        ProductDAO productDAO = new ProductDAO();
+
+        // Define a keyword to search for
+        String keyword = "a";
+
+        // Call searchProducts method
+        ResultSet rs = null;
+        try {
+            rs = productDAO.searchProducts(keyword);
+            boolean hasResults = false;
+
+            // Print the results
+            if (rs != null) {
+                while (rs.next()) {
+                    if (!hasResults) {
+                        System.out.println("Products found with the keyword: " + keyword);
+                        hasResults = true;
+                    }
+
+                    // Retrieve data from ResultSet
+                    int productId = rs.getInt("ProductID");
+                    String name = rs.getString("Name");
+                    String description = rs.getString("Description");
+                    double price = rs.getDouble("Price");
+                    String image = rs.getString("Image");
+                    String category = rs.getString("CategoryName");
+                    String color = rs.getString("Color");
+                    String size = rs.getString("Size");
+                    int quantity = rs.getInt("Quantity");
+
+                    // Print product details
+                    System.out.println("ID: " + productId);
+                    System.out.println("Name: " + name);
+                    System.out.println("Description: " + description);
+                    System.out.println("Price: " + price);
+                    System.out.println("Image: " + image);
+                    System.out.println("Category: " + category);
+                    System.out.println("Color: " + color);
+                    System.out.println("Size: " + size);
+                    System.out.println("Quantity: " + quantity);
+                    System.out.println("------------------------------");
+                }
+
+                if (!hasResults) {
+                    System.out.println("No products found with the keyword: " + keyword);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Close resources
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+        }
+    }
+
     public Product getProductById(int productId) {
         Product product = null;
         String sql = "select * from Product p where p.ProductID = ?";
@@ -236,35 +298,37 @@ public class ProductDAO {
         return totalProducts;
     }
 
-    public List<Product> searchProducts(String keyword) {
-        List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.Name, p.Description, p.Price, p.Image, c.Name, pt.Color, pt.Size, pt.Quantity "
+    public ResultSet searchProducts(String keyword) {
+        String sql = "SELECT p.ProductID, p.Name, p.Description, p.Price, p.Image, c.Name AS CategoryName, pt.Color, pt.Size, pt.Quantity "
                 + "FROM Product p "
                 + "JOIN ProductType pt ON p.ProductID = pt.ProductID "
                 + "JOIN Category c ON c.CategoryID = p.CategoryID "
                 + "WHERE p.Name LIKE ?";
+        ResultSet rs = null;
+        PreparedStatement ps = null;
         try {
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + keyword + "%");
             rs = ps.executeQuery();
-            while (rs.next()) {
-                Product product = new Product(
-                        rs.getInt("ProductID"),
-                        rs.getString("Name"),
-                        rs.getString("Description"),
-                        rs.getLong("Price"),
-                        rs.getString("Image"),
-                        rs.getInt("CategoryID")
-                );
-                products.add(product);
-            }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, e);
+                }
+            }
         }
-        return products;
+        return rs;
     }
-
-  
 
     public String getImgPathByProductId(int productId) {
         String img = "";
@@ -319,6 +383,7 @@ public class ProductDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     public ResultSet getAlls() {
         ResultSet rs = null;
         try {
@@ -326,13 +391,13 @@ public class ProductDAO {
             rs = st.executeQuery("SELECT * "
                     + "FROM Product p "
                     + "JOIN Category c ON c.CategoryID = p.CategoryID where IsActive = 1");
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
-    
+
     public Product getProductByIdOld(int productId) {
         Product product = null;
         String sql = "select * from Product p where p.ProductID = ?";

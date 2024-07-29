@@ -47,8 +47,8 @@ public class ProductController extends HttpServlet {
         String path = request.getRequestURI();
         HttpSession session = request.getSession();
         if (path.endsWith("/products")) {
-            if (request.getParameter("id") != null) {
 
+            if (request.getParameter("id") != null) {
                 int categoryID = Integer.parseInt(request.getParameter("id"));
                 CategoryDAO catDAO = new CategoryDAO();
 
@@ -71,6 +71,7 @@ public class ProductController extends HttpServlet {
                 }
 
                 session.setAttribute("products", products);
+
             } else if (request.getParameter("sort-by") != null) {
                 if (request.getParameter("sort-by").equals("name")) {
                     List<Product> products = (List<Product>) session.getAttribute("products");
@@ -90,7 +91,6 @@ public class ProductController extends HttpServlet {
                 ProductDAO proDAO = new ProductDAO();
                 ResultSet rss = proDAO.getAlls();
                 List<Product> products = new ArrayList<>();
-
                 try {
                     while (rss.next()) {
                         Product product = new Product();
@@ -111,7 +111,7 @@ public class ProductController extends HttpServlet {
             session.setAttribute("tabId", 11);
             request.getRequestDispatcher("/customer.jsp").forward(request, response);
         } else if (path.endsWith("products/list2")) {
-           if (request.getParameter("id") != null) {
+            if (request.getParameter("id") != null) {
 
                 int categoryID = Integer.parseInt(request.getParameter("id"));
                 CategoryDAO catDAO = new CategoryDAO();
@@ -185,16 +185,15 @@ public class ProductController extends HttpServlet {
             ResultSet sizes = proTypeDao.getSizes(id);
 
             ArrayList<ProductType> productTypes = proTypeDao.getProductTypesByProductID(id);
-            
-            
+
             CommentDAO cDAO = new CommentDAO();
-            
+
             ResultSet allComment = cDAO.getAllCommentByProductID(id);
-            
+
             int starAVG = cDAO.getStar(id);
-            
+
             int commentNumber = cDAO.getQuantityComment(id);
-            
+
             request.setAttribute("starAVG", starAVG);
             request.setAttribute("allComment", allComment);
             request.setAttribute("commentNumber", commentNumber);
