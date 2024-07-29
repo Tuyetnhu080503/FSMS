@@ -29,6 +29,11 @@
         $("#viewAccounts").DataTable();
     });
 </script>
+<script>
+    $(document).ready(function () {
+        $("#viewProducts").DataTable();
+    });
+</script>
 
 
 </body>

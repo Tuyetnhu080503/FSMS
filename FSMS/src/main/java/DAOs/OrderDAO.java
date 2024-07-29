@@ -9,6 +9,8 @@ import Models.Account;
 import Models.Order;
 import Models.OrderStatus;
 import Models.OrderItems;
+import Models.Product;
+import Models.ProductType;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -133,48 +135,82 @@ public class OrderDAO {
 
     public Order getOrderById(int orderId) {
         Order order = null;
-        String sql = "SELECT top 1  o.OrderID,  \n"
-                + "              a1.Firstname ,  \n"
-                + "              a1.Lastname,   \n"
-                + "              a1.Phonenumber,   \n"
-                + "              os.Status,   \n"
-                + "              o.PaymentMethod,   \n"
-                + "              c.Deliveryaddress,   \n"
-                + "              eAccount.Firstname AS EmpFirstname,  \n"
-                + "              eAccount.Lastname AS EmpLastname, \n"
-                + "              os.Time as UpdatedAt \n"
-                + "          FROM   \n"
-                + "              [Order] o   \n"
-                + "              JOIN CustomerProfile AS c ON o.CustomerID = c.CustomerID  \n"
-                + "              LEFT JOIN Voucher AS v ON o.VoucherID = v.VoucherID  \n"
-                + "              JOIN Account AS a1 ON c.AccountID = a1.AccountID   \n"
-                + "              JOIN OrderStatus AS os ON o.OrderID = os.OrderID   \n"
-                + "              JOIN EmployeeProfile AS ep ON os.EmployeeID = ep.EmployeeID  \n"
-                + "              JOIN Account AS eAccount ON ep.AccountID = eAccount.AccountID  \n"
-                + "          WHERE   \n"
-                + "              o.OrderID = ?\n"
-                + "			  order by os.Time desc;";
-        try {
-            ps = conn.prepareStatement(sql);
+        String sql = "SELECT o.OrderID, a1.Firstname, a1.Lastname, a1.Phonenumber, os.Status, "
+                + "o.PaymentMethod, c.Deliveryaddress, eAccount.Firstname AS EmpFirstname, "
+                + "eAccount.Lastname AS EmpLastname, os.Time AS UpdatedAt, p.Name AS ProductName, "
+                + "p.Description, p.Image, pt.ProductTypeID, pt.Color, pt.Size, ot.Quantity, ot.UnitPrice, ot.TotalPrice "
+                + "FROM [Order] o "
+                + "JOIN CustomerProfile AS c ON o.CustomerID = c.CustomerID "
+                + "LEFT JOIN Voucher AS v ON o.VoucherID = v.VoucherID "
+                + "JOIN Account AS a1 ON c.AccountID = a1.AccountID "
+                + "JOIN OrderStatus AS os ON o.OrderID = os.OrderID "
+                + "JOIN EmployeeProfile AS ep ON os.EmployeeID = ep.EmployeeID "
+                + "JOIN Account AS eAccount ON ep.AccountID = eAccount.AccountID "
+                + "JOIN OrderItems AS ot ON o.OrderID = ot.OrderID "
+                + "JOIN Product AS p ON ot.ProductID = p.ProductID "
+                + "JOIN ProductType AS pt ON ot.ProductTypeID = pt.ProductTypeID "
+                + "WHERE o.OrderID = ? "
+                + "ORDER BY os.Time DESC;";
+
+        try ( PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                order = new Order(
-                        rs.getInt("OrderID"),
-                        rs.getString("Firstname"),
-                        rs.getString("Lastname"),
-                        rs.getString("Phonenumber"),
-                        rs.getString("Status"),
-                        rs.getString("PaymentMethod"),
-                        rs.getString("Deliveryaddress"),
-                        rs.getString("EmpFirstname"),
-                        rs.getString("EmpLastname"),
-                        rs.getTimestamp("UpdatedAt")
-                );
+            try ( ResultSet rs = ps.executeQuery()) {
+                List<OrderItems> orderItemsList = new ArrayList<>();
+
+                while (rs.next()) {
+                    // Initialize the order object on the first row of results
+                    if (order == null) {
+                        order = new Order(
+                                rs.getInt("OrderID"),
+                                rs.getString("Firstname"),
+                                rs.getString("Lastname"),
+                                rs.getString("Phonenumber"),
+                                rs.getString("Status"),
+                                rs.getString("PaymentMethod"),
+                                rs.getString("Deliveryaddress"),
+                                rs.getString("EmpFirstname"),
+                                rs.getString("EmpLastname"),
+                                rs.getTimestamp("UpdatedAt"),
+                                new ArrayList<>()
+                        );
+                    }
+
+                    // Extract product details
+                    Product product = new Product(
+                            rs.getString("ProductName"),
+                            rs.getString("Description"),
+                            rs.getString("Image")
+                    );
+
+                    // Extract product type details
+                    ProductType productType = new ProductType(
+                            rs.getInt("ProductTypeID"),
+                            rs.getString("Color"),
+                            rs.getString("Size"),
+                            rs.getInt("Quantity")
+                    );
+
+                    // Create and add OrderItems object
+                    OrderItems orderItem = new OrderItems(
+                            rs.getInt("OrderID"),
+                            rs.getInt("Quantity"),
+                            rs.getLong("UnitPrice"),
+                            rs.getLong("TotalPrice"),
+                            productType,
+                            product
+                    );
+                    orderItemsList.add(orderItem);
+                }
+
+                // Set order items list to the order
+                if (order != null) {
+                    order.setOrderItems(orderItemsList);
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return order;
     }
 
@@ -274,10 +310,8 @@ public class OrderDAO {
         OrderDAO orderDAO = new OrderDAO();
 
         // Thông tin cần cập nhật
-        Account result = orderDAO.getAccountByEmployeeId(14);
-        
-            System.out.println(result.getRoleId());
-        
+        Order result = orderDAO.getOrderById(1);
+        System.out.println(result.getOrderItems());
 
     }
 
@@ -444,8 +478,7 @@ public class OrderDAO {
         }
         return rs;
     }
-    
-    
+
     public ResultSet getOrderInfo(int accID, int orderId) {
         ResultSet rs = null;
         try {
@@ -465,26 +498,24 @@ public class OrderDAO {
             ps.setInt(1, orderId);
             ps.setInt(2, cusID);
             rs = ps.executeQuery();
-            
 
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rs;
     }
-    
+
     public void addOrderCOD(Order order) {
         try {
             PreparedStatement ps = conn.prepareStatement("insert into [Order] values(?,?,?,?,?,?,?,?,?,?)");
             ps.setInt(1, order.getCustomerId());
             ps.setString(2, order.getStatus());
             ps.setLong(3, order.getTotalPrice());
-            ps.setTimestamp(4,order.getCreateAt() );
-            if(order.getVoucherId()!=0){
-               ps.setInt(5,order.getVoucherId());
-            }
-            else{
-               ps.setNull(5,java.sql.Types.INTEGER);
+            ps.setTimestamp(4, order.getCreateAt());
+            if (order.getVoucherId() != 0) {
+                ps.setInt(5, order.getVoucherId());
+            } else {
+                ps.setNull(5, java.sql.Types.INTEGER);
             }
             ps.setString(6, order.getPaymentMethod());
             ps.setString(7, order.getPaymentId());
@@ -492,21 +523,20 @@ public class OrderDAO {
             ps.setString(9, order.getFullName());
             ps.setString(10, order.getPhonenumber());
             ps.executeUpdate();
- 
+
         } catch (SQLException ex) {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     public int getOrderIDByCustomerIDAndCreateAt(int cusID) {
         int orderID = 0;
         try {
             PreparedStatement ps = conn.prepareStatement("select * from [Order] where CustomerID = ?");
             ps.setInt(1, cusID);
             ResultSet rs = ps.executeQuery();
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 orderID = rs.getInt("OrderID");
             }
 
@@ -515,15 +545,15 @@ public class OrderDAO {
         }
         return orderID;
     }
-    
+
     public void addOrderItems(OrderItems orderItem) {
         try {
             PreparedStatement ps = conn.prepareStatement("insert into [OrderItems] values(?,?,?,?,?,?)");
             ps.setInt(1, orderItem.getOrderId());
             ps.setInt(2, orderItem.getProductId());
             ps.setInt(3, orderItem.getProductTypeId());
-            ps.setInt(4,orderItem.getQuantity());
-            ps.setLong(5,orderItem.getUnitPrice());
+            ps.setInt(4, orderItem.getQuantity());
+            ps.setLong(5, orderItem.getUnitPrice());
             ps.setLong(6, orderItem.getTotalPrice());
             ps.executeUpdate();
 
@@ -531,7 +561,7 @@ public class OrderDAO {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void cancelOrder(int id) {
         try {
             PreparedStatement ps = conn.prepareStatement("UPDATE [Order] SET [Status] = 'Cancel' Where OrderID = ?");
@@ -541,13 +571,12 @@ public class OrderDAO {
             Logger.getLogger(OrderDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
     public int getTotalOfDate(Date date) {
         int total = -1;
         try {
-            PreparedStatement ps = conn.prepareStatement("select sum(ToTalPrice) as total from [Order] o inner join [OrderStatus] ot on o.OrderID = ot.OrderID\n" +
-                "  where ot.Status = 'Delivered' and CONVERT(date, [Time]) = ? ");
+            PreparedStatement ps = conn.prepareStatement("select sum(ToTalPrice) as total from [Order] o inner join [OrderStatus] ot on o.OrderID = ot.OrderID\n"
+                    + "  where ot.Status = 'Delivered' and CONVERT(date, [Time]) = ? ");
             ps.setDate(1, date);
             ResultSet rs = ps.executeQuery();
 
@@ -563,7 +592,6 @@ public class OrderDAO {
         }
         return total;
     }
-
 
     public int getEmployeeIdByAccountId(int accountId) {
         int employeeId = -1;
@@ -583,16 +611,16 @@ public class OrderDAO {
         return employeeId;
     }
 
-     public Account getAccountByEmployeeId(int id) {
+    public Account getAccountByEmployeeId(int id) {
         Account account = null;
         try {
             PreparedStatement ps = conn.prepareStatement("select * from Account a\n"
-                + "join EmployeeProfile as ep on ep.AccountID = a.AccountID\n"
-                + "where ep.EmployeeID = ?");
+                    + "join EmployeeProfile as ep on ep.AccountID = a.AccountID\n"
+                    + "where ep.EmployeeID = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                account = new Account(rs.getInt("AccountID"),rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
+                account = new Account(rs.getInt("AccountID"), rs.getString("Username").trim(), rs.getString("Password").trim(), rs.getString("Email").trim(), rs.getString("Firstname").trim(), rs.getString("Lastname").trim(), rs.getDate("DOB"), rs.getString("Avatar").trim(), rs.getString("Gender").trim(), rs.getString("Phonenumber").trim(), rs.getString("Address").trim(), rs.getBoolean("Isactive"), rs.getInt("RoleID"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);

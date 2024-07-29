@@ -5,8 +5,10 @@
 package Models;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Order {
+
     private int orderId;
     private int customerId;
     private String status;
@@ -23,7 +25,9 @@ public class Order {
     private String employeeLastName;
     private Timestamp updatedAt;
     private String fullName;
-      public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress, String employeeFirstName, String employeeLastName, Timestamp updatedAt) {
+    private List<OrderItems> orderItems;
+
+    public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod, String deliveryaddress, String employeeFirstName, String employeeLastName, Timestamp updatedAt, List<OrderItems> orderItems){
         this.orderId = orderId;
         this.status = status;
         this.paymentMethod = paymentMethod;
@@ -34,6 +38,7 @@ public class Order {
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
         this.updatedAt = updatedAt;
+        this.orderItems = orderItems;
     }
 
     public Order(int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId, String phonenumber, String deliveryaddress, String fullName) {
@@ -49,7 +54,7 @@ public class Order {
         this.fullName = fullName;
     }
 
-    public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod,  String deliveryaddress) {
+    public Order(int orderId, String firstName, String lastname, String phonenumber, String status, String paymentMethod, String deliveryaddress) {
         this.orderId = orderId;
         this.status = status;
         this.paymentMethod = paymentMethod;
@@ -77,8 +82,7 @@ public class Order {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-    
-    
+
     public Order(int orderId, int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId) {
         this.orderId = orderId;
         this.customerId = customerId;
@@ -89,8 +93,8 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.paymentId = paymentId;
     }
-    
-    public Order(int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId,String deliveryaddress) {
+
+    public Order(int customerId, String status, long totalPrice, Timestamp createAt, int voucherId, String paymentMethod, String paymentId, String deliveryaddress) {
         this.customerId = customerId;
         this.status = status;
         this.totalPrice = totalPrice;
@@ -100,7 +104,6 @@ public class Order {
         this.paymentId = paymentId;
         this.deliveryaddress = deliveryaddress;
     }
-
 
     public String getEmployeeFirstName() {
         return employeeFirstName;
@@ -213,7 +216,13 @@ public class Order {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
-    
-    
+
+    public List<OrderItems> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItems> orderItems) {
+        this.orderItems = orderItems;
+    }
+
 }

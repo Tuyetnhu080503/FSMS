@@ -6,10 +6,13 @@ package Controllers;
 
 import DAOs.AccountDAO;
 import DAOs.OrderDAO;
+import DAOs.ProductDAO;
 import Hash.MD5;
 import Models.Account;
 import Models.Order;
 import Models.OrderStatus;
+import Models.Product;
+import Models.ProductType;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -52,7 +55,7 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("account", account);
                     OrderDAO oDao = new OrderDAO();
                     Order order = oDao.getOrderById(orderId);
-                     List<OrderStatus> orderStatus = oDao.getListOrderStatusByOrderId(orderId);
+                    List<OrderStatus> orderStatus = oDao.getListOrderStatusByOrderId(orderId);
                     request.setAttribute("orderStatus", orderStatus);
                     request.setAttribute("order", order);
                     session.setAttribute("tabId", 6);
@@ -61,9 +64,39 @@ public class StaffController extends HttpServlet {
                     Logger.getLogger(StaffController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-            } else if (path.endsWith("/")) {
+            } else if (path.endsWith("/staff/product")) {
                 session.setAttribute("tabId", 7);
                 request.getRequestDispatcher("/staff.jsp").forward(request, response);
+            } else if (path.startsWith("/staff/products/update")) {
+                String[] idArray = path.split("/");
+                int productId = Integer.parseInt(idArray[idArray.length - 1]);
+
+                ProductDAO productDAO = new ProductDAO();
+                Product product = productDAO.getProductById(productId);
+
+                request.setAttribute("product", product);
+                ProductType productType = productDAO.getProductTypeByProductId(productId);
+                request.setAttribute("productType", productType);
+                session.setAttribute("tabId", 8);
+                request.getRequestDispatcher("/staff.jsp").forward(request, response);
+            } else if (path.startsWith("/staff/products/block/")) {
+                String[] idArray = path.split("/");
+                int id = Integer.parseInt(idArray[idArray.length - 1]);
+
+                ProductDAO pDAO = new ProductDAO();
+                pDAO.banProductById(id);
+                response.sendRedirect("/staff/products/update/" + id);
+            } else if (path.startsWith("/staff/products/unblock/")) {
+                String[] idArray = path.split("/");
+                int id = Integer.parseInt(idArray[idArray.length - 1]);
+
+                ProductDAO pDAO = new ProductDAO();
+                pDAO.unbanProductById(id);
+                response.sendRedirect("/staff/products/update/" + id);
+            } else if (path.endsWith("/product/create")) {
+
+                session.setAttribute("tabId", 9);
+                request.getRequestDispatcher("/admin.jsp").forward(request, response);
             } else { // route = "/admin"
                 session.setAttribute("tabId", 1);
                 request.getRequestDispatcher("/staff.jsp").forward(request, response);

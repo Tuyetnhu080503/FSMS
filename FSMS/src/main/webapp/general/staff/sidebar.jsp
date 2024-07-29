@@ -22,14 +22,17 @@
                 <!-- sidebar menu-->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">Menu </li>
-                 
-                    <li class="treeview">
-                        <a href="/staff/products">
+                    <li class="treeview <%=(session.getAttribute("tabId").equals(7)) ? "menu-open active" : ""%>">
+                        <a href="#">
                             <img src="https://master-admin-template.multipurposethemes.com/bs5/images/svg-icon/sidebar-menu/members.svg" class="svg-icon" alt="">
-                            <span>View list Product</span>
-                           
+                            <span>Manage Products</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </span>
                         </a>
-                
+                        <ul class="treeview-menu">
+                            <li class="<%=(session.getAttribute("tabId").equals(7)) ? "active" : ""%>"><a href="/staff/product"><i class="icon-Commit"><span class="path1"></span><span class="path2"></span></i>View Products</a></li>	
+                        </ul>
                     </li>
                     <li class="treeview <%=(session.getAttribute("tabId").equals(6)||session.getAttribute("tabId").equals(5)||session.getAttribute("tabId").equals(1)) ? "menu-open active" : ""%>">
                         <a href="#">
